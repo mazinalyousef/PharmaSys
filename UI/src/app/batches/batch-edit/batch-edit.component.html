@@ -1,0 +1,241 @@
+<div class="batch-edit">
+    <h1>{{title}}</h1>
+
+
+    <div class="form-container">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+
+
+
+            
+            <mat-tab-group>
+                <mat-tab label="General">
+  
+                    <div class="row">
+
+                        <div class="column">
+                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                <mat-label>Batch NO:
+                                </mat-label>
+                                <input   matInput formControlName="batchNO" required>
+                            </mat-form-field>
+                           </div>
+                
+                
+                           <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                            <mat-label>Batch Size:
+                            </mat-label>
+                            <input  (blur)="onbatchSizeBlur($event)"   matInput formControlName="batchSize" required>
+                            </mat-form-field>
+                            </div>
+                
+                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                
+                                    <mat-label>MFG Date</mat-label>
+                                    <input matInput [matDatepicker]="pickermFgDate" formControlName="mFgDate">
+                                    <mat-hint>MM-DD-YYYY</mat-hint>
+                                    <mat-datepicker-toggle matIconSuffix [for]="pickermFgDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickermFgDate></mat-datepicker>
+                            </mat-form-field>
+                            </div>
+                
+                
+                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                
+                                <mat-label>EXP Date</mat-label>
+                                <input matInput [matDatepicker]="pickerexpDate" formControlName="expDate">
+                                <mat-hint>MM-DD-YYYY</mat-hint>
+                                <mat-datepicker-toggle matIconSuffix [for]="pickerexpDate"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerexpDate></mat-datepicker>
+                             </mat-form-field>
+                             </div>
+                
+                
+                             <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                <mat-label>Revision:
+                                </mat-label>
+                                <input   matInput formControlName="revision"  >
+                            </mat-form-field>
+                           </div>
+
+
+                           <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                            
+                            <mat-label>Revision Date</mat-label>
+                            <input matInput [matDatepicker]="pickerrevisionDate" formControlName="revisionDate">
+                            <mat-hint>MM-DD-YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="pickerrevisionDate"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerrevisionDate></mat-datepicker>
+                         </mat-form-field>
+                         </div>
+                
+
+                         
+                
+                        </div>
+
+
+
+                        <div class="column">
+                           
+                    
+                    
+                             <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                <mat-label>barcode:
+                                </mat-label>
+                                <input  (blur)="onBarcodeBlur($event)"  matInput formControlName="barcode"   >
+                            </mat-form-field>
+                           </div>
+                    
+                    
+                         
+                    
+                    
+                       <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>MFNO:
+                        </mat-label>
+                        <input   matInput formControlName="mfno"   >
+                    </mat-form-field>
+                    </div>
+                    
+                    
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>NDCNO:
+                        </mat-label>
+                        <input   matInput formControlName="ndcno"   >
+                    </mat-form-field>
+                    </div>
+                    
+                    
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Product ID:
+                        </mat-label>
+                        <input   matInput formControlName="productId"   >
+                    </mat-form-field>
+                    </div>
+
+
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Product:
+                        </mat-label>
+                        <input   matInput formControlName="productName"   >
+                    </mat-form-field>
+                    </div>
+                    
+                    
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Tube Weight:
+                        </mat-label>
+                        <input (blur)="ontubeWeightBlur($event)"   matInput formControlName="tubeWeight"   >
+                    </mat-form-field>
+                    </div>
+                    
+                    
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Tubes Count:
+                        </mat-label>
+                        <input   matInput formControlName="tubesCount"   >
+                    </mat-form-field>
+                    </div>
+                        </div>
+
+
+
+                       
+                     
+                    </div>
+                   
+        
+        
+                </mat-tab>
+
+
+                <mat-tab label="Photos">
+
+                </mat-tab>
+                <mat-tab label="Ingredients">
+                    <div class="ng-container">
+                        <table mat-table [dataSource]="batchingredients"
+                        class="table-striped mat-elevation-z8"
+                        >
+        
+
+                        <!--
+                        <ng-container matColumnDef="ingredientId">
+                            <th mat-header-cell *matHeaderCellDef>Ingredient Id</th>
+                            <td mat-cell *matCellDef="let item">{{item.ingredientId}}</td>
+                         </ng-container>
+                        -->
+
+                         <ng-container matColumnDef="ingredientName">
+                            <th mat-header-cell *matHeaderCellDef>Ingredient</th>
+                            <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
+                         </ng-container>
+                        
+                         <ng-container matColumnDef="qtyPerTube">
+                            <th mat-header-cell *matHeaderCellDef>QTY Per Tube</th>
+                            <td mat-cell *matCellDef="let item">{{item.qtyPerTube}}</td>
+                         </ng-container>
+                         <ng-container matColumnDef="qtyPerBatch">
+                            <th mat-header-cell *matHeaderCellDef>QTY Per Batch</th>
+                            <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
+                         </ng-container>
+                        
+                         
+                         <tr mat-header-row *matHeaderRowDef="displayedIngredientsColumns"></tr>
+                         <tr mat-row *matRowDef="let row; columns: displayedIngredientsColumns;"></tr>
+                      </table>
+                     </div>
+                </mat-tab>
+            </mat-tab-group>
+
+          
+
+
+
+
+
+<div class="form-group commands">
+             
+
+           
+    
+    <button style="margin: 5px;" mat-raised-button color="primary" type="submit"
+    class="btn btn-success">
+    Save
+    </button>
+
+    
+    <button type="button" style="margin: 5px;" mat-raised-button color="primary" (click)="SendBatch()">Send</button>
+
+    <button style="margin: 5px;" mat-raised-button color="basic"
+      
+    [routerLink]="['/batches']"
+    class="btn">
+    Cancel
+    </button>
+
+
+   
+
+
+    
+    </div>
+
+
+           
+
+        </form>
+
+
+        <!--
+        <button style="margin: 5px;" mat-raised-button color="basic"
+         (click)="showLoggedUserId()"
+         class="btn">
+         Test
+       </button>
+        -->
+
+    </div>
+</div>

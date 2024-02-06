@@ -1,0 +1,41 @@
+<div class="ng-container">
+<table mat-table [dataSource]="ingredientsdataSource"  class="table-striped mat-elevation-z8">
+    <ng-container matColumnDef="ingredientName">
+        <th mat-header-cell *matHeaderCellDef>Ingredient</th>
+        <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
+     </ng-container>
+
+     <ng-container matColumnDef="qtyPerTube">
+        <th mat-header-cell *matHeaderCellDef>qtyPerTube</th>
+        <td mat-cell *matCellDef="let item">{{item.qtyPerTube}}</td>
+     </ng-container>
+
+     <ng-container matColumnDef="qtyPerBatch">
+        <th mat-header-cell *matHeaderCellDef>qtyPerBatch</th>
+        <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
+     </ng-container>
+
+     <ng-container matColumnDef="isChecked">
+        <th mat-header-cell *matHeaderCellDef>Completed</th>
+        <td mat-cell *matCellDef="let item">
+
+         <!-- <mat-checkbox [checked]="item.isChecked"></mat-checkbox>-->
+
+         <mat-checkbox color="primary"
+         [(ngModel)]="item.isChecked"
+         [ngModelOptions]="{standalone: true}"
+         ></mat-checkbox>
+
+        </td>
+     </ng-container>
+
+     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</div>
+<div>
+   <button (click)="onComplete()" style="margin: 5px;" mat-raised-button color="primary"  type="submit" 
+   class="btn btn-success">
+   Complete
+   </button>
+</div>

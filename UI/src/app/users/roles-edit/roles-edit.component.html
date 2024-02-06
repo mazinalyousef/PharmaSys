@@ -1,0 +1,71 @@
+<div class="role-edit">
+    <!--change to dynamic later-->
+    <h1 >{{title}}</h1>
+
+
+    <div class="container">
+
+        <div class="form-group"   >
+            <mat-form-field  >
+            
+                <mat-select id="RoleName" (selectionChange)="selectedValue($event)">
+                <mat-option value="">--- Select a Role ---</mat-option>
+                <mat-option *ngFor="let item of Allroles" [value]="item">
+                    {{item}}
+                </mat-option>
+                </mat-select>
+                </mat-form-field>
+        </div>
+
+        <div>
+            <button style="margin: 5px;" mat-raised-button color="primary"  
+
+        (click)="addRole()"
+             class="btn btn-success">
+             Add
+            </button>
+        </div>
+
+
+        <div class="ng-container">
+            <table mat-table [dataSource]="userrolesdataSource"
+            class="table-striped mat-elevation-z8"
+            >
+            <ng-container matColumnDef="userroleID">
+                <th mat-header-cell *matHeaderCellDef>User Role</th>
+                <td mat-cell *matCellDef="let item">{{item}}</td>
+             </ng-container>
+            
+             <ng-container matColumnDef="actions">
+               <th mat-header-cell *matHeaderCellDef>Actions</th>
+               <td  mat-cell *matCellDef="let item">
+               <a  mat-raised-button (click)="deleteRole(item)"  >delete</a>   
+               </td>
+            </ng-container>
+            
+
+           
+             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           
+          </table>
+         </div>
+
+
+         <div>
+            <button style="margin: 5px;" mat-raised-button color="primary"  
+
+        (click)="save()"
+             class="btn btn-success">
+             Save
+            </button>
+        </div>
+
+
+
+
+    </div>
+    
+
+</div>
+

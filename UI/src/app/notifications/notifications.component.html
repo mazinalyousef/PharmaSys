@@ -1,0 +1,35 @@
+
+ 
+<div class="ng-container">
+    <table mat-table [dataSource]="usernotifications"
+    class="table-striped mat-elevation-z8"
+    >
+
+    <ng-container matColumnDef="notificationMessage">
+        <th mat-header-cell *matHeaderCellDef>Notification</th>
+        <td mat-cell *matCellDef="let item">{{item.notificationMessage}}</td>
+     </ng-container>
+    
+     <ng-container matColumnDef="dateSent">
+        <th mat-header-cell *matHeaderCellDef>Date Sent</th>
+        <td mat-cell *matCellDef="let item">{{item.dateSent}}</td>
+     </ng-container>
+      
+     <ng-container matColumnDef="actions">
+       <th mat-header-cell *matHeaderCellDef>Actions</th>
+       <td  mat-cell *matCellDef="let item">
+       <a  *ngIf="item.batchTaskId" style="margin-right: 5px;" mat-raised-button
+
+         (click)="assignTask(item.batchTaskId)"
+         >Assign</a>
+
+         
+    
+       </td>
+    </ng-container>
+    
+     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+ </div>
+

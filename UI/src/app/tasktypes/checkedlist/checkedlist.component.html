@@ -1,0 +1,23 @@
+<form>
+
+    <div *ngIf="checkedlistTask">
+        <div  *ngFor="let item of checkedlistTask.taskTypeCheckLists">
+           <!-- <input type="checkbox" [checked]="item.isChecked">{{item.title}}-->
+            
+            <mat-checkbox color="primary"
+             [(ngModel)]="item.isChecked"
+             [ngModelOptions]="{standalone: true}"
+             >{{item.title}}</mat-checkbox>
+  
+         
+       </div>
+    </div>
+
+    <div>
+        <button (click)="onComplete()" style="margin: 5px;" mat-raised-button color="primary"  type="submit" 
+        class="btn btn-success">
+        Complete
+        </button>
+    </div>
+   
+</form>
