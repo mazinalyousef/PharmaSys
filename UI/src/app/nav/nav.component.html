@@ -9,8 +9,10 @@
     <span>Drs.Pharmacy</span>
     <span class="toolbar-item-spacer"></span>
 
-
-    <button mat-icon-button matTooltip="Notifications"
+    
+    <label >{{userservice.LoggedUserName$|async}}</label>
+    <button  *ngIf="currentUser$ |async"
+     mat-icon-button matTooltip="Notifications"
      (click)="showNotifications()"
     [matBadge]="presenceservice.NewnotificationsCount$|async"
    
@@ -23,15 +25,11 @@
         <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+        
         <button mat-menu-item routerLink="#">
-            <mat-icon>person</mat-icon><span>My Account</span>
+            <mat-icon>settings</mat-icon><span>Change Password</span>
         </button>
-        <button mat-menu-item routerLink="#">
-            <mat-icon>settings</mat-icon><span>Settings</span>
-        </button>
-        <button mat-menu-item routerLink="#">
-            <mat-icon>help</mat-icon><span>Help</span>
-        </button>
+       
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="onlogout()">
             <mat-icon>exit_to_app</mat-icon>Logout
@@ -49,7 +47,7 @@
            <!-- <mat-list-item *appHasRole='["Manager"]' routerLink="/users">Users</mat-list-item>-->
            <mat-list-item routerLink="/users">Users</mat-list-item>
             <mat-list-item routerLink="/batches">Batch Records</mat-list-item>
-          
+            <mat-list-item routerLink="/userTasks">My Tasks</mat-list-item>
             <mat-expansion-panel [class.mat-elevation-z0]="true">
                 <mat-expansion-panel-header>
                     Departments

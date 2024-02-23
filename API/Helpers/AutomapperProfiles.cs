@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.DTOS;
 using API.Entities;
 using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Helpers
 {
@@ -22,16 +23,61 @@ namespace API.Helpers
             CreateMap<BatchForEditDTO,Batch>();
             CreateMap<Department,DepartmentDTO>();
 
-              CreateMap<BatchIngredient,BatchIngredientDTO>().ForMember(des=>des.IngredientName,opt=>opt.MapFrom(src=>src.Ingredient.IngredientName));
+              CreateMap<BatchIngredient,BatchIngredientDTO>().ForMember(des=>des.IngredientName,opt=>opt.
+              MapFrom(src=>src.Ingredient.IngredientName));
               CreateMap<BatchIngredientDTO,BatchIngredient>().ForMember(des=>des.Ingredient,opt=>opt.Ignore());
 
-             CreateMap<Barcode,BarcodeForViewDTO>().ForMember(des=>des.ProductName,opt=>opt.MapFrom(src=>src.product.ProductName));;
+             CreateMap<Barcode,BarcodeForViewDTO>().
+             ForMember(des=>des.ProductName,opt=>opt.MapFrom(src=>src.product.ProductName));;
 
-             CreateMap<Notification,NotificationDTO>();
+             CreateMap<BarcodeForViewDTO,Barcode>();
+
+             CreateMap<Notification,NotificationDTO>().ForMember(des=>des.TakenDisplayTitle,
+             opt=>opt.MapFrom(src=>mapMotificationTakenDisplayTitle(src)));
+
+
               CreateMap<NotificationDTO,Notification>();
 
 
              CreateMap<BatchTask,BatchTaskInfoDTO>(); 
+
+              CreateMap<BatchTask,UserRunningTaskDTO>()
+             .ForMember(des=>des.TaskTypeTitle,opt=>opt.MapFrom(src=>src.TaskType.Title))
+             .ForMember(des=>des.BatchNO,opt=>opt.MapFrom(src=>src.Batch.BatchNO))
+             .ForMember(des=>des.BatchSize,opt=>opt.MapFrom(src=>src.Batch.BatchSize))
+             .ForMember(des=>des.TubeWeight,opt=>opt.MapFrom(src=>src.Batch.TubeWeight))
+             .ForMember(des=>des.TubesCount,opt=>opt.MapFrom(src=>src.Batch.TubesCount  ))
+             .ForMember(des=>des.ProductName,opt=>opt.MapFrom(src=>src.Batch.Product.ProductName));
+              
+             CreateMap<Ingredient,IngredientDTO>();
+             CreateMap<IngredientDTO,Ingredient>();
+             CreateMap<Product,ProductDTO>().
+             ForMember(des=>des.ProductTypeTitle,opt=>opt.MapFrom(src=>src.ProductType.Title));
+             CreateMap<ProductDTO,Product>();
+
+              CreateMap<ProductIngredientDTO,ProductIngredient>()
+              .ForMember(des=>des.Ingredient,opt=>opt.Ignore())
+               .ForMember(des=>des.Product,opt=>opt.Ignore())
+              ;
+              CreateMap<ProductIngredient,ProductIngredientDTO>()
+              .ForMember(des=>des.IngredientTitle,opt=>opt.MapFrom(src=>src.Ingredient.IngredientName));;;
+
+        }
+
+        private string mapMotificationTakenDisplayTitle(Notification notification)
+        {
+                string result=string.Empty;
+                if (notification.AssignedByUserId!=null)
+                {
+
+                    result = string.Format("Taken By {0}",notification.AssignedByUser.UserName);
+                }
+                else
+                {
+                    result="Available";
+                }
+                return result;
+
         }
     }
 }

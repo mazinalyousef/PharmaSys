@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject, map, take } from 'rxjs';
+import { Observable, ReplaySubject, Subject, map, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
@@ -30,6 +30,9 @@ export class UsersService
    private loggedUser = new ReplaySubject<AuthenticatedResponse>(1) ;
 
    loggedUser$ = this.loggedUser.asObservable();
+
+   private LoggedUserName =new Subject<string>();
+   LoggedUserName$ = this.LoggedUserName.asObservable();
 
    baseUrl = environment.apiUrl;
 
@@ -67,6 +70,8 @@ export class UsersService
     return  this.http.post<AuthenticatedResponse>(this.baseUrl+'Users/login',loginmodel);
   }
   */
+
+ 
   performlogin(loginmodel:LoginModel)    
   {
     return  this.http.post
@@ -77,31 +82,47 @@ export class UsersService
         (res :AuthenticatedResponse)=>
         {
           const user = res;
+          console.log(user.username+"  from user service");
           if (user)
           {
-            localStorage.setItem('user',JSON.stringify(user));
+            sessionStorage.setItem('user',JSON.stringify(user));
             this.loggedUser.next(user);
+            this.LoggedUserName.next(user.username);
             this.decodedToken = this.jwtHelper.decodeToken(user.token);
             this.CurrentloggedUser = user;
             this.presenseService.createHubConnection(this.CurrentloggedUser);
+          //  this.presenseService.createHubConnectiontesttimer(this.CurrentloggedUser); // test...
+              this.presenseService.setInitialNotificationsCount(user.id,true);
+             this.presenseService.getUsernotifications(user.id);
             this.presenseService.joinGroups( this.CurrentloggedUser);
           }
         }
       )
     );
   }
+ 
+
+    /*
+  performlogin(loginmodel:LoginModel) :Observable<AuthenticatedResponse>   
+  {
+    return  this.http.post<AuthenticatedResponse>
+    (this.baseUrl+'Users/login',loginmodel);
+  }
+  */
 
   setCurrentUser(user:AuthenticatedResponse)
   {
     this.loggedUser.next(user);
+    this.LoggedUserName.next(user.username);
   }
 
    
 
   performlogout()
   {
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     this.loggedUser.next(null);
+    this.LoggedUserName.next("");
     this.CurrentloggedUser = null;
   }
 

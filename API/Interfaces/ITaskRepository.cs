@@ -14,8 +14,12 @@ namespace API.Interfaces
 
         Task<bool> SetAsAssigned(int TaskId,string UserId);
 
+        Task<bool> SetAsCompleted(int TaskId);
+
 
         Task<BatchTask> getBatchTaskInfo(int Id);
+
+        BatchTask GetBatchTask(int _batchId,int _taskIdtypeId,int _departmentId);
 
         Task<CheckedListTaskForViewDTO> getCheckedListTaskForView(int Id);
 
@@ -23,6 +27,12 @@ namespace API.Interfaces
 
          
          Task<RangeSelectTaskForViewDTO> GetRangeSelectTaskForViewDTO(int Id);
+
+
+         List<BatchTask> getBatchTasks(int _batchId);
+          
+
+          Task<IEnumerable<BatchTask>>GetUserRunningTasks(string userId);
         
         
     }

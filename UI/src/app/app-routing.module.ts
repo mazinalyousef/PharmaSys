@@ -12,6 +12,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { CheckedlistComponent } from './tasktypes/checkedlist/checkedlist.component';
 import { RangeselectComponent } from './tasktypes/rangeselect/rangeselect.component';
 import { RawmaterialsComponent } from './tasktypes/rawmaterials/rawmaterials.component';
+import { UserTasksComponent } from './user-tasks/user-tasks.component';
 
 
  
@@ -32,6 +33,7 @@ const routes: Routes =
   {path:'rawMaterial/:id',component:RawmaterialsComponent},
   {path:'rangeSelect/:id',component:RangeselectComponent},
   {path:'checkedList/:id',component:CheckedlistComponent},
+  {path:'userTasks',component:UserTasksComponent},
   {path:'**',component:HomeComponent,pathMatch:'full'}
   
 ];

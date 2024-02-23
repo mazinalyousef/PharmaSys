@@ -23,5 +23,8 @@ public User( )
       public ICollection<BatchTask> BatchTasks { get; set; }
 
       public ICollection <Notification> Notifications { get; set; }
+
+      //added
+      public ICollection <Notification> AssignedNotifications { get; set; }
     }
 }

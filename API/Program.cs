@@ -6,6 +6,7 @@ using API.Entities;
 using API.Helpers;
 using API.Hubs;
 using API.Interfaces;
+using API.Timers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -83,11 +84,12 @@ builder.Services.AddScoped<IBatchRepository,BatchRepository>();
 builder.Services.AddScoped<ITaskRepository,TaskRepository>();
 builder.Services.AddScoped<INotificationRepository,NotificationRepository>();
 builder.Services.AddScoped<IBatchBL,BatchBL>();
+builder.Services.AddScoped<ITaskBL,TaskBL>();
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
 
 builder.Services.AddSignalR();
-
-
+builder.Services.AddScoped<TaskTimer>();
 var app = builder.Build();
 
 
@@ -112,9 +114,7 @@ using (var scope = app.Services.CreateScope())
             UserRoles.Filling_FillingTubes,
             UserRoles.Filling_Cartooning,
             UserRoles.Filling_Packaging,
-           UserRoles.Developer,
-              
-         
+           UserRoles.Developer,     
    };
  
     foreach (var role in roles)
@@ -149,5 +149,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<NotificationHub>("hubs/notification");
-
+app.MapHub<TaskTimerHub>("hubs/taskTimer");
 app.Run();

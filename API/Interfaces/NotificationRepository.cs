@@ -48,10 +48,42 @@ namespace API.Interfaces
            
         }
 
-        public async Task<IEnumerable<Notification>> GetAllUnreadForUser(string UserId)
+        public async Task<IEnumerable<Notification>> GetAllForUser(string UserId)
         {
-          return await _dataContext.Notifications.Where(x=>x.UserId==UserId &&
-           x.IsRead==false).ToListAsync();
+          //return await _dataContext.Notifications.Where(x=>x.UserId==UserId &&
+         //  x.IsRead==false).ToListAsync();
+
+          //   return await _dataContext.Notifications.Include(x=>x.User)
+          //   .Where(x=>x.UserId==UserId).ToListAsync();
+
+           return await _dataContext.Notifications.Include(x=>x.AssignedByUser)
+           .Where(x=>x.UserId==UserId).ToListAsync();
+
+        }
+         public async Task<IEnumerable<Notification>> GetAllUnreadForUser(string UserId)
+        {
+          //return await _dataContext.Notifications.Where(x=>x.UserId==UserId &&
+         //  x.IsRead==false).ToListAsync();
+
+           //  return await _dataContext.Notifications.Include(x=>x.User)
+          //   .Where(x=>x.UserId==UserId&&x.IsRead==false).ToListAsync();
+
+       return await _dataContext.Notifications.Include(x=>x.AssignedByUser)
+        .Where(x=>x.UserId==UserId&&x.IsRead==false).ToListAsync();
+
+        }
+
+        public async Task<bool> SetAllAsRead(string userId)
+        {
+         var originalEntities= await _dataContext.Notifications.Where(x=>x.UserId==userId).ToListAsync();
+         foreach(var item in originalEntities)
+         {
+          item.IsRead=true;
+          _dataContext.Entry(item).Property(x=>x.IsRead).IsModified=true;
+         }
+          await  _dataContext.SaveChangesAsync();
+
+          return true;
         }
     }
 }

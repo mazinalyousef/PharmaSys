@@ -28,6 +28,9 @@ namespace API.Entities
 
         public string AssignedByUserId { get; set; }
 
+        //added
+        public  virtual User AssignedByUser { get; set; }
+
         public bool IsRead { get; set; } 
 
         public DateTime? DateSent { get; set; }

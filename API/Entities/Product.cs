@@ -21,6 +21,6 @@ namespace API.Entities
 
         public ICollection<Barcode>  Barcodes {get;set;}
         
-
+        
     }
 }

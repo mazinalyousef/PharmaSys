@@ -7,6 +7,7 @@ import { checkedListTask } from '../_models/checkedListTask';
 import { taskAssign } from '../_models/taskAssign';
 import { rawMaterialsTask } from '../_models/rawMaterialsTask';
 import { rangeSelectTask } from '../_models/rangeSelectTask';
+import { userTask } from '../_models/userTask';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,11 @@ export class BatchtaskService {
   assign(taskassign:taskAssign) : Observable<boolean>
   {
       return this.http.put<boolean>(this.baseUrl+'Tasks/Assign',taskassign);
+  }
+
+  complete(id:number): Observable<boolean>
+  {
+      return this.http.post<boolean> (this.baseUrl+'Tasks/complete/'+id,null);
   }
 
   getBatchTask(id:number) :Observable<batchTask>
@@ -39,6 +45,10 @@ export class BatchtaskService {
   getrangeSelectTask(id:number) : Observable<rangeSelectTask>
   {
      return this.http.get<rangeSelectTask> (this.baseUrl+'tasks/rangeSelect/'+id);
+  }
+  getallRunningForUser(userId:string) :Observable<userTask[]>
+  {
+    return this.http.get<userTask[]>(this.baseUrl+'tasks/userTasks/'+userId);
   }
 
 }

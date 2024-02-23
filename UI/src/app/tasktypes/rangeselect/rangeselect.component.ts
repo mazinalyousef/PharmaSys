@@ -123,22 +123,47 @@ export class RangeselectComponent implements OnInit
 
     
   // console.log(this.selectedgroupedRange);
-
-   if (this.selectedgroupedRange)
-   {
-
-    // console.log(this.selectedgroupedRange.length);
-    // console.log(this.groupedRanges.length);
-    if(this.selectedgroupedRange.length===this.groupedRanges.length)
+  if (this.idparam)
+  { 
+    if (this.selectedgroupedRange)
     {
-        // pass back data to API
-        this.router.navigate(['/home']);
+ 
+     // console.log(this.selectedgroupedRange.length);
+     // console.log(this.groupedRanges.length);
+     if(this.selectedgroupedRange.length===this.groupedRanges.length)
+     {
+         // pass back data to API
+ 
+         this.batchtaskService.complete(this.idparam).subscribe(
+ 
+           res=>
+           {
+             if (res)
+             {
+                // we may make the user leave the task group
+               this.router.navigate(['/home']);
+             }
+             else
+             {
+               console.log("Task Failed To Complete");
+             }
+           
+           }
+           ,error=>
+           {
+             console.log(error);
+           }
+         )
+ 
+         
+     }
+     else
+     {
+        alert("condition Length Mismatch");
+     }
     }
-    else
-    {
-       alert("condition Length Mismatch");
-    }
-   }
+  }
+  
 
  
    

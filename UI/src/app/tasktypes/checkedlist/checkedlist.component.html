@@ -1,12 +1,15 @@
+
+<label >{{this.presenceservice.timerTickDisplay$|async}}</label>
 <form>
 
     <div *ngIf="checkedlistTask">
         <div  *ngFor="let item of checkedlistTask.taskTypeCheckLists">
            <!-- <input type="checkbox" [checked]="item.isChecked">{{item.title}}-->
-            
+
             <mat-checkbox color="primary"
-             [(ngModel)]="item.isChecked"
-             [ngModelOptions]="{standalone: true}"
+
+            
+             [(ngModel)]="item.isChecked" [ngModelOptions]="{standalone: true}"
              >{{item.title}}</mat-checkbox>
   
          

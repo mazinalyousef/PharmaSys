@@ -73,9 +73,18 @@ namespace API.Data
 
 
             builder.Entity<Department>().HasMany(tg=>tg.BatchTasks).WithOne(tg=>tg.Department).OnDelete(DeleteBehavior.NoAction);
-             builder.Entity<User>().HasMany(tg=>tg.BatchTasks).WithOne(tg=>tg.User).OnDelete(DeleteBehavior.NoAction);
 
 
+            builder.Entity<User>().HasMany(tg=>tg.BatchTasks).WithOne(tg=>tg.User).OnDelete(DeleteBehavior.NoAction);
+
+            //added...
+            builder.Entity<User>().HasMany(tg=>tg.AssignedNotifications).WithOne(tg=>tg.AssignedByUser).OnDelete(DeleteBehavior.NoAction);
+
+
+
+                //added..
+                builder.Entity<Batch>().HasIndex(x=>x.BatchNO).IsUnique();
+                builder.Entity<Barcode>().HasIndex(x=>x.barcode).IsUnique();
 
 
             

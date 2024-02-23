@@ -9,6 +9,8 @@ import { BaseTaskTypes } from '../_enums/BaseTaskTypes';
 import { BatchtaskService } from '../_services/batchtask.service';
 import { Router } from '@angular/router';
 import { taskAssign } from '../_models/taskAssign';
+import { PresenceService } from '../_services/presence.service';
+import { AuthenticatedResponse } from '../_models/AuthenticatedResponse';
 
 @Component({
   selector: 'app-notifications',
@@ -18,18 +20,22 @@ import { taskAssign } from '../_models/taskAssign';
 export class NotificationsComponent implements OnInit
 {
   usernotifications : notification[];
-  displayedColumns = ['notificationMessage', 'dateSent','actions']; 
+  displayedColumns = ['notificationMessage','takenDisplayTitle', 'dateSent','actions']; 
   loggedUserId : string;
   baseTaskType : BaseTaskTypes;
   taskassign : taskAssign={taskId:0,userId:''};
   assignSuccess:boolean;
+  loggedUser:AuthenticatedResponse;
+
 
 
   constructor(private notificationService : NotificationService,
     private userservice:UsersService,
     private mappinghelper : MappingHelperService,
     private batchtaskservice:BatchtaskService,
-    private router:Router
+    private router:Router,
+    public presenseService : PresenceService,
+ 
     )
   {
 
@@ -43,16 +49,17 @@ export class NotificationsComponent implements OnInit
        res=> {
          console.log(res.username);
        this.loggedUserId=res.id;
+       this.loggedUser = res;
        }
      )
 
-
-     this.loadNotifications();
+     // note : committed to test the observable 
+    // this.loadNotifications();   
   }
 
   loadNotifications()
   {
-    this.notificationService.getUnreadForUser(this.loggedUserId).subscribe
+    this.notificationService.getallForUser(this.loggedUserId).subscribe
     (
       res=>
       {
@@ -70,6 +77,16 @@ export class NotificationsComponent implements OnInit
   assignTask(batchTaskId :number)
   {
 
+         this.userservice.loggedUser$.pipe(
+         take(1) 
+           ).subscribe(
+         res=> {
+          
+         this.loggedUserId=res.id;
+         this.loggedUser = res;
+         console.log(res.id+" from assign component");
+         }
+         )
 
         this.taskassign.taskId=batchTaskId;
         this.taskassign.userId= this.loggedUserId;
@@ -84,7 +101,7 @@ export class NotificationsComponent implements OnInit
         this.assignSuccess=res;
         if (this.assignSuccess)
         {
-          this.batchtaskservice.getBatchTask(batchTaskId).subscribe(res=>
+            this.batchtaskservice.getBatchTask(batchTaskId).subscribe(res=>
             {
               this.baseTaskType =  this.mappinghelper.
               getBaseTaskType(res.taskTypeId);
@@ -105,7 +122,12 @@ export class NotificationsComponent implements OnInit
                 this.router.navigate(["/rangeSelect",batchTaskId]);
                  
               }
-      
+
+              // fire the controller 
+             
+              // join the task group 
+              this.presenseService.joinTaskGroups(this.loggedUser ,batchTaskId);
+                
            
             },error=>
             {

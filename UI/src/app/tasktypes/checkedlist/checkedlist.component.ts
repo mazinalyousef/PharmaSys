@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkedListTask } from 'src/app/_models/checkedListTask';
 import { BatchtaskService } from 'src/app/_services/batchtask.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 @Component({
   selector: 'app-checkedlist',
@@ -12,19 +13,22 @@ import { BatchtaskService } from 'src/app/_services/batchtask.service';
 export class CheckedlistComponent  implements OnInit
 {
 
-   
+   timerdata : number;
    idparam?:number;
    checkedlistTask : checkedListTask;
    
 
    constructor(private activatedRoute : ActivatedRoute, private batchtaskService : BatchtaskService,
-     private router : Router
+     private router : Router,public presenceservice :PresenceService
     ) { }
 
 
   ngOnInit(): void 
   {
       this.loadTask();
+      this.timerdata=  this.presenceservice.tasktimerData;
+      console.log( this.timerdata);
+      console.log( this.presenceservice.timerTick$);
   }
 
   loadTask()
@@ -49,12 +53,38 @@ export class CheckedlistComponent  implements OnInit
   }
   onComplete()
   {
-   var allchecked= this.checkedlistTask.taskTypeCheckLists.every(x=>x.isChecked);
-  //console.log(allchecked);
-   if (allchecked)
-   {
-    this.router.navigate(['/home']);
-   }
+    if (this.idparam)
+    {
+      var allchecked= this.checkedlistTask.taskTypeCheckLists.every(x=>x.isChecked);
+      //console.log(allchecked);
+       if (allchecked)
+       {
+    
+        // call complete task -- API
+        this.batchtaskService.complete(this.idparam).subscribe(
+
+          res=>
+          {
+            if (res)
+            {
+               // we may make the user leave the task group
+              this.router.navigate(['/home']);
+            }
+            else
+            {
+              console.log("Task Failed To Complete");// failed successfully..  :)
+            }
+          
+          }
+          ,error=>
+          {
+            console.log(error);
+          }
+        )
+       
+       }
+    }
+  
    
   }
   

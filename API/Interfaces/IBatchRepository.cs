@@ -15,6 +15,10 @@ namespace API.Interfaces
 
        Task<Batch> GetBatch(int Id);
 
+       int getBatchState(int Id);
+
+       bool setBatchState(int id,int newSate);
+
        Task<int> Add (Batch batch);
 
         Task<int> Add_Batch_Dataset(Batch batch);

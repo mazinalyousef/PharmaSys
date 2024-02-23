@@ -7,7 +7,7 @@ namespace API.DTOS
 {
     public class BarcodeForViewDTO
     {
-    public int Id { get; set; }  
+      public int Id { get; set; }  
 
      public string barcode { get; set; }
 

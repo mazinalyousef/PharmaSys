@@ -7,6 +7,7 @@ import { map } from 'rxjs';
 import { DataService } from './_services/data.service';
 import { AuthenticatedResponse } from './_models/AuthenticatedResponse';
 import { UsersService } from './_services/users.service';
+import { PresenceService } from './_services/presence.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit
     public App_departments !: Department[];
     constructor(private userservice:UsersService,
        private departmentservice:DepartmentsService,
-        private dataservice:DataService)
+        private dataservice:DataService,
+        private presenceService:PresenceService)
     {
      
     }
@@ -31,13 +33,21 @@ export class AppComponent implements OnInit
     // this.dataservice.filldepartments(this.App_departments);
     // this.dataservice.GlobalDeparments = this.App_departments;
      
-    this.setCurrentUser();
+     this.setCurrentUser();
     }
 
     setCurrentUser()
     {
-       const user : AuthenticatedResponse =JSON.parse(localStorage.getItem('user'));
-       this.userservice.setCurrentUser(user);
+       const user : AuthenticatedResponse =JSON.parse(sessionStorage.getItem('user'));
+       console.log(user.username+" from set current user")
+       if (user)
+       {
+          this.userservice.setCurrentUser(user);
+          // get  notifications
+         // this.presenceService.getUsernotifications(user.id);
+         // this.presenceService.setInitialNotificationsCount(user.id);
+          
+       }
     }
     getdepartments()
     {

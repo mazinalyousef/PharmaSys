@@ -43,6 +43,9 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { CheckedlistComponent } from './tasktypes/checkedlist/checkedlist.component';
 import { RawmaterialsComponent } from './tasktypes/rawmaterials/rawmaterials.component';
 import { RangeselectComponent } from './tasktypes/rangeselect/rangeselect.component';
+import { UserTasksComponent } from './user-tasks/user-tasks.component';
+import { UserRunningTaskComponent } from './user-running-task/user-running-task.component';
+import {MatCardModule} from '@angular/material/card';
 
 
 
@@ -64,6 +67,9 @@ import { RangeselectComponent } from './tasktypes/rangeselect/rangeselect.compon
     CheckedlistComponent,
     RawmaterialsComponent,
     RangeselectComponent,
+    UserTasksComponent,
+    UserRunningTaskComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -91,6 +97,7 @@ import { RangeselectComponent } from './tasktypes/rangeselect/rangeselect.compon
     RouterModule,
     HttpClientModule,
     ReactiveFormsModule,
+    MatCardModule,
     RouterModule.forRoot([])
   ],
   providers: [

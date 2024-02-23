@@ -38,8 +38,7 @@ export class LoginComponent implements OnInit
    this.userservice.performlogin(this.loginuser).subscribe(
     res=>
     {
-    
-      console.log(res);
+      console.log(res +" from login component");
       this.router.navigate(['home']);
     },
     err=>

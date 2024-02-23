@@ -21,11 +21,8 @@ namespace API.Controllers
         public Barcode(DataContext dataContext,IMapper mapper)
         {
             _mapper = mapper;
-            _dataContext = dataContext;
-            
+            _dataContext = dataContext;   
         }  
-
-
         [HttpGet("{barcode}")]
         public async Task<ActionResult<BarcodeForViewDTO>> GetBarcode(string barcode)
         {
@@ -39,5 +36,83 @@ namespace API.Controllers
              var barcodeforviewdto = _mapper.Map<BarcodeForViewDTO>(_result);
              return Ok(barcodeforviewdto);
         }
+
+        [HttpGet]
+        public async Task<ActionResult< IEnumerable<BarcodeForViewDTO>>> getBarcodes()
+        {
+             var barcodes = await _dataContext.Barcodes.Include(x=>x.product).ToListAsync();
+             var barcodesForViewDTOs = _mapper.Map<IEnumerable< BarcodeForViewDTO>>(barcodes);
+             return Ok(barcodesForViewDTOs) ;
+        }
+
+        [HttpPost]
+        public async Task <IActionResult> AddBarcode([FromBody] BarcodeForViewDTO barcodeForViewDTO)
+        {
+            var barcode = _mapper.Map<API.Entities.Barcode>(barcodeForViewDTO);
+            var result = _dataContext.Barcodes.Add(barcode);
+            await _dataContext.SaveChangesAsync();
+            return Ok(new Response { Status = "Success", Message = "Barcode Add Was Successfull!" });
+
+        }
+
+         [HttpPut("{Id}")]
+        public async Task<IActionResult> Update ([FromBody]BarcodeForViewDTO barcodeForViewDTO,int Id)
+        {
+            var barcode = _mapper.Map<API.Entities.Barcode>(barcodeForViewDTO);
+            // update ... keep in the controller for now 
+            var originalEntity =await _dataContext.Barcodes.FirstOrDefaultAsync(x=>x.Id==Id);
+            if (originalEntity!=null)
+            {
+                originalEntity.barcode = barcodeForViewDTO.barcode;
+                originalEntity.NDCNO = barcodeForViewDTO.NDCNO;
+                originalEntity.ProductId = barcodeForViewDTO.ProductId;
+                originalEntity.TubeWeight  = barcodeForViewDTO.TubeWeight;
+                _dataContext.Entry(originalEntity).Property(x=>x.barcode).IsModified=true;
+                _dataContext.Entry(originalEntity).Property(x=>x.NDCNO).IsModified=true;
+                _dataContext.Entry(originalEntity).Property(x=>x.ProductId).IsModified=true;
+                _dataContext.Entry(originalEntity).Property(x=>x.TubeWeight).IsModified=true;
+
+                var result = await _dataContext.SaveChangesAsync();
+            if (result==0)
+           {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message = "Update Failed!"});            
+           }
+            
+             return Ok(new Response { Status = "Success", Message = "Update Was Successfull!" });
+            }
+            
+            return StatusCode(StatusCodes.Status500InternalServerError,
+            new Response { Status = "Error", Message = "Original Entity Not Found"});      
+
+          
+
+            
+        }
+
+        [HttpDelete("{Id}")]
+        public  ActionResult Delete (int Id)
+        {
+            // find another (better) way than try catch
+            try 
+            {
+            var originalEntity= _dataContext.Barcodes.FirstOrDefault(x=>x.Id==Id);
+            if (originalEntity!=null)
+            {
+              _dataContext.Barcodes.Remove(originalEntity);
+              _dataContext.SaveChanges();
+            }
+              
+              return NoContent();
+            }
+            catch(Exception ex)
+            {
+                 return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message =ex.Message});           
+            }
+            
+        }
+
+
     }
 }

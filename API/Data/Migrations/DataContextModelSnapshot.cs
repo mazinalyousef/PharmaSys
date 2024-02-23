@@ -61,7 +61,7 @@ namespace API.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BatchNO")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("BatchSize")
                         .HasColumnType("decimal(32,2)");
@@ -112,6 +112,10 @@ namespace API.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BatchNO")
+                        .IsUnique()
+                        .HasFilter("[BatchNO] IS NOT NULL");
 
                     b.HasIndex("BatchStateId");
 
@@ -330,7 +334,7 @@ namespace API.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AssignedByUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("BatchId")
                         .HasColumnType("int");
@@ -354,6 +358,8 @@ namespace API.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedByUserId");
 
                     b.HasIndex("BatchTaskId");
 
@@ -879,6 +885,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Notification", b =>
                 {
+                    b.HasOne("API.Entities.User", "AssignedByUser")
+                        .WithMany("AssignedNotifications")
+                        .HasForeignKey("AssignedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("API.Entities.BatchTask", "BatchTask")
                         .WithMany("Notifications")
                         .HasForeignKey("BatchTaskId");
@@ -886,6 +897,8 @@ namespace API.Data.Migrations
                     b.HasOne("API.Entities.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("AssignedByUser");
 
                     b.Navigation("BatchTask");
 
@@ -1101,6 +1114,8 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.User", b =>
                 {
+                    b.Navigation("AssignedNotifications");
+
                     b.Navigation("BatchTasks");
 
                     b.Navigation("Batches");

@@ -6,6 +6,7 @@ export interface notification
         batchTaskId? : number
         batchId? : number
         assignedByUserId? : number
+        takenDisplayTitle:string
         isRead: boolean
         dateSent?: Date
         dateRead?: Date

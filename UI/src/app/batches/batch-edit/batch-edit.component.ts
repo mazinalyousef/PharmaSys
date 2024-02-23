@@ -144,7 +144,14 @@ console.log(error);
     onSubmit()
     {
 
-     
+       this.userservice.loggedUser$.pipe(
+        take(1) 
+       ).subscribe(
+         res=> {
+           console.log(res.username);
+         this.loggedUserId=res.id;
+         }
+       )
       //#region  Getting The Batch Values from Form
     
       this.batch.batchNO  = this.form.get("batchNO")?.value;

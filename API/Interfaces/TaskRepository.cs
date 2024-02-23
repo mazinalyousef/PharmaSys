@@ -7,6 +7,8 @@ using API.Data;
 using API.DTOS;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace API.Interfaces
 {
@@ -212,12 +214,20 @@ namespace API.Interfaces
 
         public async Task<bool> SetAsAssigned(int TaskId,string UserId)
         {
-            bool completed=false;
 
-            var originalEntity = _dataContext.BatchTasks.FirstOrDefault(x=>x.Id==TaskId);
+            // use transaction .. later
+
+            bool completed=false;
+             using (IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync())
+             {
+                try 
+                {
+                var originalEntity = _dataContext.BatchTasks.FirstOrDefault(x=>x.Id==TaskId);
             if (originalEntity!=null)
             {
-                // setting new properties for the original entity
+               // if (originalEntity.UserId==null) // the task is not assigned by  a user 
+                {
+                    // setting new properties for the original entity
                 originalEntity.UserId = UserId;
                 originalEntity.StartDate =DateTime.Now;
                 originalEntity.TaskStateId = (int) Enumerations.TaskStatesEnum.processing;
@@ -226,14 +236,85 @@ namespace API.Interfaces
                 _dataContext.Entry(originalEntity).Property(x=>x.StartDate).IsModified=true;
                 _dataContext.Entry(originalEntity).Property(x=>x.TaskStateId).IsModified=true;
 
+
+                // update also the notification-assigned by user property 
+                // note : update all the notifications related the the task....
+                var originalNotificationEntities = _dataContext.Notifications.Where(x=>x.BatchTaskId==TaskId).ToList();
+                if (originalNotificationEntities!=null)
+                {
+                    foreach(var _item in originalNotificationEntities)
+                    {
+                     _item.AssignedByUserId=UserId;
+                    _dataContext.Entry(_item).Property(x=>x.AssignedByUserId).IsModified=true;
+                    
+                    }
+                  // we may want to push notifications here so other users can see that the user takes this specific task
+                }
+                await _dataContext.SaveChangesAsync();
+
+                     await transaction.CommitAsync();
+                   completed=true;
+                }                   
+            } 
+                }
+                catch(Exception)
+             {
+                 await transaction.RollbackAsync();
+             }
+            
+             }
+           
+            return completed;
+        }
+
+
+         
+         public async Task<bool> SetAsCompleted(int TaskId)
+         {
+            bool completed=false;
+
+            var originalEntity = _dataContext.BatchTasks.FirstOrDefault(x=>x.Id==TaskId);
+            if (originalEntity!=null)
+            {
+                // setting new properties for the original entity
+                originalEntity.EndDate =DateTime.Now;
+                originalEntity.TaskStateId = (int) Enumerations.TaskStatesEnum.finished;
+                _dataContext.Entry(originalEntity).Property(x=>x.EndDate).IsModified=true;
+                _dataContext.Entry(originalEntity).Property(x=>x.TaskStateId).IsModified=true;
                   await _dataContext.SaveChangesAsync();
                   completed=true;
 
             } 
             return completed;
-        }
+         }
 
         
+         public List<BatchTask> getBatchTasks(int _batchId)
+         {
+            List<BatchTask> batchTasks=new  List<BatchTask>();
+            batchTasks = _dataContext.BatchTasks.Where(x=>x.BatchId==_batchId).ToList();
+            return batchTasks;
+         }
+
+         public BatchTask GetBatchTask(int _batchId,int _taskIdtypeId,int _departmentId)
+         {
+            BatchTask batchTask= new BatchTask();
+            batchTask= _dataContext.BatchTasks.Where(x=>x.TaskTypeId==_taskIdtypeId&&x.BatchId==
+            _batchId&&x.DepartmentId==_departmentId).FirstOrDefault();
+            return batchTask;
+         }
+
+
+
+
+         public async Task<IEnumerable<BatchTask>>GetUserRunningTasks(string userId)
+         {
+            return await _dataContext.BatchTasks.
+             Include(x=>x.Batch).ThenInclude(x=>x.Product)
+            .Include(x=>x.TaskType)
+            .Where(x=>x.UserId==userId&&x.TaskStateId==(int)Enumerations.TaskStatesEnum.processing).ToListAsync();
+         }
+
 
 
     }

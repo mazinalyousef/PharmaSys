@@ -4,6 +4,7 @@ import { UsersService } from '../_services/users.service';
 import { Observable, take, takeLast } from 'rxjs';
 import { AuthenticatedResponse } from '../_models/AuthenticatedResponse';
 import { PresenceService } from '../_services/presence.service';
+import { NotificationService } from '../_services/notification.service';
 
 @Component({
   selector: 'app-nav',
@@ -21,8 +22,12 @@ export class NavComponent implements OnInit {
   //loggedin : boolean;
   currentUser$:Observable<AuthenticatedResponse>;
 
+  loggedUserId : string;
+  loggedUserName : string;
+
   constructor(public userservice:UsersService,
     public presenceservice:PresenceService,
+    private notificationservice : NotificationService,
      private router: Router)
   {
     //this.notificationsIsHidden=false;
@@ -34,15 +39,26 @@ export class NavComponent implements OnInit {
     
     {
 
+
+      this.userservice.loggedUser$.pipe(
+        take(1) 
+       ).subscribe(
+         res=> {
+           console.log(res.username+" from nav ...");
+         this.loggedUserId=res.id;
+         this.loggedUserName=res.username;
+         }
+       )
+
      //this.router.navigate(['home'])
    
    //  this.getCurrentUser();
 
      this.currentUser$ = this.userservice.loggedUser$;
-     if (this.currentUser$)
+     if (this.loggedUserId)
      {
-      this.router.navigate(['login']);
-      // this.router.navigate(['home']);
+      
+     // this.router.navigate(['home']);
    
      }
      else
@@ -79,6 +95,30 @@ export class NavComponent implements OnInit {
 
     showNotifications()
     {
+
+
+      // testing... re-update the logged user id 
+       this.userservice.loggedUser$.pipe(
+        take(1) 
+       ).subscribe(
+         res=> 
+         {
+           console.log(res.username+" from nav ...");
+         this.loggedUserId=res.id;
+         
+         }
+       )
+       
+         this.notificationservice.setAllasRead(this.loggedUserId).subscribe(res=>
+        {
+            if (res)
+            {
+              console.log(res+" from nav click notifications")
+              this.presenceservice.setInitialNotificationsCount(this.loggedUserId,true);
+            }
+        },error=>{console.log(error);}
+        )
+    
       this.router.navigate(['notifications']);
     }
 

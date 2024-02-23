@@ -6,6 +6,7 @@ using API.Data;
 using API.Entities;
 using API.Enumerations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace API.Interfaces
 {
@@ -31,36 +32,18 @@ namespace API.Interfaces
         public async Task<int> Add_Batch_Dataset(Batch batch)
         {
              
-             var result= _dataContext.Batches.Add(batch);
+          int insertedBatchId=0;
+             // use transaction
+          using ( IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync())
+          {
+
+            try 
+            {
+              var result= _dataContext.Batches.Add(batch);
               await _dataContext.SaveChangesAsync();
-             var insertedBatchId=  result.Entity.Id;
-/*
-
-             // get product ingredients ....
-             var productIngredients = _dataContext.ProductIngredients.Where(x=>x.ProductId==batch.ProductId).ToList();
-             // calculate the batch tube weight
-             decimal BatchTubeSize = batch.BatchSize / batch.TubesCount; // handle exceptions later...
-
-
-             List<BatchIngredient> batchIngredients=new List<BatchIngredient> ();
-             // now loop  through product ingredients 
-             foreach (var productIngredientsItem  in productIngredients)
-             {
-                 BatchIngredient batchIngredient=new  BatchIngredient();
-                 batchIngredient.BatchId = 0; // change to added batch Id ...
-                 batchIngredient.IngredientId = productIngredientsItem.IngredientId;
-                 batchIngredient.QTYPerTube = productIngredientsItem.Percentage;
-                 batchIngredient.QTYPerBatch = BatchTubeSize *  (batchIngredient.QTYPerTube/100m);
-                 batchIngredients.Add(batchIngredient);
-             }
-*/
-
-
-
-           var batchIngredients = this.generate_Batch_ingredient(batch.ProductId,batch.BatchSize,batch.TubesCount);
-
-           
-          
+              insertedBatchId=  result.Entity.Id;
+ 
+            var batchIngredients = this.generate_Batch_ingredient(_dataContext,batch.ProductId,batch.BatchSize,batch.TubesCount);
 
             // now assign the batch Id foreach BatchIngredient item
             foreach (var batchIngredientsItem in batchIngredients)
@@ -70,8 +53,17 @@ namespace API.Interfaces
                 await _dataContext.SaveChangesAsync();
             }
 
+            await transaction.CommitAsync();
             
-            return insertedBatchId;
+            }
+            catch(Exception)
+            {
+               await transaction.RollbackAsync();
+               insertedBatchId=0;
+            }
+
+          }
+          return insertedBatchId;   
 
         }
 
@@ -81,7 +73,7 @@ namespace API.Interfaces
           if (originalEntity!=null)
           {
             _dataContext.Batches.Remove(originalEntity);
-              _dataContext.SaveChangesAsync();
+              _dataContext.SaveChanges();
           }
         }
 
@@ -111,6 +103,24 @@ namespace API.Interfaces
           .FirstOrDefaultAsync(x=>x.Id==Id);
         }
 
+          public int getBatchState(int Id)
+          {
+             var batch=_dataContext.Batches.Where(x=>x.Id==Id).FirstOrDefault();
+             return batch.BatchStateId;
+          }
+
+          public bool setBatchState(int Id,int newSate)
+          {
+            bool completed=false;
+            var originalBatch = _dataContext.Batches.FirstOrDefault(x=>x.Id==Id);
+            originalBatch.BatchStateId=newSate;
+            _dataContext.Entry(originalBatch).Property(x=>x.BatchStateId).IsModified=true;
+            _dataContext.SaveChanges();
+            return completed;
+          }
+
+          
+
 
         public async Task<IEnumerable<Batch>> GetAll()
         {
@@ -121,7 +131,13 @@ namespace API.Interfaces
 
         public async Task<Batch> Update(int Id,Batch batch)
         {
-         var originalEntity=  await  _dataContext.Batches.FirstOrDefaultAsync(x=>x.Id==Id);
+
+          var originalEntity=  await  _dataContext.Batches.FirstOrDefaultAsync(x=>x.Id==Id);
+           using (IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync())
+         {
+	       try 
+           {
+			     
           if (originalEntity!=null)
           {
             // setting properties of original entity from parameter entity....
@@ -172,7 +188,7 @@ namespace API.Interfaces
               // the other way is to compare the original entities with the new ones --
               // -- and make delete - update - insert statemetns based on the comparison
 
-               var batchIngredients = this.generate_Batch_ingredient(batch.ProductId,batch.BatchSize,batch.TubesCount);
+               var batchIngredients = this.generate_Batch_ingredient(_dataContext,batch.ProductId,batch.BatchSize,batch.TubesCount);
 
                // remove the old ingredients entries ....
                // get the original entities first....
@@ -190,19 +206,32 @@ namespace API.Interfaces
                _dataContext.BatchIngredients.Add(batchIngredientsItem);
                 await _dataContext.SaveChangesAsync();
             }
-             return originalEntity;
+
+
+           await transaction.CommitAsync();
+            return originalEntity;
           }
-          return null;
+        
+		      }
+		     catch(Exception)
+         {
+           await transaction.RollbackAsync();
+         }
+			   
+		      }
+           return null;
+
+         
         }
 
         
 
-        private List<BatchIngredient> generate_Batch_ingredient(int productId,decimal batchSize,int tubesCount)
+        private  List<BatchIngredient> generate_Batch_ingredient(DataContext dcntxt, int productId,decimal batchSize,int tubesCount)
 
         {
             List<BatchIngredient> batchIngredients=new List<BatchIngredient> ();
            // get product ingredients ....
-             var productIngredients = _dataContext.ProductIngredients.Where(x=>x.ProductId==productId).ToList();
+             var productIngredients = dcntxt.ProductIngredients.Where(x=>x.ProductId==productId).ToList();
              // calculate the batch tube weight
              decimal BatchTubeSize = batchSize / tubesCount; // handle exceptions later...
 
@@ -233,7 +262,7 @@ namespace API.Interfaces
             return false;
            }
            originalBatch.StartDate = DateTime.Now;
-           originalBatch.BatchStateId =(int) BatchStatesEnum.processing;
+           originalBatch.BatchStateId =(int) BatchStatesEnum.preProduction;
            _dataContext.Entry(originalBatch).Property(x=>x.StartDate).IsModified=true;
             _dataContext.Entry(originalBatch).Property(x=>x.BatchStateId).IsModified=true;
 
