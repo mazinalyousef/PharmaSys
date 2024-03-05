@@ -31,7 +31,10 @@ export class UsersService
 
    loggedUser$ = this.loggedUser.asObservable();
 
-   private LoggedUserName =new Subject<string>();
+ //  private LoggedUserName =new Subject<string>();
+ //  LoggedUserName$ = this.LoggedUserName.asObservable();
+
+   private LoggedUserName =new ReplaySubject<string>(1);
    LoggedUserName$ = this.LoggedUserName.asObservable();
 
    baseUrl = environment.apiUrl;
@@ -40,7 +43,7 @@ export class UsersService
    // move this logic to interceptor....
   constructor(private http:HttpClient, private presenseService:PresenceService) 
   {
-    
+     
   }
 
   getUsers():Observable<User[]>
@@ -90,11 +93,19 @@ export class UsersService
             this.LoggedUserName.next(user.username);
             this.decodedToken = this.jwtHelper.decodeToken(user.token);
             this.CurrentloggedUser = user;
-            this.presenseService.createHubConnection(this.CurrentloggedUser);
-          //  this.presenseService.createHubConnectiontesttimer(this.CurrentloggedUser); // test...
+             
+             // notifications
+             this.presenseService.createHubConnection(this.CurrentloggedUser);
               this.presenseService.setInitialNotificationsCount(user.id,true);
              this.presenseService.getUsernotifications(user.id);
             this.presenseService.joinGroups( this.CurrentloggedUser);
+
+            // messages...
+              this.presenseService.createMessageHubConnection(this.CurrentloggedUser);
+              this.presenseService.setInitialMessagesCount(user.id,true);
+              this.presenseService.getUsermessages(user.id);
+              this.presenseService.joinMessageGroups(this.CurrentloggedUser);
+
           }
         }
       )
@@ -112,8 +123,29 @@ export class UsersService
 
   setCurrentUser(user:AuthenticatedResponse)
   {
+    console.log("inside setCurrentUser for user "+user.username);
     this.loggedUser.next(user);
     this.LoggedUserName.next(user.username);
+     
+
+    // here we nedd to maintain (restore) the hub connection
+    this.presenseService.createHubConnection(user); //added
+    this.presenseService.setInitialNotificationsCount(user.id,true);
+    this.presenseService.getUsernotifications(user.id);
+    this.presenseService.joinGroups( user);//added
+   
+  
+    this.presenseService.createMessageHubConnection(user); //added
+
+     this.presenseService.setInitialMessagesCount(user.id,true);
+     
+    this.presenseService.getUsermessages(user.id);
+    this.presenseService.joinMessageGroups(user); //added
+
+    // timer hub not habdeled here ...
+    // consider it 
+    // may need to handle as well
+    
   }
 
    
@@ -124,8 +156,8 @@ export class UsersService
     this.loggedUser.next(null);
     this.LoggedUserName.next("");
     this.CurrentloggedUser = null;
+    this.presenseService.stopHubConnection();
   }
-
 
 
   getUserRoles(userName :string) : Observable<string[]>

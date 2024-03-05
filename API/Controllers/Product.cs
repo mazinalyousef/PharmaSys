@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using API.DTOS;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    
     public class Product : ControllerBase
     {
         
@@ -24,6 +26,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{Id}")]
+          [Authorize(Policy ="ManagerPolicy")]
         public  ActionResult Delete (int Id)
         {
             // find another (better) way than try catch
@@ -42,6 +45,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{Id}")]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<ProductDTO>> GetProduct(int Id)
         {
              var _result = await _productRepository.GetWithIngredients(Id);
@@ -55,6 +59,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult< IEnumerable<ProductDTO>>> getProducts()
         {
              var productsDTO = await _productRepository.GetAll();
@@ -63,9 +68,13 @@ namespace API.Controllers
         }
 
         [HttpPost]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task <IActionResult> AddProduct([FromBody] ProductDTO productDTO)
         {
+
+           
             var product = _mapper.Map<API.Entities.Product>(productDTO);
+             
             var result = await _productRepository.Add_Product_Dataset(product);
             if (result)
             {
@@ -81,6 +90,7 @@ namespace API.Controllers
         }
 
           [HttpPut("{Id}")]
+            [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Update ([FromBody]ProductDTO productDTO,int Id)
         {
             var product = _mapper.Map<API.Entities.Product>(productDTO);

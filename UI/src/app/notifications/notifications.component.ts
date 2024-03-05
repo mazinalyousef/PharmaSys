@@ -23,7 +23,10 @@ export class NotificationsComponent implements OnInit
   displayedColumns = ['notificationMessage','takenDisplayTitle', 'dateSent','actions']; 
   loggedUserId : string;
   baseTaskType : BaseTaskTypes;
-  taskassign : taskAssign={taskId:0,userId:''};
+  TaskSeconds:number;
+  taskDepartmentId:number;
+  taskTypeId:number;
+  taskassign : taskAssign={taskId:0,userId:'',seconds:0};
   assignSuccess:boolean;
   loggedUser:AuthenticatedResponse;
 
@@ -50,15 +53,19 @@ export class NotificationsComponent implements OnInit
          console.log(res.username);
        this.loggedUserId=res.id;
        this.loggedUser = res;
+       console.log( this.loggedUserId+" from on init notifications")
        }
      )
 
      // note : committed to test the observable 
-    // this.loadNotifications();   
+     // this.loadNotifications();  
+     
+     // must reload the user (logged user) notifications....
   }
 
   loadNotifications()
   {
+    console.log( this.loggedUserId+" from on   notifications....loadNotifications function");
     this.notificationService.getallForUser(this.loggedUserId).subscribe
     (
       res=>
@@ -91,7 +98,35 @@ export class NotificationsComponent implements OnInit
         this.taskassign.taskId=batchTaskId;
         this.taskassign.userId= this.loggedUserId;
         // todo : later use switchmap ...to handle one service after another call...
+        this.batchtaskservice.getBatchTask(batchTaskId).subscribe(res=>
+          {
+            this.taskDepartmentId = res.departmentId;
+            this.taskTypeId = res.taskTypeId;
+            this.baseTaskType =  this.mappinghelper.
+            getBaseTaskType(res.taskTypeId);
+            
 
+
+            this.TaskSeconds = this.mappinghelper.
+            getTaskSeconds(res.taskTypeId);
+              
+
+              /*
+            if (res.taskTypeId===(TaskTypes.RawMaterialsWeighting))
+            {this.TaskSeconds=25;}
+            if (res.taskTypeId===(TaskTypes.Manufacturing))
+            {this.TaskSeconds=22;}
+            if (res.taskTypeId===(TaskTypes.RoomCleaning))
+            {this.TaskSeconds=15;}
+              */
+            
+           
+           
+             
+          },error=>
+          {
+            console.log(error)
+          });
 
        // 1- set task as assigned....
        this.batchtaskservice.assign(this.taskassign).subscribe
@@ -101,38 +136,34 @@ export class NotificationsComponent implements OnInit
         this.assignSuccess=res;
         if (this.assignSuccess)
         {
-            this.batchtaskservice.getBatchTask(batchTaskId).subscribe(res=>
-            {
-              this.baseTaskType =  this.mappinghelper.
-              getBaseTaskType(res.taskTypeId);
-              console.log(this.baseTaskType);
-      
-              // route to suitable path....
-      
-              if (this.baseTaskType == BaseTaskTypes.CheckedList)
-              {
-                  this.router.navigate(["/checkedList",batchTaskId]);
-              }
-              else  if (this.baseTaskType == BaseTaskTypes.WeightingMaterialCheckedList)
-              {
-                this.router.navigate(["/rawMaterial",batchTaskId]);
-              }
-              else if (this.baseTaskType == BaseTaskTypes.RangeSelect)
-              {
-                this.router.navigate(["/rangeSelect",batchTaskId]);
-                 
-              }
-
-              // fire the controller 
-             
-              // join the task group 
-              this.presenseService.joinTaskGroups(this.loggedUser ,batchTaskId);
-                
            
-            },error=>
-            {
-              console.log(error)
-            })
+
+           // route to suitable path....
+    
+           if (this.baseTaskType == BaseTaskTypes.CheckedList)
+           {
+               this.router.navigate(["/checkedList",batchTaskId]);
+           }
+           else  if (this.baseTaskType == BaseTaskTypes.WeightingMaterialCheckedList)
+           {
+             this.router.navigate(["/rawMaterial",batchTaskId]);
+           }
+           else if (this.baseTaskType == BaseTaskTypes.RangeSelect)
+           {
+             this.router.navigate(["/rangeSelect",batchTaskId]);
+              
+           }
+
+           // fire the controller 
+          
+           // join the task group 
+            this.presenseService.joinTaskGroups(this.loggedUser ,batchTaskId,this.taskDepartmentId,this.taskTypeId);
+
+            this.taskassign.seconds=  this.TaskSeconds;
+          //  console.log("seconds:"+this.taskassign.seconds);
+            this.batchtaskservice.WaitForTaskTimer(this.taskassign).subscribe(res=>{
+              
+            });
         }
        
         },

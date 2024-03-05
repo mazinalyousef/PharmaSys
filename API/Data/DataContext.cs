@@ -52,8 +52,8 @@ namespace API.Data
                 public DbSet<Barcode> Barcodes {get;set;}
                 public DbSet<Notification> Notifications {get;set;}
 
+              public DbSet<Message> Messages{get;set;}
 
-        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -79,12 +79,16 @@ namespace API.Data
 
             //added...
             builder.Entity<User>().HasMany(tg=>tg.AssignedNotifications).WithOne(tg=>tg.AssignedByUser).OnDelete(DeleteBehavior.NoAction);
-
-
+            builder.Entity<User>().HasMany(tg=>tg.DestinatedMessages).WithOne(tg=>tg.DestinationUser).OnDelete(DeleteBehavior.NoAction);
 
                 //added..
-                builder.Entity<Batch>().HasIndex(x=>x.BatchNO).IsUnique();
-                builder.Entity<Barcode>().HasIndex(x=>x.barcode).IsUnique();
+             builder.Entity<Batch>().HasIndex(x=>x.BatchNO).IsUnique();
+                
+             builder.Entity<Barcode>().HasIndex(x=>x.barcode).IsUnique();
+
+             builder.Entity<Product>().HasIndex(x=>x.ProductName).IsUnique();
+
+             builder.Entity<Ingredient>().HasIndex(x=>x.IngredientName).IsUnique();
 
 
             

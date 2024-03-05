@@ -49,6 +49,14 @@ namespace API.Interfaces
 
             if (BatchTaskDataSet!=null)
             {
+
+                // get original batch info  along with produc
+                var BatchEntity=  await _dataContext.Batches.AsNoTracking().
+                Include(x=>x.Product)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x=>x.Id==BatchTaskDataSet.BatchId);
+
+
                 // mapping ... here done manually  ... 
                 checkedListTaskForViewDTO = new CheckedListTaskForViewDTO();
                 checkedListTaskForViewDTO.Id = BatchTaskDataSet.Id;
@@ -59,6 +67,8 @@ namespace API.Interfaces
                 checkedListTaskForViewDTO.StartDate =BatchTaskDataSet.StartDate;
                 checkedListTaskForViewDTO.TaskTypeId =BatchTaskDataSet.TaskTypeId;
                 checkedListTaskForViewDTO.UserId=BatchTaskDataSet.UserId;
+
+               
 
                 string departmentTitle=string.Empty;
                 if (BatchTaskDataSet.Department!=null)
@@ -85,6 +95,29 @@ namespace API.Interfaces
                     };
                     checkedListTaskForViewDTO.taskTypeCheckLists.Add(taskTypeCheckListNewItem);
 
+                }
+
+                    //added....
+                 if (BatchEntity!=null)
+                {
+                     Batch batchforview = new Batch ();
+                    batchforview.Barcode = BatchEntity.Barcode;
+                    batchforview.BatchNO = BatchEntity.BatchNO;
+                    batchforview.BatchSize = BatchEntity.BatchSize;
+                    batchforview.StartDate = BatchEntity.StartDate;
+                    batchforview.ExpDate = BatchEntity.ExpDate;
+                    batchforview.MFgDate = BatchEntity.MFgDate;
+                    batchforview.MFNO = BatchEntity.MFNO;
+                    batchforview.NDCNO=BatchEntity.NDCNO;
+                    batchforview.TubeWeight = BatchEntity.TubeWeight;
+
+                    checkedListTaskForViewDTO.BatchInfo=batchforview;
+                    if (BatchEntity.Product!=null)
+                    {
+                        Product productforview = new Product ();
+                        productforview.ProductName = BatchEntity.Product.ProductName;
+                        checkedListTaskForViewDTO.ProductInfo=productforview;
+                    }
                 }
                
             }
@@ -172,6 +205,14 @@ namespace API.Interfaces
 
                 if (BatchTaskDataSet!=null)
                 {
+
+                    // get original batch info  along with produc
+                var BatchEntity=  await _dataContext.Batches.AsNoTracking().
+                Include(x=>x.Product)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x=>x.Id==BatchTaskDataSet.BatchId);
+
+
                         // mapping ... here done manually  ... 
                 rawMaterialsTaskForViewDTO = new RawMaterialsTaskForViewDTO();
                 rawMaterialsTaskForViewDTO.Id = BatchTaskDataSet.Id;
@@ -207,27 +248,58 @@ namespace API.Interfaces
                      rawMaterialsTaskForViewDTO.batchIngredientDTOs.Add(batchIngredientNewItem);
                  }
 
+                      //added....
+                 if (BatchEntity!=null)
+                {
+                     Batch batchforview = new Batch ();
+                    batchforview.Barcode = BatchEntity.Barcode;
+                    batchforview.BatchNO = BatchEntity.BatchNO;
+                    batchforview.BatchSize = BatchEntity.BatchSize;
+                    batchforview.StartDate = BatchEntity.StartDate;
+                    batchforview.ExpDate = BatchEntity.ExpDate;
+                    batchforview.MFgDate = BatchEntity.MFgDate;
+                    batchforview.MFNO = BatchEntity.MFNO;
+                    batchforview.NDCNO=BatchEntity.NDCNO;
+                    batchforview.TubeWeight = BatchEntity.TubeWeight;
+
+                    rawMaterialsTaskForViewDTO.BatchInfo=batchforview;
+                    if (BatchEntity.Product!=null)
+                    {
+                        Product productforview = new Product ();
+                        productforview.ProductName = BatchEntity.Product.ProductName;
+                        rawMaterialsTaskForViewDTO.ProductInfo=productforview;
+                    }
+                }
+
                 }
 
              return rawMaterialsTaskForViewDTO;
         }
 
-        public async Task<bool> SetAsAssigned(int TaskId,string UserId)
+        		public async Task<bool> SetAsAssigned(int TaskId,string UserId)
         {
 
             // use transaction .. later
 
             bool completed=false;
-             using (IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync())
-             {
-                try 
-                {
                 var originalEntity = _dataContext.BatchTasks.FirstOrDefault(x=>x.Id==TaskId);
+             
+            
+            
             if (originalEntity!=null)
             {
-               // if (originalEntity.UserId==null) // the task is not assigned by  a user 
+
+                // additional check Task is not assigned by another user
+
+                 if (originalEntity.UserId==null) // the task is not assigned by  a user 
                 {
-                    // setting new properties for the original entity
+                    
+                  using (IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync())
+				  {
+					  try 
+					  {
+						  
+						     // setting new properties for the original entity
                 originalEntity.UserId = UserId;
                 originalEntity.StartDate =DateTime.Now;
                 originalEntity.TaskStateId = (int) Enumerations.TaskStatesEnum.processing;
@@ -254,16 +326,15 @@ namespace API.Interfaces
 
                      await transaction.CommitAsync();
                    completed=true;
-                }                   
-            } 
-                }
-                catch(Exception)
-             {
-                 await transaction.RollbackAsync();
-             }
-            
-             }
-           
+					  }  // try 
+					    catch(Exception)
+						{
+							await transaction.RollbackAsync();
+						}
+				  }
+                } // if task is not assigned by a user...
+                                  
+            }    // if original entity isnot null     
             return completed;
         }
 

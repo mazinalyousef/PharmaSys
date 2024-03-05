@@ -6,6 +6,7 @@ using API.Entities;
 using API.Helpers;
 using API.Hubs;
 using API.Interfaces;
+using API.Middleware;
 using API.Timers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -70,6 +71,14 @@ builder.Services.AddAuthentication(options =>
 
 
 
+// testing
+ builder.Services.AddAuthorization(opt=>
+ {
+    opt.AddPolicy("ManagerPolicy",policy=>policy.RequireRole(UserRoles.Manager,UserRoles.Developer));
+ });
+
+
+
 //builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(x=>x.JsonSerializerOptions.ReferenceHandler=ReferenceHandler.IgnoreCycles);
 builder.Services.AddCors();
@@ -83,6 +92,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IBatchRepository,BatchRepository>();
 builder.Services.AddScoped<ITaskRepository,TaskRepository>();
 builder.Services.AddScoped<INotificationRepository,NotificationRepository>();
+builder.Services.AddScoped<IMessageRepository,MessageRepository>();
 builder.Services.AddScoped<IBatchBL,BatchBL>();
 builder.Services.AddScoped<ITaskBL,TaskBL>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
@@ -134,6 +144,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseCors(x=>x.AllowAnyHeader()
@@ -146,8 +159,15 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();   
+
 app.MapControllers();
+
 
 app.MapHub<NotificationHub>("hubs/notification");
 app.MapHub<TaskTimerHub>("hubs/taskTimer");
+app.MapHub<MessageHub>("hubs/message");
+
+app.MapFallbackToController("Index","FallBack");
 app.Run();

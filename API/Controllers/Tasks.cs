@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.BusinessLogic;
+using API.Data;
 using API.DTOS;
 using API.Entities;
+using API.Helpers;
 using API.Hubs;
 using API.Interfaces;
 using API.Timers;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace API.Controllers
 {
@@ -29,11 +34,13 @@ namespace API.Controllers
         private readonly ITaskBL _taskBL;
 
         private readonly UserManager<User> _userManager;
+
+         private readonly DataContext _dataContext;
         public Tasks(ITaskRepository taskRepository,IMapper mapper,ITaskBL taskBL,
         IHubContext<TaskTimerHub> tasktimerhub,TaskTimer taskTimer, 
         IHubContext<NotificationHub> notificationHub
-        ,UserManager<User> userManager)
-        {
+        ,UserManager<User> userManager,DataContext dataContext)
+        { _dataContext=dataContext;
             _mapper = mapper;
             _taskRepository = taskRepository;
             _taskBL= taskBL;
@@ -47,6 +54,7 @@ namespace API.Controllers
 
         [HttpPut]
         [Route("Assign")]
+        [Authorize]
         public async Task<ActionResult<bool>> SetTaskAsAssigned([FromBody] TaskAssignDTO taskAssignDTO)
         {
            bool iscompleted=  await _taskRepository.
@@ -63,8 +71,6 @@ namespace API.Controllers
              return StatusCode(StatusCodes.Status500InternalServerError,false);
            }
            
-
-
                // make user update their notifications list...
 
                 // we can make filtering based on the tasktype Id to who we will send the notifications
@@ -80,33 +86,149 @@ namespace API.Controllers
                 {
                   await _notificationHub.Clients.Group(role).SendAsync("UpdateNotifications","Update Notifications");
                 }
-              // fire the timer ....
+                 // fire the timer ....
                 var taskinfo= _taskRepository.getBatchTaskInfo(taskAssignDTO.TaskId).GetAwaiter().GetResult();
                 if ( taskinfo.TaskTypeId==(int)Enumerations.TaskTypesEnum.RoomCleaning)
-                {  _tasktimer.MaxSeconds=50;}
+                { 
+                   _tasktimer.MaxSeconds=15;
+                }
                 else  if ( taskinfo.TaskTypeId==(int)Enumerations.TaskTypesEnum.RawMaterialsWeighting)
                 {
-                _tasktimer.MaxSeconds=500;
+                _tasktimer.MaxSeconds=25;
                 }
+                else  if ( taskinfo.TaskTypeId==(int)Enumerations.TaskTypesEnum.Manufacturing)
+                {
+                _tasktimer.MaxSeconds=22;
+                }
+
+                
+                
                  int secondsleft=-1;
+
+
+                 // this is testing
+                //  string TransferTimerDataSignalRMethodName = string.Format("{0}_{1}",taskAssignDTO.TaskId.ToString(),"TransferTimerData");
              
                 if (!_tasktimer.IsTimerStarted)
                 _tasktimer.PrepareTimer
                 (
-                () =>
+                async () =>
                 {
                  
-                      _tasktimerhub.Clients.Group(taskAssignDTO.TaskId.ToString()).SendAsync("TransferTimerData",
+
+                       
+                       await _tasktimerhub.Clients.Group(taskAssignDTO.TaskId.ToString()).SendAsync("TransferTimerData",
                       _tasktimer.currentSeconds);
-                        secondsleft=_tasktimer.currentSeconds;
+                       secondsleft=_tasktimer.currentSeconds;   
                 } 
                 );
-            return Ok(true);
 
-        }
+                         
+
+                        // execute code after the timer seconds.....
+
+                       
+                       //  Task.Delay(_tasktimer.MaxSeconds*1000).ContinueWith(o => { OnTimerrElapsed(taskAssignDTO.TaskId); });     
+                         return Ok(true);
+
+                   }
+
+
+
+
+                  [HttpPost]
+                  [Route("WaitForTaskTimer")]
+                  [Authorize]
+                   public async Task<ActionResult<bool>> WaitForTaskTimer([FromBody] TaskAssignDTO taskAssignDTO)
+                   {
+
+                          
+                          int originalSeconds=taskAssignDTO.Seconds; //  coming from client ....not the best .. change later...
+                          await Task.Delay((originalSeconds*1000)+5000).ContinueWith(o =>
+                           {
+                        
+                                      try
+                                     {
+                                     // send notification to manager that task timer is ended.....
+
+                                       
+                                      // get managers
+                                    
+                                    var ManagerUsers= _userManager.GetUsersInRoleAsync(UserRoles.Manager).GetAwaiter().GetResult();;
+                                    var  originalTask=  _dataContext.BatchTasks.
+                                    Include(x=>x.Batch).ThenInclude(x=>x.Product)
+                                   .Include(x=>x.TaskType).Where(x=>x.Id==taskAssignDTO.TaskId).FirstOrDefaultAsync().GetAwaiter().GetResult();;
+                                    var originalUser = _userManager.FindByIdAsync(originalTask.UserId).GetAwaiter().GetResult();;
+                                    
+                                    if (originalTask.TaskStateId!=(int)Enumerations.TaskStatesEnum.finished)
+                                    {
+                                    string message = string.Format("Timer Elapsed For Task : {0} ,Batch NO: {1} , Assigned By User :{2} ",
+                                     originalTask.TaskType.Title,originalTask.Batch.BatchNO,originalUser.UserName
+                                     );
+
+                                      // for all managers send  notofications DB 
+
+                                    bool tscommited=false;
+                                     using (IDbContextTransaction transaction=  _dataContext.Database.BeginTransactionAsync().GetAwaiter().GetResult())
+                                    {
+                                      try 
+                                      {
+                                        foreach (var managerUser in ManagerUsers)
+                                      {
+                                        var userId = managerUser.Id;
+                                        Entities.Notification notification=new  Entities.Notification();
+                                        notification.BatchId = originalTask.BatchId;
+                                        notification.BatchTaskId =null;
+                                        notification.DateSent = DateTime.Now;
+
+                                        // need to get the batch number 
+                                        notification.NotificationMessage = message;
+                                        notification.UserId = userId;
+                                       
+                                        _dataContext.Notifications.Add(notification);
+                                          _dataContext.SaveChangesAsync().GetAwaiter().GetResult(); 
+                                        }
+
+                                          transaction.CommitAsync().GetAwaiter().GetResult();;tscommited=true;
+                                      }
+                                      catch(Exception ex)
+                                      {
+                                        var x=ex.ToString();
+                                            transaction.RollbackAsync().GetAwaiter().GetResult();;
+                                      }
+                                  
+                                   }  // using transaction...
+
+                                  // send notification messages .. hub...
+                                    if (tscommited)
+                                    {
+                                        _notificationHub.Clients.Group(UserRoles.Manager).SendAsync("ReceiveMessage",message).GetAwaiter().GetResult();;
+                                        _notificationHub.Clients.Group(UserRoles.Manager).SendAsync("UpdateNotifications","UpdateNotifications").GetAwaiter().GetResult();;
+                                    }
+
+                                   } // if task not finished...
+                                     }
+                                     catch(Exception ex)
+                                     {
+                                        var xxx=ex.ToString();
+                                     }
+                        
+                         
+                         
+                       }
+                       );  
+
+                         return Ok(true);   
+
+                   }
+
+
+                                   
+ 
 
 
         [HttpGet("{Id}")]
+          [Authorize]
         public async Task<ActionResult<BatchTaskInfoDTO>> getBatchTaskinfo(int Id)
         {
             var originalItem=  await  _taskRepository.getBatchTaskInfo(Id);
@@ -124,6 +246,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("checkedList/{Id}")]
+         [Authorize]
         public async Task<ActionResult<CheckedListTaskForViewDTO>> getCheckedListBatchTask(int Id)
         {
             var item = await _taskRepository.getCheckedListTaskForView(Id);
@@ -139,6 +262,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("rawMaterials/{Id}")]
+          [Authorize]
         public async Task<ActionResult<RawMaterialsTaskForViewDTO>> getrawMaterialsBatchTask(int Id)
         {
             var item = await _taskRepository.GetRawMaterialsTaskForView(Id);
@@ -155,6 +279,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("rangeSelect/{Id}")]
+          [Authorize]
         public async Task<ActionResult<RangeSelectTaskForViewDTO>> getRangeSelectTaskBatchTask(int Id)
         {
             var item = await _taskRepository.GetRangeSelectTaskForViewDTO(Id);
@@ -170,6 +295,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("complete/{Id}")]
+          [Authorize]
         public  ActionResult<bool> SetTaskAsCompleted(int Id)
         {
             
@@ -191,6 +317,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("userTasks/{Id}")]
+          [Authorize]
         public async Task<ActionResult<IEnumerable<UserRunningTaskDTO>>> GetUserRunningTasks(string Id)
         {
             var tasks  = await _taskRepository.GetUserRunningTasks(Id);

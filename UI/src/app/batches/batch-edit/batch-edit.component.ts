@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, filter, map, take } from 'rxjs';
 import { BatchStates } from 'src/app/_enums/batchStates';
 import { batch } from 'src/app/_models/batch';
@@ -8,7 +9,7 @@ import { batchIngredient } from 'src/app/_models/batchIngredient';
 import { BarcodeService } from 'src/app/_services/barcode.service';
 import { BatchService } from 'src/app/_services/batch.service';
 import { UsersService } from 'src/app/_services/users.service';
-
+import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
 @Component
 ({
   selector: 'app-batch-edit',
@@ -21,11 +22,15 @@ export class BatchEditComponent  implements OnInit
    
     
   displayedIngredientsColumns = ['ingredientName', 'qtyPerTube','qtyPerBatch']; 
+
+
    title:string;
 
    form : FormGroup;
 
    iseditmode:boolean;
+
+   stateIsNotInitialized:boolean;
 
     batch : batch;
 
@@ -39,7 +44,7 @@ export class BatchEditComponent  implements OnInit
     constructor(private activatedRoute:ActivatedRoute,
       private router:Router,private batchservice:BatchService,
       private barcodeservice:BarcodeService,
-      private userservice:UsersService)
+      private userservice:UsersService, private toastr:ToastrService)
     {
 
     }
@@ -124,15 +129,18 @@ res=>
   this.batchingredients = this.batch.batchIngredients; // remove later...no need
   this.title="Editing Batch No :"+this.batch.batchNO;
   this.form.patchValue( this.batch);
+
+  this.stateIsNotInitialized = this.batch.batchStateId!==BatchStates.initialized;
 }
 ,error=>
 {
-console.log(error);
+console.log(error);  this.stateIsNotInitialized=true;
 }
         )
       }
       else
       {
+        this.stateIsNotInitialized=true;
         this.iseditmode=false;
         this.title="Add a New Batch...";
         this.batch = {} as batch;
@@ -159,11 +167,27 @@ console.log(error);
       this.batch.barcode  = this.form.get("barcode")?.value;
       this.batch.revision = this.form.get("revision")?.value;
       this.batch.revisionDate = this.form.get("revisionDate")?.value;
+      this.batch.revisionDate =new Date(this.GetDateFromIsoString(this.batch.revisionDate));
+      // testing...
+    //  console.log("rev Date:"+ this.batch.revisionDate)
+    //  console.log("rev Date toLocaleString:"+ this.batch.revisionDate.toLocaleString())
+      //console.log("rev Date toJSON:"+ this.batch.revisionDate.toJSON())
+
+      
+      // This will return an ISO string matching your local time.
+    
+
       this.batch.expDate = this.form.get("expDate")?.value;
-      this.batch.batchStateId  = BatchStates.initialized; // replace with enumeration ... later
+      this.batch.expDate =new Date(this.GetDateFromIsoString(this.batch.expDate));
+      
       this.batch.cartoonPictureURL  = "";
       this.batch.mfno  = this.form.get("mfno")?.value;
+
+
       this.batch.mFgDate  = this.form.get("mFgDate")?.value; // re- check for dates
+      this.batch.mFgDate =new Date(this.GetDateFromIsoString(this.batch.mFgDate));
+
+
       this.batch.ndcno  = this.form.get("ndcno")?.value;
       this.batch.productId  = +this.form.get("productId")?.value;
    //   this.batch.userId  = "0b17e502-1da0-45f4-80c9-6d104734a8dd"; // replace with logged user Id....
@@ -183,31 +207,46 @@ console.log(error);
           res=>
           {
              console.log("Batch"+this.batch.batchNO+"has been updated");
+             this.toastr.info(MessagesTitle.onSaveSuccess,"");
              this.router.navigate(['/batches']);
           }
           ,error=>
           {
              console.log(error);
+             this.toastr.error(error,"");
           }
          )
        }
        else
        {
+
+           this.batch.batchStateId  = BatchStates.initialized; // replace with enumeration ... later
           // insert....
           this.batchservice.addBatch(this.batch).subscribe(res=>
             {
               console.log("Batch " + this.batch.batchNO + " has been Added.");
+              this.toastr.info(MessagesTitle.onSaveSuccess,"");
               this.router.navigate(['/batches']);
             }
             ,error=>
             {
               console.log(error);
+              this.toastr.error(error,"");
             }
             )
        }
     }
 
+     
 
+    GetDateFromIsoString(_date:Date) :string
+    {
+      var d =new Date(_date);
+      var ss=  new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes() - d.getTimezoneOffset()).toISOString();
+      
+      return ss;
+
+    }
 
 
     ontubeWeightBlur(event:any)
@@ -264,7 +303,10 @@ console.log(error);
       productName:this.batch.productName,
       ndcno:this.batch.ndcno,
       tubeWeight:this.batch.tubeWeight,
-     })
+     });
+
+     // after that i need to set the tubes count ...
+     this.calculateTubesCount();
    }
 )
 
@@ -284,21 +326,27 @@ console.log(error);
 
     let    batchsizegrams = batchsize * 1000;
    // console.log(batchsizegrams);
+   let tubescount :number = 1;
     if (tubewight!=0)
     {
-    let tubescount :number = 1;
-   // tubescount =Number(batchsizegrams)  / Number(tubewight);
-
     tubescount = Math.ceil((batchsizegrams) / (tubewight)) ;
-
     this.batch.tubesCount =  +tubescount ;
     this.form.patchValue(
       {
         tubesCount:this.batch.tubesCount
       }
-    )
+    );
 
     console.log(tubescount);
+    }
+    else
+    {
+      this.batch.tubesCount = 0;
+      this.form.patchValue(
+        {
+          tubesCount:this.batch.tubesCount
+        }
+      )
     }
      
    }
@@ -314,16 +362,19 @@ console.log(error);
         {
             if (res==true)
             {
-              console.log("Batch Sended Successfully");
+              
+              this.toastr.info("Batch Sended Successfully","");
             }
             else
             {
-              console.log("Batch Send Was Unsuccessfull");
+              
+              this.toastr.error("Batch Send Was Unsuccessfull","");
             }
         }
         ,error=>
         {
           console.log(error);
+          this.toastr.error("Batch Send Was Unsuccessfull","");
         }
         )
     }
@@ -336,19 +387,7 @@ console.log(error);
    }
 
 
-/*
-   showLoggedUserId()
-   { 
-    
-    this.userservice.loggedUser$.subscribe
-    (
-      ite=>
-      {
-        console.log(ite.username);
-      }
-    ) ;
-  }
-  */
+ 
   
 
 

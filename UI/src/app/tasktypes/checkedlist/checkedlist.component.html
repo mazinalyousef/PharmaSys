@@ -1,8 +1,50 @@
 
+
+<div class="component-main-container">
+<!--<label  *ngIf="isCheckRoomTask">{{this.presenceservice.CheckRoome_Warehouse_timerTick_timerTickDisplay$|async}}</label>-->
 <label >{{this.presenceservice.timerTickDisplay$|async}}</label>
+ 
+
+<div *ngIf="checkedlistTask">
+      
+
+    <div class="header-main-container">{{checkedlistTask.title}}</div>
+
+    <table class="header-table">
+      
+        <tr>
+            <td>Batch NO :  {{checkedlistTask.batchInfo.batchNO}}</td>
+            <td>Batch Size: {{checkedlistTask.batchInfo.batchSize}}</td>
+            <td>Start Date: {{checkedlistTask.batchInfo.startDate}}</td>
+            <td>MFG Date: {{checkedlistTask.batchInfo.mFgDate}}</td>
+        </tr>
+
+        <tr>
+            <td>Tube Weight :  {{checkedlistTask.batchInfo.tubeWeight}}</td>
+            <td>Tubes Count: {{checkedlistTask.batchInfo.tubesCount}}</td>
+            <td>NDCNO: {{checkedlistTask.batchInfo.ndcno}}</td>
+            <td>MFNO : {{checkedlistTask.batchInfo.mfno}}</td>
+        </tr>
+
+        <tr>
+            <td>Barcode :  {{checkedlistTask.batchInfo.barcode}}</td>
+            <td>Product: {{checkedlistTask.productInfo.productName}}</td>
+            <td>Expiration Date: {{checkedlistTask.batchInfo.expDate}}</td>
+           
+        </tr>
+        
+
+
+    </table>
+ 
+    
+</div>
 <form>
 
     <div *ngIf="checkedlistTask">
+
+
+       
         <div  *ngFor="let item of checkedlistTask.taskTypeCheckLists">
            <!-- <input type="checkbox" [checked]="item.isChecked">{{item.title}}-->
 
@@ -24,3 +66,20 @@
     </div>
    
 </form>
+
+
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+<div>
+    <div> <label>Note</label></div>
+   
+    <div>
+        <textarea [(ngModel)]="note" [ngModelOptions]="{standalone:true}"></textarea>
+    </div>
+   
+    <div>
+        <button (click)="sendNote()" style="margin: 5px;" mat-raised-button color="primary">Send Note</button>
+    </div>
+   
+</div>
+
+</div>

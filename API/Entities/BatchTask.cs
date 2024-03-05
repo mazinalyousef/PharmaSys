@@ -55,11 +55,13 @@ namespace API.Entities
             public ICollection<BatchTaskRange> BatchTaskRanges { get; set; }
 
 
-             public ICollection<BatchTaskNote> BatchTaskNotes { get; set; }
+            public ICollection<BatchTaskNote> BatchTaskNotes { get; set; }
           
-              public ICollection<BatchTaskCertificate> BatchTaskCertificates { get; set; }
+            public ICollection<BatchTaskCertificate> BatchTaskCertificates { get; set; }
 
 
-                public ICollection<Notification> Notifications { get; set; }
+            public ICollection<Notification> Notifications { get; set; }
+
+            public ICollection<Message> Messages { get; set; }
     }
 }

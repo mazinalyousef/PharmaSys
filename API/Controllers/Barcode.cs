@@ -6,6 +6,7 @@ using API.Data;
 using API.DTOS;
 using API.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,7 @@ namespace API.Controllers
             _dataContext = dataContext;   
         }  
         [HttpGet("{barcode}")]
+        [Authorize]
         public async Task<ActionResult<BarcodeForViewDTO>> GetBarcode(string barcode)
         {
              var _result = await _dataContext.Barcodes.Where(x=>x.barcode==barcode)
@@ -38,6 +40,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult< IEnumerable<BarcodeForViewDTO>>> getBarcodes()
         {
              var barcodes = await _dataContext.Barcodes.Include(x=>x.product).ToListAsync();
@@ -46,6 +49,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task <IActionResult> AddBarcode([FromBody] BarcodeForViewDTO barcodeForViewDTO)
         {
             var barcode = _mapper.Map<API.Entities.Barcode>(barcodeForViewDTO);
@@ -56,6 +60,7 @@ namespace API.Controllers
         }
 
          [HttpPut("{Id}")]
+           [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Update ([FromBody]BarcodeForViewDTO barcodeForViewDTO,int Id)
         {
             var barcode = _mapper.Map<API.Entities.Barcode>(barcodeForViewDTO);
@@ -91,6 +96,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{Id}")]
+          [Authorize(Policy ="ManagerPolicy")]
         public  ActionResult Delete (int Id)
         {
             // find another (better) way than try catch

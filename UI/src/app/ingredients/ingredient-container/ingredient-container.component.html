@@ -1,0 +1,17 @@
+
+<div class="row">
+    
+
+
+    <div class="column">
+        <app-ingredient-list #ingList (editEvent)="ingEdit.loadIngredient()"></app-ingredient-list>
+    </div>
+
+    
+<div class="column">
+
+    <app-ingredient-edit  #ingEdit (saveEvent)="ingList.loadItems()"></app-ingredient-edit>
+ </div>
+
+
+</div>

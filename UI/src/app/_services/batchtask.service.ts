@@ -24,6 +24,11 @@ export class BatchtaskService {
       return this.http.put<boolean>(this.baseUrl+'Tasks/Assign',taskassign);
   }
 
+  WaitForTaskTimer(taskassign:taskAssign) : Observable<boolean>
+  {
+      return this.http.post<boolean>(this.baseUrl+'Tasks/WaitForTaskTimer',taskassign);
+  }
+
   complete(id:number): Observable<boolean>
   {
       return this.http.post<boolean> (this.baseUrl+'Tasks/complete/'+id,null);

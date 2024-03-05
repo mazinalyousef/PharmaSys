@@ -14,5 +14,10 @@ namespace API.Hubs
         {
              await Groups.AddToGroupAsync(Context.ConnectionId,groupId.ToString());
         }
+        //RemoveUserToGroup
+        public async Task RemoveUserToGroup(int groupId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId,groupId.ToString());
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace API.Interfaces
 
        Task<Product> Get(int Id);
        
-        Task<Product> GetWithIngredients(int Id);
+       Task<Product> GetWithIngredients(int Id);
        Task<int> Add (Product product);
         Task<bool> Add_Product_Dataset(Product product);
         Task<bool> Update(int Id,Product product);

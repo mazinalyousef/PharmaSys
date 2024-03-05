@@ -26,5 +26,14 @@ public User( )
 
       //added
       public ICollection <Notification> AssignedNotifications { get; set; }
+
+      
+
+
+      public ICollection<Message> Messages{get;set;}
+
+       public ICollection<Message> DestinatedMessages{get;set;}
+
+       
     }
 }

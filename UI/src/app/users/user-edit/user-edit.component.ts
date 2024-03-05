@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { Department } from 'src/app/_models/department';
 import { User } from 'src/app/_models/user';
 import { DataService } from 'src/app/_services/data.service';
 import { DepartmentsService } from 'src/app/_services/departments.service';
- 
+import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
 import { UsersService } from 'src/app/_services/users.service';
 
 @Component({
@@ -36,7 +37,9 @@ export class UserEditComponent implements OnInit
   username?:string;
   constructor( private activatedRoute:ActivatedRoute,private departmentservice:DepartmentsService,
     public dataservice: DataService,
-  private router:Router,private userservice:UsersService)
+  private router:Router,private userservice:UsersService,
+  private toastr:ToastrService
+  )
   {
    
   }
@@ -127,12 +130,14 @@ export class UserEditComponent implements OnInit
             result=>
             {
               console.log("User " + this.user.userName + " has been updated.");
+              this.toastr.info(MessagesTitle.onSaveSuccess,"");
               this.router.navigate(['/users']);
             }
             ,
             error=>
             {
               console.log(error);
+              this.toastr.error(error,"");
             }
             
            )
@@ -145,12 +150,14 @@ export class UserEditComponent implements OnInit
             result=>
             {
               console.log("User " + this.user.userName + " has been Added.");
+              this.toastr.info(MessagesTitle.onSaveSuccess,"");
               this.router.navigate(['/users']);
             }
             ,
             error=>
             {
               console.log(error);
+              this.toastr.error(error,"");
             }
             
            )

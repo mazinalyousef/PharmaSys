@@ -32,6 +32,12 @@ namespace API.DTOS
          public DateTime? StartDate { get; set; }
          public DateTime? EndDate { get; set; }
 
+
+
+         public Batch BatchInfo { get; set; }
+         public  Product ProductInfo { get; set; }
+
+            
          public ICollection<TaskTypeCheckList> taskTypeCheckLists{get;set;}
     }
 }

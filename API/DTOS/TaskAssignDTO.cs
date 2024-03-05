@@ -11,6 +11,9 @@ namespace API.DTOS
 
         public int TaskId { get; set; }
 
+
+        public int Seconds{get;set;}
+
         
     }
 }

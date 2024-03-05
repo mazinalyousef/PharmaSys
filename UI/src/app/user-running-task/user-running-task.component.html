@@ -1,4 +1,5 @@
-<mat-card class="card">
+<div style="margin: 1.5%;">
+  <mat-card class="card">
     <mat-card-header>
       <mat-card-title>Task : {{userrunningTask.taskTypeTitle}}</mat-card-title>
       <mat-card-subtitle>Batch NO: {{userrunningTask.batchNO}}</mat-card-subtitle>
@@ -14,3 +15,4 @@
       <button mat-button (click)="enterTask(userrunningTask.id,userrunningTask.taskTypeId)">Enter</button>
     </mat-card-actions>
   </mat-card>
+</div>

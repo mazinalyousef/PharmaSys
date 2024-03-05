@@ -1,0 +1,5 @@
+<h1>Internal Server Error</h1>
+<ng-container *ngIf="Errors">
+    <h5 style="color: red;">Error :{{Errors.message}}</h5>
+    <code style="color: azure;">{{Errors.details}}</code>
+</ng-container>

@@ -16,7 +16,7 @@ namespace API.Entities
          public  Ingredient Ingredient { get; set; }
 
 
-         [Column(TypeName = "decimal(32,2)")]
+         [Column(TypeName = "decimal(32,3)")]
          public decimal Percentage { get; set; }
 
          

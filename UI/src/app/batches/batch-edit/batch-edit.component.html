@@ -1,20 +1,15 @@
-<div class="batch-edit">
+<div class="component-main-container">
     <h1>{{title}}</h1>
 
 
     <div class="form-container">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-
-
-
-            
             <mat-tab-group>
                 <mat-tab label="General">
   
                     <div class="row">
-
-                        <div class="column">
+                        <div class="column1">
                             <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                                 <mat-label>Batch NO:
                                 </mat-label>
@@ -34,7 +29,7 @@
                                 
                                     <mat-label>MFG Date</mat-label>
                                     <input matInput [matDatepicker]="pickermFgDate" formControlName="mFgDate">
-                                    <mat-hint>MM-DD-YYYY</mat-hint>
+                                 
                                     <mat-datepicker-toggle matIconSuffix [for]="pickermFgDate"></mat-datepicker-toggle>
                                     <mat-datepicker #pickermFgDate></mat-datepicker>
                             </mat-form-field>
@@ -45,7 +40,7 @@
                                 
                                 <mat-label>EXP Date</mat-label>
                                 <input matInput [matDatepicker]="pickerexpDate" formControlName="expDate">
-                                <mat-hint>MM-DD-YYYY</mat-hint>
+                                
                                 <mat-datepicker-toggle matIconSuffix [for]="pickerexpDate"></mat-datepicker-toggle>
                                 <mat-datepicker #pickerexpDate></mat-datepicker>
                              </mat-form-field>
@@ -64,7 +59,7 @@
                             
                             <mat-label>Revision Date</mat-label>
                             <input matInput [matDatepicker]="pickerrevisionDate" formControlName="revisionDate">
-                            <mat-hint>MM-DD-YYYY</mat-hint>
+                             
                             <mat-datepicker-toggle matIconSuffix [for]="pickerrevisionDate"></mat-datepicker-toggle>
                             <mat-datepicker #pickerrevisionDate></mat-datepicker>
                          </mat-form-field>
@@ -75,12 +70,8 @@
                 
                         </div>
 
-
-
-                        <div class="column">
-                           
-                    
-                    
+                        <div class="column2">
+                        
                              <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                                 <mat-label>barcode:
                                 </mat-label>
@@ -108,7 +99,7 @@
                     </div>
                     
                     
-                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                    <div [hidden]="true" class="form-group"> <mat-form-field class="form-field" appearance="outline">
                         <mat-label>Product ID:
                         </mat-label>
                         <input   matInput formControlName="productId"   >
@@ -119,7 +110,7 @@
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                         <mat-label>Product:
                         </mat-label>
-                        <input   matInput formControlName="productName"   >
+                        <input [readonly]="true"  matInput formControlName="productName"   >
                     </mat-form-field>
                     </div>
                     
@@ -127,7 +118,7 @@
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                         <mat-label>Tube Weight:
                         </mat-label>
-                        <input (blur)="ontubeWeightBlur($event)"   matInput formControlName="tubeWeight"   >
+                        <input [readonly]="true" (blur)="ontubeWeightBlur($event)"   matInput formControlName="tubeWeight"   >
                     </mat-form-field>
                     </div>
                     
@@ -135,15 +126,10 @@
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                         <mat-label>Tubes Count:
                         </mat-label>
-                        <input   matInput formControlName="tubesCount"   >
+                        <input  [readonly]="true" matInput formControlName="tubesCount"   >
                     </mat-form-field>
                     </div>
                         </div>
-
-
-
-                       
-                     
                     </div>
                    
         
@@ -207,7 +193,8 @@
     </button>
 
     
-    <button type="button" style="margin: 5px;" mat-raised-button color="primary" (click)="SendBatch()">Send</button>
+    <button type="button"  [disabled]="stateIsNotInitialized"
+    style="margin: 5px;" mat-raised-button color="primary" (click)="SendBatch()">Send</button>
 
     <button style="margin: 5px;" mat-raised-button color="basic"
       

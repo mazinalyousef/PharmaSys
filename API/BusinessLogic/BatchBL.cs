@@ -41,8 +41,6 @@ namespace API.BusinessLogic
          // for now use transaction here ---
          // -- in future implement unit of work design pattern
 
-
-
         // using (IDbContextTransaction)
 
         // first generate the tasks for the whole system 
@@ -51,7 +49,7 @@ namespace API.BusinessLogic
         // -- and the same task can be delivered to more than one department 
         // 
          
-           var allusers= await _userManager.Users.ToListAsync();
+          var allusers= await _userManager.Users.ToListAsync();
           var Warehouse_CheckRoomsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.Warehouse_CheckRooms);
           var  Warehouse_RawMaterialsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.Warehouse_RawMaterials);
           var  QA_RawMaterialsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.QA_RawMaterials);

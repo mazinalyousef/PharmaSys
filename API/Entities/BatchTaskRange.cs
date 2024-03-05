@@ -24,7 +24,7 @@ namespace API.Entities
         // optional feild ... may drop later... 
         public string TaskTypeRangeTitle { get; set; }
 
-        [Column(TypeName = "decimal(32,2)")]
+        [Column(TypeName = "decimal(32,3)")]
         public decimal TaskTypeRangeValue { get; set; }
     }
 }

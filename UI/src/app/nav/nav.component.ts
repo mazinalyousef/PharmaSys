@@ -5,6 +5,8 @@ import { Observable, take, takeLast } from 'rxjs';
 import { AuthenticatedResponse } from '../_models/AuthenticatedResponse';
 import { PresenceService } from '../_services/presence.service';
 import { NotificationService } from '../_services/notification.service';
+import { MessageService } from '../_services/message.service';
+import { LoaderService } from '../_services/loader.service';
 
 @Component({
   selector: 'app-nav',
@@ -28,7 +30,9 @@ export class NavComponent implements OnInit {
   constructor(public userservice:UsersService,
     public presenceservice:PresenceService,
     private notificationservice : NotificationService,
-     private router: Router)
+    private messageservice :MessageService,
+     private router: Router,
+     public loaderService :LoaderService)
   {
     //this.notificationsIsHidden=false;
     this.notificationCounter=0;
@@ -103,7 +107,7 @@ export class NavComponent implements OnInit {
        ).subscribe(
          res=> 
          {
-           console.log(res.username+" from nav ...");
+           console.log(res.username+" from nav notifications click ...");
          this.loggedUserId=res.id;
          
          }
@@ -120,6 +124,30 @@ export class NavComponent implements OnInit {
         )
     
       this.router.navigate(['notifications']);
+    }
+    showMessages()
+    {
+       this.userservice.loggedUser$.pipe(
+        take(1) 
+       ).subscribe(
+         res=> 
+         {
+         this.loggedUserId=res.id;
+         }
+       )
+
+       this.messageservice.setAllasRead(this.loggedUserId).subscribe(res=>
+        {
+            if (res)
+            {
+              console.log(res+" from nav click messages")
+              this.presenceservice.setInitialMessagesCount(this.loggedUserId,true);
+            }
+        },error=>{console.log(error);}
+        )
+        
+       
+        this.router.navigate(['messages']);
     }
 
 }

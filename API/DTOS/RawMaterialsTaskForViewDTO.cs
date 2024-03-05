@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Entities;
 
 namespace API.DTOS
 {
@@ -31,6 +32,9 @@ namespace API.DTOS
       
          public DateTime? StartDate { get; set; }
          public DateTime? EndDate { get; set; }
+
+          public Batch BatchInfo { get; set; }
+         public  Product ProductInfo { get; set; }
 
          public ICollection<BatchIngredientDTO>  batchIngredientDTOs {get;set;}
     }

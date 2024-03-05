@@ -1,3 +1,5 @@
+import { batch } from "./batch"
+import { product } from "./product"
 import { taskTypeCheckList } from "./taskTypeCheckList"
 
 export interface checkedListTask
@@ -13,5 +15,9 @@ export interface checkedListTask
     endDate?: Date
 
     taskTypeCheckLists : taskTypeCheckList []
+
+    batchInfo :batch
+    productInfo:product
+
 
 }

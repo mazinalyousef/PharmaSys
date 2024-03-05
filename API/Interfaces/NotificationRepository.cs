@@ -56,8 +56,10 @@ namespace API.Interfaces
           //   return await _dataContext.Notifications.Include(x=>x.User)
           //   .Where(x=>x.UserId==UserId).ToListAsync();
 
-           return await _dataContext.Notifications.Include(x=>x.AssignedByUser)
-           .Where(x=>x.UserId==UserId).ToListAsync();
+          var IQR= _dataContext.Notifications.Include(x=>x.AssignedByUser)
+           .Where(x=>x.UserId==UserId).OrderByDescending(x=>x.Id).Take(50);
+
+           return await IQR.ToListAsync();
 
         }
          public async Task<IEnumerable<Notification>> GetAllUnreadForUser(string UserId)

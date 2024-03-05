@@ -15,8 +15,6 @@ export class BatchService {
    { 
 
    }
-
-
    getBatches(): Observable<batch[]>
    {
       return this.http.get<batch[]> (this.baseUrl+'Batches');

@@ -1,5 +1,7 @@
 
+import { batch } from "./batch"
 import { batchIngredient } from "./batchIngredient"
+import { product } from "./product"
 
 export interface rawMaterialsTask
 {
@@ -14,4 +16,8 @@ export interface rawMaterialsTask
     endDate?: Date
 
     batchIngredientDTOs: batchIngredient[]
+
+    
+    batchInfo :batch
+    productInfo:product
 }

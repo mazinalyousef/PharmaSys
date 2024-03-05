@@ -1,49 +1,58 @@
-
-<h1>Batches</h1>
-<div class="commands text-right">
-    <button style="margin: 5px;" mat-raised-button 
-    color="primary" 
-    type="submit" 
-    [routerLink]="['/batchRegister']"
-    class="btn btn-success">
-     Add
-    </button>
-</div>
-
-<div class="ng-container">
-    <table mat-table [dataSource]="batches"
-    class="table-striped mat-elevation-z8"
-    >
-
-    <ng-container matColumnDef="batchNO">
-        <th mat-header-cell *matHeaderCellDef>Batch Number</th>
-        <td mat-cell *matCellDef="let batch">{{batch.batchNO}}</td>
-     </ng-container>
-    
-     <ng-container matColumnDef="batchSize">
-        <th mat-header-cell *matHeaderCellDef>Batch Size</th>
-        <td mat-cell *matCellDef="let batch">{{batch.batchSize}}</td>
-     </ng-container>
-    
-     <ng-container matColumnDef="productName">
-        <th mat-header-cell *matHeaderCellDef>Product</th>
-        <td mat-cell *matCellDef="let batch">{{batch.productName}}</td>
-     </ng-container>
-
-     
-
-    
-     <ng-container matColumnDef="actions">
-       <th mat-header-cell *matHeaderCellDef>Actions</th>
-       <td  mat-cell *matCellDef="let batch">
-       <a  style="margin-right: 5px;" mat-raised-button [routerLink]="['/batches',batch.id]">edit</a>
+<div class="component-main-container"><h1>Batches</h1>
+   <div class="commands text-right">
+       <button style="margin: 5px;" mat-raised-button 
+       color="primary" 
+       type="submit" 
+       [routerLink]="['/batchRegister']"
+       class="btn btn-success">
+        Add
+       </button>
+   </div>
+   
+   <div class="ng-container">
+       <table mat-table [dataSource]="MatdataSource"
+       class="table-striped mat-elevation-z8"
+       >
+   
+       <ng-container matColumnDef="batchNO">
+           <th mat-header-cell *matHeaderCellDef>Batch Number</th>
+           <td mat-cell *matCellDef="let batch">{{batch.batchNO}}</td>
+        </ng-container>
        
-       <a  mat-raised-button color="warn" (click)="delete(batch.id)" >delete</a>   
-       </td>
-    </ng-container>
+        <ng-container matColumnDef="batchSize">
+           <th mat-header-cell *matHeaderCellDef>Batch Size</th>
+           <td mat-cell *matCellDef="let batch">{{batch.batchSize}}</td>
+        </ng-container>
+       
+        <ng-container matColumnDef="productName">
+           <th mat-header-cell *matHeaderCellDef>Product</th>
+           <td mat-cell *matCellDef="let batch">{{batch.productName}}</td>
+        </ng-container>
+   
+        
+   
+       
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td  mat-cell *matCellDef="let batch">
+          <a  style="margin-right: 5px;" mat-raised-button [routerLink]="['/batches',batch.id]">edit</a>
+          
+          <a  mat-raised-button color="warn" (click)="delete(batch.id)" >delete</a>   
+          </td>
+       </ng-container>
+       
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+     </table>
+   
+     <mat-paginator #paginator
+     class="demo-paginator"
+     showFirstLastButtons
+     [pageSizeOptions]="[5, 10, 25, 100]"
+     aria-label="Select page">
+    </mat-paginator>
+   
     
-     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
- </div>
+    </div></div>
+
 

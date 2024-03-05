@@ -1,0 +1,48 @@
+
+.maingrid{
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    column-gap: 10px;
+    row-gap: 10px;
+}
+ 
+ 
+button {
+    font-size: 1.25em;
+    font-weight: bold;
+    line-height: 1;
+    text-transform: uppercase;
+    position: relative;
+    border: .0875em solid;
+    padding: 1em;
+    color: #3F51B5;
+    background: transparent;
+    border-radius: .625em;
+    transition: background 1s;
+    
+    &:hover,
+    &:focus {
+        color: white;
+        background: #3F51B5;
+        border-color: #3F51B5;
+    }
+    
+    &:active {
+        top: .08em;
+    }
+}
+
+    .svg-icon {
+    /* Place the icon on the text baseline. */
+    position: relative;
+    top: .125em;
+    /* Let the icon take whatever color the parent has. */
+    fill: currentColor;
+    /*
+     * If the icon is used on a link, which has a color transition,
+     * we can also use a transition on the fill value.
+    */
+   transition: fill 1s;
+}
+
+ 

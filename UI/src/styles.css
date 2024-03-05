@@ -1,4 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import 'node_modules/ngx-toastr/toastr.css';
+
+ .success {
+    background-color: rgb(100, 230, 50) !important;
+    color: white;
+   
+  }
+
+  .error-style { 
+ 
+    background-color: #b00020;
+    color: white;
+  }
+
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+ 
+th, td {
+  border: 1px solid;
+  border-color: #b8b8b8;
+}
+.header-main-container {
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+  
+
+  

@@ -70,11 +70,15 @@ namespace API.Interfaces
         public   void Delete(int Id)
         {
           var originalEntity=     _dataContext.Batches.FirstOrDefault(x=>x.Id==Id);
-          if (originalEntity!=null)
+          
+           if (originalEntity!=null)
           {
-            _dataContext.Batches.Remove(originalEntity);
+              _dataContext.Batches.Remove(originalEntity);
               _dataContext.SaveChanges();
+
+         
           }
+          
         }
 
         public async Task<Batch> Get(int Id)
@@ -133,6 +137,12 @@ namespace API.Interfaces
         {
 
           var originalEntity=  await  _dataContext.Batches.FirstOrDefaultAsync(x=>x.Id==Id);
+
+          if (originalEntity.BatchStateId!=(int)Enumerations.BatchStatesEnum.initialized)
+          {
+            return null;
+          }
+
            using (IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync())
          {
 	       try 
@@ -244,7 +254,8 @@ namespace API.Interfaces
                  batchIngredient.BatchId = 0; // change to added batch Id ...
                  batchIngredient.IngredientId = productIngredientsItem.IngredientId;
                  batchIngredient.QTYPerTube = productIngredientsItem.Percentage;
-                 batchIngredient.QTYPerBatch = BatchTubeSize * (batchIngredient.QTYPerTube/100m);
+             //    batchIngredient.QTYPerBatch = BatchTubeSize * (batchIngredient.QTYPerTube/100m);
+               batchIngredient.QTYPerBatch = batchSize * (batchIngredient.QTYPerTube/100m);
                  batchIngredients.Add(batchIngredient);
              }
 

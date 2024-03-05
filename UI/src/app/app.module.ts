@@ -46,6 +46,31 @@ import { RangeselectComponent } from './tasktypes/rangeselect/rangeselect.compon
 import { UserTasksComponent } from './user-tasks/user-tasks.component';
 import { UserRunningTaskComponent } from './user-running-task/user-running-task.component';
 import {MatCardModule} from '@angular/material/card';
+import { IngredientListComponent } from './ingredients/ingredient-list/ingredient-list.component';
+import { IngredientEditComponent } from './ingredients/ingredient-edit/ingredient-edit.component';
+import { IngredientContainerComponent } from './ingredients/ingredient-container/ingredient-container.component';
+import { ManagementComponent } from './management/management.component';
+import { BarcodeContainerComponent } from './Barcodes/barcode-container/barcode-container.component';
+import { BarcodeEditComponent } from './Barcodes/barcode-edit/barcode-edit.component';
+import { BarcodeListComponent } from './Barcodes/barcode-list/barcode-list.component';
+import { ProductContainerComponent } from './Products/product-container/product-container.component';
+import { ProductEditComponent } from './Products/product-edit/product-edit.component';
+import { ProductListComponent } from './Products/product-list/product-list.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component'
+import { ToastrModule } from 'ngx-toastr';
+import { MessagesComponent } from './messages/messages.component';
+import { MessageComponent } from './message/message.component';  
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
+import { BusyInterceptor } from './_interceptors/busy.interceptor';
+
+ 
+
 
 
 
@@ -69,7 +94,21 @@ import {MatCardModule} from '@angular/material/card';
     RangeselectComponent,
     UserTasksComponent,
     UserRunningTaskComponent,
-    
+    IngredientListComponent,
+    IngredientEditComponent,
+    IngredientContainerComponent,
+    ManagementComponent,
+    BarcodeContainerComponent,
+    BarcodeEditComponent,
+    BarcodeListComponent,
+    ProductContainerComponent,
+    ProductEditComponent,
+    ProductListComponent,
+    TestErrorsComponent,
+    NotFoundComponent,
+    ServerErrorComponent,
+    MessagesComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +127,7 @@ import {MatCardModule} from '@angular/material/card';
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
+    MatAutocompleteModule,
     MatBadgeModule,
     MatDialogModule,
     MatSelectModule,
@@ -98,10 +138,19 @@ import {MatCardModule} from '@angular/material/card';
     HttpClientModule,
     ReactiveFormsModule,
     MatCardModule,
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    
+    ToastrModule.forRoot(
+      {positionClass: 'toast-bottom-right'}
+    ),
     RouterModule.forRoot([])
   ],
   providers: [
-    {provide:HTTP_INTERCEPTORS,useClass:JwtInterceptor,multi:true}
+    {provide:HTTP_INTERCEPTORS,useClass:JwtInterceptor,multi:true},
+    {provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true},
+    {provide:HTTP_INTERCEPTORS,useClass:BusyInterceptor,multi:true}
   ],
   bootstrap: [AppComponent]
 })

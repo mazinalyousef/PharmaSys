@@ -42,7 +42,7 @@ namespace API.Timers
         currentSeconds= MaxSeconds- (Convert.ToInt32((DateTime.Now - TimerStarted).TotalSeconds));
         if (currentSeconds < 0)
         {
-            IsTimerStarted = false;
+             IsTimerStarted = false;
             _timer.Dispose();
         }   
     }

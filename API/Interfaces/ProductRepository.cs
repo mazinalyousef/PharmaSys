@@ -87,7 +87,8 @@ namespace API.Interfaces
 
          public async Task<Product> GetWithIngredients(int Id)
         {
-              return await _dataContext.Products.Include(x=>x.ProductIngredients).
+              return await _dataContext.Products.
+              Include(x=>x.ProductIngredients).ThenInclude(x=>x.Ingredient).
               Where(x=>x.Id==Id) 
              .FirstOrDefaultAsync();
         }
@@ -127,7 +128,7 @@ namespace API.Interfaces
                     {
                         ProductIngredient productIngredient =new ProductIngredient ()
                         {
-                            ProductId = newItem.ProductId,
+                            ProductId = originalProduct.Id,
                             IngredientId= newItem.IngredientId,
                             Percentage = newItem.Percentage
                         };

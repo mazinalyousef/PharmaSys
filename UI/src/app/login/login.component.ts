@@ -6,6 +6,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { AuthenticatedResponse } from '../_models/AuthenticatedResponse';
 import { environment } from 'src/environments/environment';
 import { UsersService } from '../_services/users.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit
    
   constructor(private router: Router,
      private userservice: UsersService,
+     private toastr:ToastrService
     )
   {
 
@@ -38,37 +40,16 @@ export class LoginComponent implements OnInit
    this.userservice.performlogin(this.loginuser).subscribe(
     res=>
     {
-      console.log(res +" from login component");
+       
       this.router.navigate(['home']);
     },
     err=>
     {
       console.log(err);
+      this.toastr.error(err,"");
     }
    )
   }
-/*
-    login = ( form: NgForm) =>
-     {
-    if (form.valid) {
-      this.http.post<AuthenticatedResponse>(this.baseUrl+'Users/login', this.loginuser, {
-        headers: new HttpHeaders({ "Content-Type": "application/json"})
-      })
-      .subscribe({
-        next: (response: AuthenticatedResponse) => {
-          
-          const token = response.token;
-          localStorage.setItem("jwt", token); 
-           console.log(token);
-          this.invalidLogin = false; 
-
-          // load application .. navigate nav component...
-          this.router.navigate(['home'])
-        },
-        error: (err: HttpErrorResponse) => this.invalidLogin = true
-      })
-    }
-  }
-  */
+ 
 
 }

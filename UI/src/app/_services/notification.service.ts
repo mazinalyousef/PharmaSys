@@ -27,7 +27,6 @@ export class NotificationService {
   }
   setAllasRead(userId:string):Observable<boolean>
   {
-
     return this.http.put<boolean>(this.baseUrl+'Notification/'+userId,null);
   }
 }

@@ -60,7 +60,20 @@ namespace API.Helpers
                .ForMember(des=>des.Product,opt=>opt.Ignore())
               ;
               CreateMap<ProductIngredient,ProductIngredientDTO>()
-              .ForMember(des=>des.IngredientTitle,opt=>opt.MapFrom(src=>src.Ingredient.IngredientName));;;
+              .ForMember(des=>des.IngredientTitle,opt=>opt.MapFrom(src=>src.Ingredient.IngredientName));;
+
+
+
+               CreateMap<Message,MessageDTO>()
+              .ForMember(des=>des.BatchNO,opt=>opt.MapFrom(src=>src.BatchTask.Batch.BatchNO))
+               .ForMember(des=>des.UserName,opt=>opt.MapFrom(src=>src.User.UserName));
+
+
+                CreateMap<MessageDTO,Message>()
+            .ForMember(des=>des.BatchTask,opt=>opt.Ignore())
+            .ForMember(des=>des.User,opt=>opt.Ignore())
+            .ForMember(des=>des.DestinationUser,opt=>opt.Ignore());;
+              
 
         }
 

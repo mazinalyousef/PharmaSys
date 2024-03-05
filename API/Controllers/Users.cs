@@ -19,6 +19,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    
     public class Users : ControllerBase
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -37,7 +38,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+      [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<IEnumerable<UserForViewDTO>>> GetUsers()
         {
                 var users = await _userManager.Users.Include(x=>x.Department).ToListAsync();
@@ -46,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{Id}")]
-        
+         [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<User>> GetUser(string Id)
         {
              var _userResult = await _userManager.FindByIdAsync(Id);
@@ -60,6 +61,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("register")]
+         [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
            var _userResult = await _userManager.FindByNameAsync(registerDTO.Username);
@@ -102,7 +104,7 @@ namespace API.Controllers
 
 
         [HttpPut("{Id}")]
-        [Authorize]
+        [Authorize(Policy ="ManagerPolicy")]
          public async Task<IActionResult> Update([FromBody] UpdateUserDTO updateDTO,string Id)
         {
             
@@ -134,6 +136,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<LoggedUserDTO>> Login([FromBody] LoginDTO loginDTO)
         {
             var userResult = await _userManager.FindByNameAsync(loginDTO.Username);
@@ -173,6 +176,7 @@ namespace API.Controllers
 
           
         [HttpPost("editRoles/{userName}")]
+         [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> EditRoles(string userName, string[]RoleNames) 
         {
             var user = await _userManager.FindByNameAsync(userName);
@@ -207,6 +211,7 @@ namespace API.Controllers
 
 
         [HttpGet("Roles/{userName}")]
+         [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<IEnumerable<RoleEditDto>>> GetUserRoles(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);

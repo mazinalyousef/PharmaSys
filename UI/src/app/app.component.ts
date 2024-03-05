@@ -8,6 +8,7 @@ import { DataService } from './_services/data.service';
 import { AuthenticatedResponse } from './_models/AuthenticatedResponse';
 import { UsersService } from './_services/users.service';
 import { PresenceService } from './_services/presence.service';
+import { LoaderService } from './_services/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -23,30 +24,27 @@ export class AppComponent implements OnInit
     constructor(private userservice:UsersService,
        private departmentservice:DepartmentsService,
         private dataservice:DataService,
-        private presenceService:PresenceService)
+        private presenceService:PresenceService,
+        public loaderService:LoaderService)
     {
      
     }
     ngOnInit(): void
     {
-     this.getdepartments();
-    // this.dataservice.filldepartments(this.App_departments);
-    // this.dataservice.GlobalDeparments = this.App_departments;
+      this.setCurrentUser();
+      this.getdepartments();
+   
      
-     this.setCurrentUser();
     }
 
     setCurrentUser()
     {
        const user : AuthenticatedResponse =JSON.parse(sessionStorage.getItem('user'));
-       console.log(user.username+" from set current user")
+       console.log(user.username+" from set current user--app component init")
        if (user)
        {
+          console.log("calling userservice.setCurrentUser from app component for user "+user.id)
           this.userservice.setCurrentUser(user);
-          // get  notifications
-         // this.presenceService.getUsernotifications(user.id);
-         // this.presenceService.setInitialNotificationsCount(user.id);
-          
        }
     }
     getdepartments()

@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using API.DTOS;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class Notification : ControllerBase
     {
         private readonly INotificationRepository _notificationRepository;

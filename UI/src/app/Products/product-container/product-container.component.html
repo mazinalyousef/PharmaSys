@@ -1,0 +1,12 @@
+<div class="row">
+
+    <div class="column">
+        <app-product-list #prodList (editEvent)="prodEdit.loadProduct()"></app-product-list>
+    </div>
+
+    
+<div class="column">
+    <app-product-edit #prodEdit (saveEvent)="prodList.loadItems()"></app-product-edit>
+ </div>
+   
+</div>

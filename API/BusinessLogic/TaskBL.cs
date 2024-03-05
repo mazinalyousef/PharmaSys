@@ -23,7 +23,7 @@ namespace API.BusinessLogic
         private readonly UserManager<User> _userManager;
 
          private readonly IHubContext<NotificationHub> _notificationHub;
-
+    
         public TaskBL(
             DataContext dataContext,
           
@@ -41,6 +41,9 @@ namespace API.BusinessLogic
         }
 
 
+
+
+          
 
         // must change to sync ....
         public bool SetAsCompleted(int _taskId)

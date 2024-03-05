@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ namespace API.Entities
     {
      public int Id { get; set; }  
 
+
+
+     [Required]
      public string barcode { get; set; }
 
 
@@ -18,7 +22,7 @@ namespace API.Entities
 
       public string NDCNO { get; set; } 
 
-      [Column(TypeName = "decimal(32,2)")]
+      [Column(TypeName = "decimal(32,3)")]
       public decimal TubeWeight {get;set;} 
 
     }

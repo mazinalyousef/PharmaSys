@@ -18,6 +18,7 @@ using API.BusinessLogic;
 using API.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using API.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
@@ -48,6 +49,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<IEnumerable<BatchForViewDTO>>> GetBatches()
         {
                 var Batches = await _batchRepository.GetAll();
@@ -57,6 +59,7 @@ namespace API.Controllers
 
 
         [HttpGet("{Id}")]
+        [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<BatchForEditDTO>> GetBatch(int Id)
         {
             var Batch  = await _batchRepository.Get(Id);
@@ -66,9 +69,9 @@ namespace API.Controllers
             else
             { return Ok(BatchforeditDTO);} 
         }
-        
-
+    
          [HttpPost]
+           [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Register([FromBody]BatchForEditDTO batchForEditDTO)
         {
                 // mapping....
@@ -93,7 +96,6 @@ namespace API.Controllers
                     BatchStateId = batchForEditDTO.BatchStateId
                    };
                    */
-
               //  var result = await _batchRepository.Add(batch);
                   var result = await _batchRepository.Add_Batch_Dataset(batch);
                  // make sure about  the checking here....
@@ -103,22 +105,33 @@ namespace API.Controllers
                   }
                   else
                   {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed To Create the Batch" });
+                    return StatusCode(StatusCodes.Status500InternalServerError, 
+                    new Response { Status = "Error", Message = "Failed To Create the Batch" });
                   }
            
         }
 
     
         [HttpPut("{Id}")]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Update ([FromBody]BatchForEditDTO batchForEditDTO,int Id)
         {
               var batch=  _mapper.Map<Batch>(batchForEditDTO);
+
+                  /*
+                 if (batch.BatchStateId!=(int)Enumerations.BatchStatesEnum.initialized)
+                {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message = "Batch Update Failed Due To Batch State!"});     
+                }
+                */
+
               var result = await _batchRepository.Update(Id,batch); // catch exceptions ... later....
               if (result==null)
-           {
+                {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 new Response { Status = "Error", Message = "Batch Update Failed!"});            
-           }
+                }
 
               return Ok(new Response { Status = "Success", Message = "Batch Update Was Successfull!" });
         }
@@ -126,14 +139,25 @@ namespace API.Controllers
 
 
         [HttpDelete("{Id}")]
-
+  [Authorize(Policy ="ManagerPolicy")]
         public ActionResult Delete (int Id)
         {
             // find another (better) way than try catch
-            try 
-            {
-              _batchRepository.Delete(Id);
-              return NoContent();
+                try 
+                {
+
+                  var originalEntity  = _batchRepository.Get(Id).GetAwaiter().GetResult();
+                   if (originalEntity.BatchStateId==(int)Enumerations.BatchStatesEnum.initialized)
+                   {
+                   _batchRepository.Delete(Id);
+                     return NoContent();
+                   }
+                   else
+                   {
+              return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message = "Batch Delete Failed!"});    
+                   }
+             
             }
             catch(Exception ex)
             {
@@ -148,10 +172,15 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("send/{Id}")]
+          [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> SendBatch( int Id)
         {
-             // note we can return an object (batch DTO) instead of bool to get  more info ...
-              bool completed = await _batchBL.SendBatch(Id);
+                bool completed =false;
+                   var originalEntity  = _batchRepository.Get(Id).GetAwaiter().GetResult();
+                   if (originalEntity.BatchStateId==(int)Enumerations.BatchStatesEnum.initialized)
+                   {
+                    // note we can return an object (batch DTO) instead of bool to get  more info ...
+                completed = await _batchBL.SendBatch(Id);
               string newTaskMessage="You've Received a New Task";
 
 
@@ -174,6 +203,14 @@ namespace API.Controllers
                await _notificationHub.Clients.Group(UserRoles.Accountant).SendAsync("UpdateNotifications",newTaskMessage);
                 } 
              
+                   }
+                   else
+                   {
+                   return StatusCode(StatusCodes.Status500InternalServerError,
+                     new Response { Status = "Error", Message = "Batch Send Failed!"});    
+                   }
+
+           
                    
              return Ok(completed);
         }

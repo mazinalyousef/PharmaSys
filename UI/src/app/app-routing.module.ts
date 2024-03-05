@@ -13,6 +13,13 @@ import { CheckedlistComponent } from './tasktypes/checkedlist/checkedlist.compon
 import { RangeselectComponent } from './tasktypes/rangeselect/rangeselect.component';
 import { RawmaterialsComponent } from './tasktypes/rawmaterials/rawmaterials.component';
 import { UserTasksComponent } from './user-tasks/user-tasks.component';
+import { ManagementComponent } from './management/management.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
+import { AdminGuard } from './_guards/admin.guard';
+import { EnterTaskGuard } from './_guards/enter-task.guard';
+import { MessagesComponent } from './messages/messages.component';
+
 
 
  
@@ -22,18 +29,22 @@ const routes: Routes =
 [
   {path:'home',component:HomeComponent},
   {path:'login',component:LoginComponent},
-  {path:'users',component:UserListComponent,canActivate:[AuthGuard]},
-  {path:'users/:id',component:UserEditComponent},
-  {path:'userRegister',component:UserEditComponent},
-  {path:'batches',component:BatchListComponent},
-  {path:'batches/:id',component:BatchEditComponent},
-  {path:'batchRegister',component:BatchEditComponent},
-  {path:'userRoles/:userName',component:RolesEditComponent},
-  {path:'notifications',component:NotificationsComponent},
-  {path:'rawMaterial/:id',component:RawmaterialsComponent},
-  {path:'rangeSelect/:id',component:RangeselectComponent},
-  {path:'checkedList/:id',component:CheckedlistComponent},
-  {path:'userTasks',component:UserTasksComponent},
+  {path:'users',component:UserListComponent,canActivate:[AdminGuard]},
+  {path:'users/:id',component:UserEditComponent,canActivate:[AdminGuard]},
+  {path:'userRegister',component:UserEditComponent,canActivate:[AdminGuard]},
+  {path:'batches',component:BatchListComponent,canActivate:[AdminGuard]},
+  {path:'batches/:id',component:BatchEditComponent,canActivate:[AdminGuard]},
+  {path:'batchRegister',component:BatchEditComponent,canActivate:[AdminGuard]},
+  {path:'userRoles/:userName',component:RolesEditComponent,canActivate:[AdminGuard]},
+  {path:'notifications',component:NotificationsComponent,canActivate:[AuthGuard]},
+  {path:'rawMaterial/:id',component:RawmaterialsComponent,canActivate:[EnterTaskGuard]},
+  {path:'rangeSelect/:id',component:RangeselectComponent,canActivate:[EnterTaskGuard]},
+  {path:'checkedList/:id',component:CheckedlistComponent,canActivate:[EnterTaskGuard]},
+  {path:'userTasks',component:UserTasksComponent,canActivate:[AuthGuard]},
+  {path:'management',component:ManagementComponent,canActivate:[AdminGuard]},
+  {path:'not-found',component:NotFoundComponent},
+  {path:'server-error',component:ServerErrorComponent},
+  {path:'messages',component:MessagesComponent,canActivate:[AuthGuard]},
   {path:'**',component:HomeComponent,pathMatch:'full'}
   
 ];

@@ -21,10 +21,10 @@ namespace API.Entities
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
 
-        [Column(TypeName = "decimal(32,2)")]
+        [Column(TypeName = "decimal(32,3)")]
         public decimal QTYPerTube { get; set; }
 
-        [Column(TypeName = "decimal(32,2)")]
+        [Column(TypeName = "decimal(32,3)")]
         public decimal QTYPerBatch { get; set; }
 
         [NotMapped]

@@ -17,7 +17,7 @@ namespace API.Entities
         /// The Batch Size ... In Kilogram 
         /// </summary>
         /// 
-        [Column(TypeName = "decimal(32,2)")]
+        [Column(TypeName = "decimal(32,3)")]
         public decimal BatchSize {get;set;} 
 
         public DateTime?  MFgDate { get; set; } 
