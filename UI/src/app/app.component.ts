@@ -40,9 +40,10 @@ export class AppComponent implements OnInit
     setCurrentUser()
     {
        const user : AuthenticatedResponse =JSON.parse(sessionStorage.getItem('user'));
-       console.log(user.username+" from set current user--app component init")
+      
        if (user)
        {
+        console.log(user.username+" from set current user--app component init") 
           console.log("calling userservice.setCurrentUser from app component for user "+user.id)
           this.userservice.setCurrentUser(user);
        }

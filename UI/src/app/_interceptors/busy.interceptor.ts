@@ -19,12 +19,12 @@ export class BusyInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>>
    {
 
-    this.loaderService.isloading.next(true);
+    this.loaderService.isLoading.next(true);
     return next.handle(request).pipe(
       
       finalize(
         ()=>{
-          this.loaderService.isloading.next(false);
+          this.loaderService.isLoading.next(false);
         }
       )
     );
