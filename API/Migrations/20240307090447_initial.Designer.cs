@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace API.Data.Migrations
+namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240102092532_BatchTask")]
-    partial class BatchTask
+    [Migration("20240307090447_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,37 @@ namespace API.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("API.Entities.Barcode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("NDCNO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TubeWeight")
+                        .HasColumnType("decimal(32,3)");
+
+                    b.Property<string>("barcode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("barcode")
+                        .IsUnique();
+
+                    b.ToTable("Barcodes");
+                });
 
             modelBuilder.Entity("API.Entities.Batch", b =>
                 {
@@ -36,13 +67,16 @@ namespace API.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BatchNO")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("BatchSize")
-                        .HasColumnType("decimal(32,2)");
+                        .HasColumnType("decimal(32,3)");
 
                     b.Property<int>("BatchStateId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CartoonPictureURL")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -71,10 +105,23 @@ namespace API.Data.Migrations
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("TubePictureURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TubeWeight")
+                        .HasColumnType("decimal(32,2)");
+
+                    b.Property<int>("TubesCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BatchNO")
+                        .IsUnique()
+                        .HasFilter("[BatchNO] IS NOT NULL");
 
                     b.HasIndex("BatchStateId");
 
@@ -100,10 +147,10 @@ namespace API.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("QTYPerBatch")
-                        .HasColumnType("decimal(32,2)");
+                        .HasColumnType("decimal(32,3)");
 
                     b.Property<decimal>("QTYPerTube")
-                        .HasColumnType("decimal(32,2)");
+                        .HasColumnType("decimal(32,3)");
 
                     b.HasKey("Id");
 
@@ -111,7 +158,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("BatchIngredient");
+                    b.ToTable("BatchIngredients");
                 });
 
             modelBuilder.Entity("API.Entities.BatchState", b =>
@@ -144,6 +191,9 @@ namespace API.Data.Migrations
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DurationInSeconds")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -174,6 +224,81 @@ namespace API.Data.Migrations
                     b.ToTable("BatchTasks");
                 });
 
+            modelBuilder.Entity("API.Entities.BatchTaskCertificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BatchTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchTaskId");
+
+                    b.ToTable("BatchTaskCertificates");
+                });
+
+            modelBuilder.Entity("API.Entities.BatchTaskNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BatchTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("recipientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchTaskId");
+
+                    b.ToTable("BatchTaskNotes");
+                });
+
+            modelBuilder.Entity("API.Entities.BatchTaskRange", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BatchTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TaskTypeRangeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TaskTypeRangeTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TaskTypeRangeValue")
+                        .HasColumnType("decimal(32,3)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchTaskId");
+
+                    b.ToTable("BatchTaskRanges");
+                });
+
             modelBuilder.Entity("API.Entities.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -199,11 +324,101 @@ namespace API.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("IngredientName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IngredientName")
+                        .IsUnique();
+
                     b.ToTable("Ingredients");
+                });
+
+            modelBuilder.Entity("API.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BatchTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateRead")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DestinationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BatchTaskId");
+
+                    b.HasIndex("DestinationUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("API.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AssignedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("BatchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BatchTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateRead")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NotificationMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedByUserId");
+
+                    b.HasIndex("BatchTaskId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>
@@ -215,12 +430,16 @@ namespace API.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ProductTypeId")
+                    b.Property<int?>("ProductTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductName")
+                        .IsUnique();
 
                     b.HasIndex("ProductTypeId");
 
@@ -234,6 +453,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Percentage")
+                        .HasColumnType("decimal(32,3)");
 
                     b.HasKey("ProductId", "IngredientId");
 
@@ -281,6 +503,12 @@ namespace API.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DurationInSeconds")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -346,7 +574,7 @@ namespace API.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("RangeValue")
-                        .HasColumnType("decimal(32,2)");
+                        .HasColumnType("decimal(32,3)");
 
                     b.Property<int?>("TaskTypeGroupId")
                         .HasColumnType("int");
@@ -571,15 +799,27 @@ namespace API.Data.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("FullName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("DepartmentId");
 
                     b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("API.Entities.Barcode", b =>
+                {
+                    b.HasOne("API.Entities.Product", "product")
+                        .WithMany("Barcodes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("API.Entities.Batch", b =>
@@ -629,7 +869,7 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.BatchTask", b =>
                 {
                     b.HasOne("API.Entities.Batch", "Batch")
-                        .WithMany("BatchTasks")
+                        .WithMany()
                         .HasForeignKey("BatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -667,13 +907,88 @@ namespace API.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Entities.BatchTaskCertificate", b =>
+                {
+                    b.HasOne("API.Entities.BatchTask", "BatchTask")
+                        .WithMany("BatchTaskCertificates")
+                        .HasForeignKey("BatchTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BatchTask");
+                });
+
+            modelBuilder.Entity("API.Entities.BatchTaskNote", b =>
+                {
+                    b.HasOne("API.Entities.BatchTask", "BatchTask")
+                        .WithMany("BatchTaskNotes")
+                        .HasForeignKey("BatchTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BatchTask");
+                });
+
+            modelBuilder.Entity("API.Entities.BatchTaskRange", b =>
+                {
+                    b.HasOne("API.Entities.BatchTask", "BatchTask")
+                        .WithMany("BatchTaskRanges")
+                        .HasForeignKey("BatchTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BatchTask");
+                });
+
+            modelBuilder.Entity("API.Entities.Message", b =>
+                {
+                    b.HasOne("API.Entities.BatchTask", "BatchTask")
+                        .WithMany("Messages")
+                        .HasForeignKey("BatchTaskId");
+
+                    b.HasOne("API.Entities.User", "DestinationUser")
+                        .WithMany("DestinatedMessages")
+                        .HasForeignKey("DestinationUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("API.Entities.User", "User")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("BatchTask");
+
+                    b.Navigation("DestinationUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Entities.Notification", b =>
+                {
+                    b.HasOne("API.Entities.User", "AssignedByUser")
+                        .WithMany("AssignedNotifications")
+                        .HasForeignKey("AssignedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("API.Entities.BatchTask", "BatchTask")
+                        .WithMany("Notifications")
+                        .HasForeignKey("BatchTaskId");
+
+                    b.HasOne("API.Entities.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("AssignedByUser");
+
+                    b.Navigation("BatchTask");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
                     b.HasOne("API.Entities.ProductType", "ProductType")
                         .WithMany("Products")
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductTypeId");
 
                     b.Navigation("ProductType");
                 });
@@ -799,9 +1114,7 @@ namespace API.Data.Migrations
                 {
                     b.HasOne("API.Entities.Department", "Department")
                         .WithMany("Users")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
                 });
@@ -809,13 +1122,24 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Batch", b =>
                 {
                     b.Navigation("BatchIngredients");
-
-                    b.Navigation("BatchTasks");
                 });
 
             modelBuilder.Entity("API.Entities.BatchState", b =>
                 {
                     b.Navigation("Batches");
+                });
+
+            modelBuilder.Entity("API.Entities.BatchTask", b =>
+                {
+                    b.Navigation("BatchTaskCertificates");
+
+                    b.Navigation("BatchTaskNotes");
+
+                    b.Navigation("BatchTaskRanges");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("API.Entities.Department", b =>
@@ -834,6 +1158,8 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
+                    b.Navigation("Barcodes");
+
                     b.Navigation("Batches");
 
                     b.Navigation("ProductIngredients");
@@ -869,9 +1195,17 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.User", b =>
                 {
+                    b.Navigation("AssignedNotifications");
+
                     b.Navigation("BatchTasks");
 
                     b.Navigation("Batches");
+
+                    b.Navigation("DestinatedMessages");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

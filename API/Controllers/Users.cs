@@ -37,8 +37,10 @@ namespace API.Controllers
             _userManager = userManager;
         }
 
+
+// [Authorize(Policy ="ManagerPolicy")]
         [HttpGet]
-      [Authorize(Policy ="ManagerPolicy")]
+     
         public async Task<ActionResult<IEnumerable<UserForViewDTO>>> GetUsers()
         {
                 var users = await _userManager.Users.Include(x=>x.Department).ToListAsync();
@@ -47,7 +49,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{Id}")]
-         [Authorize(Policy ="ManagerPolicy")]
+       
         public async Task<ActionResult<User>> GetUser(string Id)
         {
              var _userResult = await _userManager.FindByIdAsync(Id);
@@ -57,11 +59,10 @@ namespace API.Controllers
              }
              return _userResult;
         }
-
-
+        
         [HttpPost]
         [Route("register")]
-         [Authorize(Policy ="ManagerPolicy")]
+         
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
            var _userResult = await _userManager.FindByNameAsync(registerDTO.Username);
@@ -104,7 +105,7 @@ namespace API.Controllers
 
 
         [HttpPut("{Id}")]
-        [Authorize(Policy ="ManagerPolicy")]
+        
          public async Task<IActionResult> Update([FromBody] UpdateUserDTO updateDTO,string Id)
         {
             
@@ -176,7 +177,7 @@ namespace API.Controllers
 
           
         [HttpPost("editRoles/{userName}")]
-         [Authorize(Policy ="ManagerPolicy")]
+         
         public async Task<IActionResult> EditRoles(string userName, string[]RoleNames) 
         {
             var user = await _userManager.FindByNameAsync(userName);
@@ -211,7 +212,7 @@ namespace API.Controllers
 
 
         [HttpGet("Roles/{userName}")]
-         [Authorize(Policy ="ManagerPolicy")]
+       
         public async Task<ActionResult<IEnumerable<RoleEditDto>>> GetUserRoles(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
