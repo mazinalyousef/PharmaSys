@@ -26,7 +26,14 @@ builder.Services.AddDbContext<DataContext>(options=>
     );
 });
 
-builder.Services.AddIdentity<User,IdentityRole>()
+builder.Services.AddIdentity<User,IdentityRole>(opt=>
+{
+    opt.Password.RequiredLength=3;
+    opt.Password.RequireDigit=false;
+    opt.Password.RequiredUniqueChars=0;
+    opt.Password.RequireUppercase=false;
+    opt.Password.RequireNonAlphanumeric=false;
+})
 .AddEntityFrameworkStores<DataContext>()
 .AddDefaultTokenProviders();
 
