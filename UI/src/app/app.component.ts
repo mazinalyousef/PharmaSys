@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DepartmentsService } from './_services/departments.service';
 import { Department } from './_models/department';
  
 import { A11yModule } from '@angular/cdk/a11y';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { DataService } from './_services/data.service';
 import { AuthenticatedResponse } from './_models/AuthenticatedResponse';
 import { UsersService } from './_services/users.service';
@@ -19,20 +19,29 @@ import { LoaderService } from './_services/loader.service';
 export class AppComponent implements OnInit
  {
 
+    
    // public App_departments! : Department[];
     public App_departments !: Department[];
+
+    isBusy:Observable<boolean>;
     constructor(private userservice:UsersService,
        private departmentservice:DepartmentsService,
         private dataservice:DataService,
         private presenceService:PresenceService,
-        public loaderService:LoaderService)
+        public loaderService:LoaderService,
+         )
     {
      
     }
     ngOnInit(): void
     {
+      setTimeout(() => {
+        this.isBusy = this.loaderService.isLoading$;
+    });
+     
       this.setCurrentUser();
       this.getdepartments();
+      
    
      
     }

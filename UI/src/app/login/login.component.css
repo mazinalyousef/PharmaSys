@@ -1,4 +1,31 @@
- .login-container{
-    display: flex;
-    margin: auto;
+ .login-container
+ 
+ {
+    margin-top: 32px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+    
  }
+ .login-form
+ {
+   
+ }
+ p
+ {
+   text-align: center;
+   color: #3F51B5;
+ }
+  .commands
+  {
+   display: flex;
+   justify-content: center;
+   
+  }
+
+  .form-field
+  {
+   
+    
+    
+  }

@@ -13,6 +13,7 @@ import { MessageService } from 'src/app/_services/message.service';
 import { PresenceService } from 'src/app/_services/presence.service';
 import { UsersService } from 'src/app/_services/users.service';
 import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-checkedlist',
@@ -22,7 +23,7 @@ import * as MessagesTitle from 'src/app/Globals/globalMessages';
 export class CheckedlistComponent  implements OnInit,OnDestroy
 {
 
-   
+  baseUrl = environment.apiUrl;
    idparam?:number;
    checkedlistTask : checkedListTask;
    
@@ -32,6 +33,9 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
 
     note:string;
     message:message;
+
+    tubeUrl:string;
+    cartoonUrl:string;
 
    constructor(private activatedRoute : ActivatedRoute, private batchtaskService : BatchtaskService,
      private router : Router,public presenceservice :PresenceService,private userservice :UsersService
@@ -79,7 +83,20 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
           result=>
           {
             this.checkedlistTask=result;
+             
 
+
+            if (this.checkedlistTask)
+            {
+             // this.tubeUrl = this.baseUrl+'images/'+this.checkedlistTask.productInfo.id.toString()+'_Tube.jpg'
+             // this.cartoonUrl =this.baseUrl+'images/'+this.checkedlistTask.productInfo.id.toString()+'_Cartoon.jpg'
+
+                this.tubeUrl = this.baseUrl+'images/'+this.checkedlistTask.batchInfo.id.toString()+'_Tube.jpg'
+                this.cartoonUrl =this.baseUrl+'images/'+this.checkedlistTask.batchInfo.id.toString()+'_Cartoon.jpg'
+
+            }
+           
+            /*
             if (this.checkedlistTask.departmentId)
             {
               if (this.checkedlistTask.taskTypeId===TaskTypes.RoomCleaning)
@@ -94,6 +111,7 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
               }
               
             }
+            */
 			
           }
           , 

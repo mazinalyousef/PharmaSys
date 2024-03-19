@@ -36,6 +36,10 @@ namespace API.Controllers
         private readonly UserManager<User> _userManager;
 
          private readonly DataContext _dataContext;
+
+
+         private   readonly object completeTaskLock=new object ();
+
         public Tasks(ITaskRepository taskRepository,IMapper mapper,ITaskBL taskBL,
         IHubContext<TaskTimerHub> tasktimerhub,TaskTimer taskTimer, 
         IHubContext<NotificationHub> notificationHub
@@ -88,6 +92,24 @@ namespace API.Controllers
                 }
                  // fire the timer ....
                 var taskinfo= _taskRepository.getBatchTaskInfo(taskAssignDTO.TaskId).GetAwaiter().GetResult();
+
+                // we need to include the department also ....
+
+
+
+                // try to get the suitable timer ....
+                var timerItem= Helpers.TaskTypesTimerData.taskTypesTimers.Where(x=>x.DepartmentId==taskinfo.DepartmentId&&x.taskTypeId
+                 ==taskinfo.TaskTypeId).FirstOrDefault();
+
+                 if (timerItem!=null)
+                 {
+                     _tasktimer.MaxSeconds = timerItem.DurationInSeconds;
+                 }
+
+
+
+
+                /*
                 if ( taskinfo.TaskTypeId==(int)Enumerations.TaskTypesEnum.RoomCleaning)
                 { 
                    _tasktimer.MaxSeconds=15;
@@ -100,6 +122,7 @@ namespace API.Controllers
                 {
                 _tasktimer.MaxSeconds=22;
                 }
+                */
 
                 
                 
@@ -143,8 +166,21 @@ namespace API.Controllers
                    {
 
                           
-                          int originalSeconds=taskAssignDTO.Seconds; //  coming from client ....not the best .. change later...
-                          await Task.Delay((originalSeconds*1000)+5000).ContinueWith(o =>
+                         // int originalSeconds=taskAssignDTO.Seconds; //  coming from client ....not the best .. change later...
+
+                            int originalSeconds=-1;
+                           var timerItem= Helpers.TaskTypesTimerData.taskTypesTimers.Where(x=>x.DepartmentId==taskAssignDTO.DepartmentId&&x.taskTypeId
+                           ==taskAssignDTO.TaskTypeId).FirstOrDefault();
+                            if (timerItem!=null)
+                             {
+                              originalSeconds = timerItem.DurationInSeconds;
+                             }
+                           
+                           if (originalSeconds>0)
+                           {
+
+
+        await Task.Delay((originalSeconds*1000)+5000).ContinueWith(o =>
                            {
                         
                                       try
@@ -216,16 +252,15 @@ namespace API.Controllers
                          
                          
                        }
-                       );  
+                       );
+
+
+                           }
+                    
 
                          return Ok(true);   
 
                    }
-
-
-                                   
- 
-
 
         [HttpGet("{Id}")]
           [Authorize]
@@ -298,8 +333,12 @@ namespace API.Controllers
           [Authorize]
         public  ActionResult<bool> SetTaskAsCompleted(int Id)
         {
-            
-           bool iscompleted=_taskBL.SetAsCompleted(Id);
+           bool iscompleted=false;
+           lock(completeTaskLock)
+           {
+            iscompleted=_taskBL.SetAsCompleted(Id);
+           }
+         
            if (!iscompleted)
            {
                 /*

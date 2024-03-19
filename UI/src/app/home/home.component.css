@@ -1,17 +1,27 @@
 
 .maingrid{
+    
+    margin-top: 42px;
     display: grid;
-    grid-template-columns: 300px 300px 300px;
+    grid-template-columns: 200px 200px 200px;
     column-gap: 10px;
     row-gap: 10px;
 }
+
+.main-component{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ 
  
  
 button {
+    cursor:pointer;
     font-size: 1.25em;
     font-weight: bold;
     line-height: 1;
-    text-transform: uppercase;
     position: relative;
     border: .0875em solid;
     padding: 1em;
@@ -45,4 +55,7 @@ button {
    transition: fill 1s;
 }
 
+
+
+ 
  

@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'node_modules/ngx-toastr/toastr.css';
+@import 'node_modules/ngx-spinner/animations/ball-scale-multiple.css';
+@import 'node_modules/ngx-spinner/animations/ball-spin.css';
+
+ 
 
  .success {
     background-color: rgb(100, 230, 50) !important;
@@ -24,12 +28,26 @@ th, td {
   border: 1px solid;
   border-color: #b8b8b8;
 }
+
 .header-main-container {
+  margin-top: 10px;
   font-size: large;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+ 
 }
+
+table
+{
+  margin-top: 10px;
+  margin-bottom: 10px;
+ 
+}
+.form-field
+{
+  
+  width: 90%;
+}
+
+ 
 
 
   

@@ -12,6 +12,7 @@ import { MessageService } from 'src/app/_services/message.service';
 import { PresenceService } from 'src/app/_services/presence.service';
 import { UsersService } from 'src/app/_services/users.service';
 import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-rawmaterials',
@@ -31,6 +32,10 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
    AuthenticatedUser :AuthenticatedResponse;
    note:string;
    message:message;
+
+   tubeUrl:string;
+   cartoonUrl:string;
+  baseUrl = environment.apiUrl;
    
   
    constructor(private activatedRoute : ActivatedRoute, private batchtaskService : BatchtaskService,
@@ -79,6 +84,13 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
             
             this.rawmaterialTask=result;
             this.ingredientsdataSource = new MatTableDataSource<any>(this.rawmaterialTask.batchIngredientDTOs);
+
+            if (this.rawmaterialTask)
+            {
+              this.tubeUrl = this.baseUrl+'images/'+this.rawmaterialTask.batchInfo.id.toString()+'_Tube.jpg'
+              this.cartoonUrl =this.baseUrl+'images/'+this.rawmaterialTask.batchInfo.id.toString()+'_Cartoon.jpg'
+            }
+            /*
             if (this.rawmaterialTask.departmentId)
             {
               if (this.rawmaterialTask.departmentId===DepartmentsEnum.Warehouse)
@@ -100,6 +112,7 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
                 this.isAccountantTask=false;
               }
             }
+            */
             console.log(result);
           }
           , 

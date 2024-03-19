@@ -20,9 +20,9 @@ export class BatchService {
       return this.http.get<batch[]> (this.baseUrl+'Batches');
    }
 
-   addBatch(batch:batch) : Observable<batch>
+   addBatch(batch:batch) : Observable<number>
    {
-      return this.http.post<batch>(this.baseUrl+'Batches',batch);
+      return this.http.post<number>(this.baseUrl+'Batches',batch);
       
    }
 
@@ -43,6 +43,24 @@ export class BatchService {
    sendBatch(id:number) : Observable<boolean>
    {
        return this.http.post<boolean>(this.baseUrl+'Batches/send/'+id,null);
+   }
+
+   addTubeImage(formData:FormData) 
+   {
+      return this.http.post(this.baseUrl+'Batches/UploadTubePhoto',formData);
+      
+   }
+   addCartoonImage(formData:FormData) 
+   {
+      return this.http.post(this.baseUrl+'Batches/UploadCartoonPhoto',formData);  
+   }
+   loadTubeImage(id:number)
+   {
+    return this.http.get(this.baseUrl+'images/'+id.toString()+'_Tube.jpg');  
+   }
+   loadCartoonImage(id:number)
+   {
+    return this.http.get(this.baseUrl+'images/'+id.toString()+'_Cartoon.jpg');  
    }
 
 

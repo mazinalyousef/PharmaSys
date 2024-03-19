@@ -31,6 +31,12 @@ export class ProductListComponent implements OnInit
     this.loadItems();
   }
 
+  applyFilter(event: Event) {
+    
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.MatdataSource.filter = filterValue.trim().toLowerCase();
+}
+
   loadItems()
   {
     this.managementDataService.getProducts();
@@ -40,6 +46,9 @@ export class ProductListComponent implements OnInit
       {
         this.MatdataSource = new MatTableDataSource<any>(res);
         this.MatdataSource.paginator = this.paginator;
+        this.MatdataSource.filterPredicate = function(data, filter: number): boolean {
+          return data.productName.trim().toLowerCase().includes(filter);
+        };
       }
     )
   }

@@ -27,10 +27,19 @@ export class BatchListComponent implements OnInit
   {
 
   }
-  ngOnInit(): void {
+  ngOnInit(): void
+   {
     this.loadBatches();
+
+   
+
   }
 
+  applyFilter(event: Event) {
+    
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.MatdataSource.filter = filterValue.trim().toLowerCase();
+}
    
 
   loadBatches()
@@ -40,6 +49,9 @@ export class BatchListComponent implements OnInit
         this.batches = res;
         this.MatdataSource = new MatTableDataSource<any>(this.batches);
         this.MatdataSource.paginator = this.paginator;
+        this.MatdataSource.filterPredicate = function(data, filter: number): boolean {
+          return data.batchNO===filter;
+        };
       })
       
       

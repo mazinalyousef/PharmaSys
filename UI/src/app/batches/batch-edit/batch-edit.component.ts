@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup,Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, filter, map, take } from 'rxjs';
@@ -8,8 +8,10 @@ import { batch } from 'src/app/_models/batch';
 import { batchIngredient } from 'src/app/_models/batchIngredient';
 import { BarcodeService } from 'src/app/_services/barcode.service';
 import { BatchService } from 'src/app/_services/batch.service';
+import { ProductService } from 'src/app/_services/product.service';
 import { UsersService } from 'src/app/_services/users.service';
 import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
+import { environment } from 'src/environments/environment';
 @Component
 ({
   selector: 'app-batch-edit',
@@ -20,7 +22,7 @@ import * as MessagesTitle from 'src/app/Globals/globalMessages';
 export class BatchEditComponent  implements OnInit
 {
    
-    
+  baseUrl = environment.apiUrl;
   displayedIngredientsColumns = ['ingredientName', 'qtyPerTube','qtyPerBatch']; 
 
 
@@ -41,10 +43,20 @@ export class BatchEditComponent  implements OnInit
     loggedUserId : string;
 
 
+    uploadTubeFile: File | null;
+    uploadTubeFileLabel: string | undefined = 'Choose Tube image to upload';
+     tubeUrl:string;
+  
+  
+    uploadCartoonFile: File | null;
+    uploadCartoonFileLabel: string | undefined = 'Choose Cartoon image to upload';
+    cartoonUrl:string;
+
     constructor(private activatedRoute:ActivatedRoute,
       private router:Router,private batchservice:BatchService,
       private barcodeservice:BarcodeService,
-      private userservice:UsersService, private toastr:ToastrService)
+      private userservice:UsersService, private toastr:ToastrService,
+      private productService:ProductService)
     {
 
     }
@@ -83,15 +95,15 @@ export class BatchEditComponent  implements OnInit
         this.form =new FormGroup
         ( 
           {
-          batchNO:new FormControl(''),
-          batchSize:new FormControl(''),
-          mFgDate:new FormControl(''),
-          expDate:new FormControl(''),
+          batchNO:new FormControl('',Validators.required),
+          batchSize:new FormControl('',Validators.required),
+          mFgDate:new FormControl('',Validators.required),
+          expDate:new FormControl('',Validators.required),
           revision:new FormControl(''),
-          revisionDate:new FormControl(''),
-          barcode:new FormControl(''),
+          revisionDate:new FormControl('',Validators.required),
+          barcode:new FormControl('',Validators.required),
           mfno:new FormControl(''),
-          ndcno:new FormControl(''),
+          ndcno:new FormControl('',Validators.required),
           productId:new FormControl(''),
           productName:new FormControl(''),
           tubeWeight:new FormControl(''),
@@ -113,6 +125,7 @@ export class BatchEditComponent  implements OnInit
     
     loadBatch()
     {
+      this.clearFilesData();
      // this.idparameter = +this.activatedRoute.snapshot.params['id'];
       this.idparameter = this.activatedRoute.snapshot.params['id'];
 
@@ -131,6 +144,10 @@ res=>
   this.form.patchValue( this.batch);
 
   this.stateIsNotInitialized = this.batch.batchStateId!==BatchStates.initialized;
+
+   // load images...
+   this.tubeUrl = this.baseUrl+'images/'+this.batch.id.toString()+'_Tube.jpg'
+   this.cartoonUrl =this.baseUrl+'images/'+this.batch.id.toString()+'_Cartoon.jpg'
 }
 ,error=>
 {
@@ -149,9 +166,109 @@ console.log(error);  this.stateIsNotInitialized=true;
     }
 
 
+
+    handleTubeFileInput(files: FileList)
+  {
+    if (files.length > 0)
+     {
+      this.uploadTubeFile = files.item(0);
+      this.uploadTubeFileLabel = this.uploadTubeFile?.name;
+
+      const reader = new FileReader();
+      reader.readAsDataURL(this.uploadTubeFile); 
+      reader.onload = (_event) => { 
+          this.tubeUrl = reader.result as string; 
+      }
+
+    }
+  }
+  handleCartoonFileInput(files: FileList)
+  {
+    if (files.length > 0)
+     {
+      this.uploadCartoonFile = files.item(0);
+      this.uploadCartoonFileLabel = this.uploadCartoonFile?.name;
+
+      const reader = new FileReader();
+      reader.readAsDataURL(this.uploadCartoonFile); 
+      reader.onload = (_event) => { 
+          this.cartoonUrl = reader.result as string; 
+      }
+
+    }
+  }
+
+  
+ uploadTubePhoto(id:number)
+ {
+  const formData = new FormData();
+  // files ...
+   if (this.uploadTubeFile)
+    {
+    // formData.append(this.product.id.toString(), this.uploadTubeFile);
+     formData.append(id.toString(), this.uploadTubeFile);
+      // call service
+    this.batchservice.addTubeImage(formData).subscribe(
+      res=>
+      {
+        console.log(res);
+        this.toastr.info(MessagesTitle.onSaveSuccess,"");
+      }
+      ,error=>
+      {
+        console.log(error);
+        this.toastr.error(error,"");
+      }
+    )
+    }
+   
+ }
+
+ 
+ uploadCartoonPhoto(id:number)
+ {
+  const formData = new FormData();
+    // files ...
+     if (this.uploadCartoonFile)
+      {
+       formData.append(id.toString(), this.uploadCartoonFile);
+         // call service
+      this.batchservice.addCartoonImage(formData).subscribe(
+        res=>
+        {
+          console.log(res);
+          this.toastr.info(MessagesTitle.onSaveSuccess,"");
+        }
+        ,error=>
+        {
+          console.log(error);
+          this.toastr.error(error,"");
+        }
+      )
+      }
+    
+  
+ }
+
+
+  clearFilesData()
+  {
+    this.uploadTubeFile = null; this.uploadTubeFileLabel='';
+    this.uploadCartoonFile=null; this.uploadCartoonFileLabel='';
+     this.tubeUrl='';
+     this.cartoonUrl='';
+  }
+
+
     onSubmit()
     {
 
+
+      if (!this.form.valid)
+      {
+          this.toastr.error("Invalid Data,Please Check Again","error");
+          return
+      }
        this.userservice.loggedUser$.pipe(
         take(1) 
        ).subscribe(
@@ -206,6 +323,11 @@ console.log(error);  this.stateIsNotInitialized=true;
          (
           res=>
           {
+
+              // upload photos
+            this.uploadTubePhoto(this.idparameter);
+            this.uploadCartoonPhoto(this.idparameter);
+
              console.log("Batch"+this.batch.batchNO+"has been updated");
              this.toastr.info(MessagesTitle.onSaveSuccess,"");
              this.router.navigate(['/batches']);
@@ -224,6 +346,12 @@ console.log(error);  this.stateIsNotInitialized=true;
           // insert....
           this.batchservice.addBatch(this.batch).subscribe(res=>
             {
+              if (res)
+              {
+                // add photos
+              this.uploadTubePhoto(res);
+              this.uploadCartoonPhoto(res);
+              }
               console.log("Batch " + this.batch.batchNO + " has been Added.");
               this.toastr.info(MessagesTitle.onSaveSuccess,"");
               this.router.navigate(['/batches']);

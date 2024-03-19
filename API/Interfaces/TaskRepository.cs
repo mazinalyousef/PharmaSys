@@ -101,6 +101,7 @@ namespace API.Interfaces
                  if (BatchEntity!=null)
                 {
                      Batch batchforview = new Batch ();
+                     batchforview.Id = BatchEntity.Id;
                     batchforview.Barcode = BatchEntity.Barcode;
                     batchforview.BatchNO = BatchEntity.BatchNO;
                     batchforview.BatchSize = BatchEntity.BatchSize;
@@ -110,12 +111,14 @@ namespace API.Interfaces
                     batchforview.MFNO = BatchEntity.MFNO;
                     batchforview.NDCNO=BatchEntity.NDCNO;
                     batchforview.TubeWeight = BatchEntity.TubeWeight;
+                     batchforview.TubesCount = BatchEntity.TubesCount;
 
                     checkedListTaskForViewDTO.BatchInfo=batchforview;
                     if (BatchEntity.Product!=null)
                     {
                         Product productforview = new Product ();
                         productforview.ProductName = BatchEntity.Product.ProductName;
+                        productforview.Id =  BatchEntity.Product.Id;
                         checkedListTaskForViewDTO.ProductInfo=productforview;
                     }
                 }
@@ -252,6 +255,7 @@ namespace API.Interfaces
                  if (BatchEntity!=null)
                 {
                      Batch batchforview = new Batch ();
+                     batchforview.Id=BatchEntity.Id;
                     batchforview.Barcode = BatchEntity.Barcode;
                     batchforview.BatchNO = BatchEntity.BatchNO;
                     batchforview.BatchSize = BatchEntity.BatchSize;
@@ -261,12 +265,14 @@ namespace API.Interfaces
                     batchforview.MFNO = BatchEntity.MFNO;
                     batchforview.NDCNO=BatchEntity.NDCNO;
                     batchforview.TubeWeight = BatchEntity.TubeWeight;
+                    batchforview.TubesCount = BatchEntity.TubesCount;
 
                     rawMaterialsTaskForViewDTO.BatchInfo=batchforview;
                     if (BatchEntity.Product!=null)
                     {
                         Product productforview = new Product ();
                         productforview.ProductName = BatchEntity.Product.ProductName;
+                        productforview.Id = BatchEntity.Product.Id;
                         rawMaterialsTaskForViewDTO.ProductInfo=productforview;
                     }
                 }
@@ -275,7 +281,7 @@ namespace API.Interfaces
 
              return rawMaterialsTaskForViewDTO;
         }
-
+        
         		public async Task<bool> SetAsAssigned(int TaskId,string UserId)
         {
 
@@ -299,21 +305,21 @@ namespace API.Interfaces
 					  try 
 					  {
 						  
-						     // setting new properties for the original entity
-                originalEntity.UserId = UserId;
-                originalEntity.StartDate =DateTime.Now;
-                originalEntity.TaskStateId = (int) Enumerations.TaskStatesEnum.processing;
 
-                _dataContext.Entry(originalEntity).Property(x=>x.UserId).IsModified=true;
-                _dataContext.Entry(originalEntity).Property(x=>x.StartDate).IsModified=true;
-                _dataContext.Entry(originalEntity).Property(x=>x.TaskStateId).IsModified=true;
+                            			     // setting new properties for the original entity
+                    originalEntity.UserId = UserId;
+                    originalEntity.StartDate =DateTime.Now;
+                    originalEntity.TaskStateId = (int) Enumerations.TaskStatesEnum.processing;
 
+                    _dataContext.Entry(originalEntity).Property(x=>x.UserId).IsModified=true;
+                    _dataContext.Entry(originalEntity).Property(x=>x.StartDate).IsModified=true;
+                    _dataContext.Entry(originalEntity).Property(x=>x.TaskStateId).IsModified=true;
 
-                // update also the notification-assigned by user property 
-                // note : update all the notifications related the the task....
-                var originalNotificationEntities = _dataContext.Notifications.Where(x=>x.BatchTaskId==TaskId).ToList();
-                if (originalNotificationEntities!=null)
-                {
+                    // update also the notification-assigned by user property 
+                    // note : update all the notifications related the the task....
+                    var originalNotificationEntities = _dataContext.Notifications.Where(x=>x.BatchTaskId==TaskId).ToList();
+                    if (originalNotificationEntities!=null)
+                    {
                     foreach(var _item in originalNotificationEntities)
                     {
                      _item.AssignedByUserId=UserId;
@@ -321,11 +327,12 @@ namespace API.Interfaces
                     
                     }
                   // we may want to push notifications here so other users can see that the user takes this specific task
-                }
-                await _dataContext.SaveChangesAsync();
+                     }
+                        await _dataContext.SaveChangesAsync();
 
-                     await transaction.CommitAsync();
-                   completed=true;
+                        await transaction.CommitAsync();
+                        completed=true;
+
 					  }  // try 
 					    catch(Exception)
 						{
@@ -338,8 +345,6 @@ namespace API.Interfaces
             return completed;
         }
 
-
-         
          public async Task<bool> SetAsCompleted(int TaskId)
          {
             bool completed=false;
@@ -374,9 +379,6 @@ namespace API.Interfaces
             _batchId&&x.DepartmentId==_departmentId).FirstOrDefault();
             return batchTask;
          }
-
-
-
 
          public async Task<IEnumerable<BatchTask>>GetUserRunningTasks(string userId)
          {

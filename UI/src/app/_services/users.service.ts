@@ -8,6 +8,7 @@ import { LoginModel } from '../_models/login';
 import { AuthenticatedResponse } from '../_models/AuthenticatedResponse';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { PresenceService } from './presence.service';
+import { changepassword } from '../_models/changepassword';
 
 
 
@@ -157,6 +158,11 @@ export class UsersService
     this.LoggedUserName.next("");
     this.CurrentloggedUser = null;
     this.presenseService.stopHubConnection();
+  }
+
+  changePassword(changepasswordModel : changepassword)
+  {
+      return this.http.post(this.baseUrl+'Users/ChangePassword',changepasswordModel);
   }
 
 

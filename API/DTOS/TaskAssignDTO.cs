@@ -14,6 +14,11 @@ namespace API.DTOS
 
         public int Seconds{get;set;}
 
+
+        public int TaskTypeId { get; set; }
+
+        public int DepartmentId { get; set; }
+
         
     }
 }

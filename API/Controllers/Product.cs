@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using API.DTOS;
 using API.Interfaces;
@@ -15,7 +16,7 @@ namespace API.Controllers
     
     public class Product : ControllerBase
     {
-        
+      
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
 
@@ -23,6 +24,7 @@ namespace API.Controllers
         {
             _productRepository =productRepository;
             _mapper= mapper;
+          
         }
 
         [HttpDelete("{Id}")]
@@ -68,6 +70,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        
           [Authorize(Policy ="ManagerPolicy")]
         public async Task <IActionResult> AddProduct([FromBody] ProductDTO productDTO)
         {
@@ -76,9 +79,11 @@ namespace API.Controllers
             var product = _mapper.Map<API.Entities.Product>(productDTO);
              
             var result = await _productRepository.Add_Product_Dataset(product);
-            if (result)
+
+           
+            if (result.OperationsSucceeded)
             {
-            return Ok(new Response { Status = "Success", Message = " Add Was Successfull!" });
+            return Ok(result);
             }
             else
             {
@@ -90,6 +95,7 @@ namespace API.Controllers
         }
 
           [HttpPut("{Id}")]
+           [DisableRequestSizeLimit]
             [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Update ([FromBody]ProductDTO productDTO,int Id)
         {

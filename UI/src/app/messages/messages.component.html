@@ -1,18 +1,13 @@
-<div class="component-main-container">
+<div>
   <ul >
-    <li *ngFor="let item of presenseService.userMessages$|async">
-        <div>
-         <style>
-             div {
-               
-               background-color: #EFECEC;
-               border-radius: 25px ; 
-               margin: 10px;
-               padding: 15px;
-             }
-           </style>
-          <app-message [msg]="item"></app-message>
-        </div>
+    <li  *ngFor="let item of presenseService.userMessages$|async">
+
+
+      <div class="message-container">
+        <app-message [msg]="item"></app-message>
+      </div>
+    
+      
     </li>
  </ul>
 </div>

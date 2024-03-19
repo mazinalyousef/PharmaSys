@@ -10,15 +10,23 @@
 .app-sidenav {
     width: 230px;
 }
-.app-sidenav-content {
+.router-outlet-content {
+    
+    margin: 15px;
+    flex: 1;
+    height: 100%;
+    width: 100%; 
+} 
+.mat-sidenav-content
+{
+
     
     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
-    width: 100%;
- 
-   
-   
-} 
+    width: 100%; 
+}
  
 
  

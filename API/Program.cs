@@ -11,6 +11,7 @@ using API.Timers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -76,8 +77,6 @@ builder.Services.AddAuthentication(options =>
 
 });
 
-
-
 // testing
  builder.Services.AddAuthorization(opt=>
  {
@@ -95,6 +94,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
+// add singletone
+builder.Services.AddScoped<IGlobalDataRepository,GlobalDataRepository>();
+
 // add repository ....
 builder.Services.AddScoped<IBatchRepository,BatchRepository>();
 builder.Services.AddScoped<ITaskRepository,TaskRepository>();
@@ -105,10 +107,11 @@ builder.Services.AddScoped<ITaskBL,TaskBL>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 
 
+
+
 builder.Services.AddSignalR();
 builder.Services.AddScoped<TaskTimer>();
 var app = builder.Build();
-
 
 // TODO: refactor the code .. later to transfer to another layer....
 #region seed roles
@@ -131,17 +134,32 @@ using (var scope = app.Services.CreateScope())
             UserRoles.Filling_FillingTubes,
             UserRoles.Filling_Cartooning,
             UserRoles.Filling_Packaging,
-           UserRoles.Developer,     
+            UserRoles.Developer,     
    };
  
+     
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
             await roleManager.CreateAsync(new IdentityRole(role));
+            
         }
     }
+
+
+// try to acccess singletone service 
+    //  var globalDataService= app.Services.GetRequiredService<IGlobalDataRepository>();
+    //  globalDataService.getTaskTypeTimersData();
+     var globalDataService = scope.ServiceProvider.GetRequiredService<IGlobalDataRepository>();
+      bool dataReadCompleted=  globalDataService.getTaskTypeTimersData();
+
+    
 }
+
+
+
+
 #endregion
 
 // Configure the HTTP request pipeline.
@@ -167,7 +185,19 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseDefaultFiles();
-app.UseStaticFiles();   
+
+app.UseStaticFiles(); 
+
+ // for the wwwroot/uploads folder
+  string uploadsDir = Path.Combine(builder.Environment.WebRootPath, "uploads");
+  if (!Directory.Exists(uploadsDir))
+      Directory.CreateDirectory(uploadsDir);
+
+  app.UseStaticFiles(new StaticFileOptions()
+  {
+      RequestPath = "/api/images",
+      FileProvider = new PhysicalFileProvider(uploadsDir)
+  }); 
 
 app.MapControllers();
 

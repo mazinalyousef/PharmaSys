@@ -14,12 +14,9 @@ namespace API.Entities
 
         public BatchTask BatchTask { get; set; }
 
-
-
-
          public int? TaskTypeRangeId { get; set; }
 
-
+            
         
         // optional feild ... may drop later... 
         public string TaskTypeRangeTitle { get; set; }

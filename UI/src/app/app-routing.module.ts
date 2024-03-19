@@ -19,6 +19,7 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { AdminGuard } from './_guards/admin.guard';
 import { EnterTaskGuard } from './_guards/enter-task.guard';
 import { MessagesComponent } from './messages/messages.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 
@@ -45,6 +46,7 @@ const routes: Routes =
   {path:'not-found',component:NotFoundComponent},
   {path:'server-error',component:ServerErrorComponent},
   {path:'messages',component:MessagesComponent,canActivate:[AuthGuard]},
+  {path:'changePassword',component:ChangePasswordComponent,canActivate:[AuthGuard]},
   {path:'**',component:HomeComponent,pathMatch:'full'}
   
 ];

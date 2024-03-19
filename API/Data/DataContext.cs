@@ -16,6 +16,7 @@ namespace API.Data
 
         }
 
+            
              public DbSet<Product> Products { get; set; } 
              public DbSet<ProductType> ProductTypes { get; set; } 
 
@@ -53,6 +54,8 @@ namespace API.Data
                 public DbSet<Notification> Notifications {get;set;}
 
               public DbSet<Message> Messages{get;set;}
+
+              public DbSet<TaskTypesTimers> TaskTypesTimers{get;set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

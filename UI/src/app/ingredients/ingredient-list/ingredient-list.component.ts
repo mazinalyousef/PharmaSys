@@ -40,6 +40,14 @@ export class IngredientListComponent implements  OnInit
        
     }
 
+    applyFilter(event: Event) {
+    
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.MatdataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
+
       
      handlePageEvent(event: PageEvent)
      {
@@ -61,6 +69,9 @@ export class IngredientListComponent implements  OnInit
         res=>{
           this.MatdataSource = new MatTableDataSource<any>(res);
           this.MatdataSource.paginator = this.paginator;
+          this.MatdataSource.filterPredicate = function(data, filter: number): boolean {
+            return data.ingredientName.toLowerCase().includes(filter);
+          };
         }
       )
       

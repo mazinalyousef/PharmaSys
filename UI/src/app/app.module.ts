@@ -26,6 +26,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatDialogModule} from '@angular/material/dialog'
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatGridListModule} from '@angular/material/grid-list'
 import{MatCheckboxModule} from '@angular/material/checkbox'
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
@@ -68,6 +69,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { MessageComponent } from './message/message.component';  
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 import { BusyInterceptor } from './_interceptors/busy.interceptor';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
  
 
@@ -108,7 +111,8 @@ import { BusyInterceptor } from './_interceptors/busy.interceptor';
     NotFoundComponent,
     ServerErrorComponent,
     MessagesComponent,
-    MessageComponent
+    MessageComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -141,6 +145,8 @@ import { BusyInterceptor } from './_interceptors/busy.interceptor';
     MatSnackBarModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatGridListModule,
+    NgxSpinnerModule,
     
     ToastrModule.forRoot(
       {positionClass: 'toast-bottom-right'}

@@ -10,8 +10,7 @@ namespace API.DTOS
         public int Id { get; set; }
 
         public int BatchId { get; set; }
-
-       
+        
         public int IngredientId { get; set; }
         public string IngredientName { get; set; } 
         public decimal QTYPerTube { get; set; }

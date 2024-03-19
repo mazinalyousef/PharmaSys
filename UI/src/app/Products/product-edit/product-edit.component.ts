@@ -4,11 +4,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, map, startWith } from 'rxjs';
 import { ingredient } from 'src/app/_models/ingredient';
+import { InsertedEntityStatus } from 'src/app/_models/InsertedEntityStatus';
 import { product } from 'src/app/_models/product';
 import { productIngredient } from 'src/app/_models/productIngredient';
 import { ManagementDataService } from 'src/app/_services/management-data.service';
 import { ProductService } from 'src/app/_services/product.service';
 import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-product-edit',
   templateUrl: './product-edit.component.html',
@@ -18,6 +20,7 @@ export class ProductEditComponent implements OnInit
 
 {
 
+  baseUrl = environment.apiUrl;
   ingredientAutoCompletecontrol=new FormControl();
   filteredingredients :Observable<any>;
   displayedColumns = ['ingredientId','ingredientTitle','percentage','actions']; 
@@ -26,10 +29,18 @@ export class ProductEditComponent implements OnInit
   productIngredients :productIngredient[];
   AllIngredients : ingredient[];
   form :FormGroup;
+
+ insertedEntity:InsertedEntityStatus;
   
+
   MatdataSource :any;
   selectedProductIngredientItem :productIngredient;
   @Output() saveEvent = new EventEmitter();
+
+
+
+ 
+  
 
   constructor(private productService :ProductService,
     public managementDataService:ManagementDataService,
@@ -38,6 +49,10 @@ export class ProductEditComponent implements OnInit
   {
 
   }
+
+  
+
+
   ngOnInit(): void
   {
 
@@ -85,6 +100,8 @@ export class ProductEditComponent implements OnInit
 
   loadProduct()
   {
+  
+  
   this.managementDataService.selectedProduct$.subscribe(
    res=>
    {
@@ -92,8 +109,10 @@ export class ProductEditComponent implements OnInit
      this.productIngredients = this.product.productIngredients;
      this.MatdataSource =new MatTableDataSource<any>(this.productIngredients);
      this.form.patchValue(this.product);
-    
+     
+
      this.onNewProductIngredient();
+     
    }
    );
  
@@ -148,6 +167,7 @@ export class ProductEditComponent implements OnInit
   }
   onnew()
   {
+   
      this.product={} as product;
      this.product.id=0;
      this.product.productName="";
@@ -180,6 +200,10 @@ export class ProductEditComponent implements OnInit
          {
            console.log("success");
            this.toastr.info(MessagesTitle.onSaveSuccess,"");
+
+           // upload photos
+           //this.uploadTubePhoto(this.product.id);
+          // this.uploadCartoonPhoto(this.product.id);
            //reload ....
            this.saveEvent.emit(null);
          }
@@ -195,13 +219,24 @@ export class ProductEditComponent implements OnInit
     }
     else
     {
+     
        // add...
        this.productService.add(this.product).subscribe
         (
          result=>
          {
-           console.log("success ");
+           this.insertedEntity = result;
+           console.log("Inserted Entity :"+this.insertedEntity.insertedId);
            this.toastr.info(MessagesTitle.onSaveSuccess,"");
+           
+           // insert photos 
+           if (this.insertedEntity.insertedId)
+           {
+            // upload photos
+          // this.uploadTubePhoto(this.insertedEntity.insertedId);
+          // this.uploadCartoonPhoto(this.insertedEntity.insertedId);
+           }
+           
             //reload ....
             this.saveEvent.emit(null);
          }
@@ -217,6 +252,7 @@ export class ProductEditComponent implements OnInit
     }
 
  }
+
 
 
 }

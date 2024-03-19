@@ -29,6 +29,11 @@ export class BarcodeListComponent implements OnInit
   {
     this.loadItems();
   }
+  applyFilter(event: Event) {
+    
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.MatdataSource.filter = filterValue.trim().toLowerCase();
+}
 
   loadItems()
   {
@@ -39,6 +44,9 @@ export class BarcodeListComponent implements OnInit
       {
         this.MatdataSource = new MatTableDataSource<any>(res);
         this.MatdataSource.paginator = this.paginator;
+        this.MatdataSource.filterPredicate = function(data, filter: number): boolean {
+          return data.barcode.toLowerCase().includes(filter);
+        };
       }
     )
   }

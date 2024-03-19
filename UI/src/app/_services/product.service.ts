@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { product } from '../_models/product';
 import { HttpClient } from '@angular/common/http';
+import { InsertedEntityStatus } from '../_models/InsertedEntityStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,13 @@ export class ProductService {
      return this.http.get<product[]> (this.baseUrl+'Product');
   }
 
-  add(item:product) : Observable<product>
+  add(item:product) : Observable<InsertedEntityStatus>
   {
-     return this.http.post<product>(this.baseUrl+'Product',item);
+     return this.http.post<InsertedEntityStatus>(this.baseUrl+'Product',item);
      
   }
+
+ 
 
   get (id:number) : Observable<product>
   {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240307090447_initial")]
-    partial class initial
+    [Migration("20240317180252_tasktypetimers")]
+    partial class tasktypetimers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -164,10 +164,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.BatchState", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -302,10 +299,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.Department", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -429,12 +423,18 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CartoonPictureURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("ProductTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("TubePictureURL")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -483,10 +483,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.TaskState", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -499,10 +496,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.TaskType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
@@ -521,10 +515,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.TaskTypeCheckList", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("TaskTypeGroupId")
                         .HasColumnType("int");
@@ -547,10 +538,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.TaskTypeGroup", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("TaskTypeId")
                         .HasColumnType("int");
@@ -568,10 +556,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.TaskTypeRange", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("RangeValue")
                         .HasColumnType("decimal(32,3)");
@@ -589,6 +574,30 @@ namespace API.Migrations
                     b.HasIndex("TaskTypeId");
 
                     b.ToTable("TaskTypeRanges");
+                });
+
+            modelBuilder.Entity("API.Entities.TaskTypesTimers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DurationInSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("taskTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("taskTypeId");
+
+                    b.ToTable("TaskTypesTimers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1059,6 +1068,17 @@ namespace API.Migrations
                     b.Navigation("TaskTypeGroup");
                 });
 
+            modelBuilder.Entity("API.Entities.TaskTypesTimers", b =>
+                {
+                    b.HasOne("API.Entities.TaskType", "taskType")
+                        .WithMany("taskTypesTimers")
+                        .HasForeignKey("taskTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("taskType");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1184,6 +1204,8 @@ namespace API.Migrations
                     b.Navigation("TaskTypeGroups");
 
                     b.Navigation("taskTypeRanges");
+
+                    b.Navigation("taskTypesTimers");
                 });
 
             modelBuilder.Entity("API.Entities.TaskTypeGroup", b =>

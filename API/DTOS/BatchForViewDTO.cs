@@ -8,6 +8,7 @@ namespace API.DTOS
     public class BatchForViewDTO
     {
 
+        
             public int Id { get; set; }
             public string BatchNO { get; set; }
             public decimal BatchSize {get;set;} 

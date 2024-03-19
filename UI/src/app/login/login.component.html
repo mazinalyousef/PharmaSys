@@ -1,6 +1,6 @@
 <div class="login-container">
-    <form #loginForm="ngForm" (ngSubmit)="login()">
-      <h2 >Log IN</h2>
+    <div class="login-form"> <form #loginForm="ngForm" (ngSubmit)="login()">
+      <p style="font-size: 32px;">Log In</p>
         
         <br/>
 
@@ -35,11 +35,12 @@
 -->
 
   <div class="form-group commands">        
-  <button style="margin: 5px;" mat-raised-button color="primary" type="submit" 
+  <button  style="width: 150px;"  mat-raised-button color="primary" type="submit" 
   class="btn btn-success">
      OK
   </button>
 
   </div>
-    </form>
+    </form></div>
+   
   </div>

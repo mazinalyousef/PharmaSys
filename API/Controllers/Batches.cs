@@ -26,6 +26,9 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class Batches : ControllerBase
     {
+
+
+        private readonly IWebHostEnvironment _hostingEnvironment;
         
          private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
@@ -39,13 +42,14 @@ namespace API.Controllers
          IConfiguration configuration,
          IHubContext<NotificationHub> notificationHub,
          IBatchBL batchBL,
-         IMapper mapper)
+         IMapper mapper,IWebHostEnvironment hostingEnvironment)
         {
             _batchBL = batchBL;
             _batchRepository = batchRepository;
             _notificationHub =notificationHub;
              _mapper = mapper;
             _configuration = configuration;
+              _hostingEnvironment  = hostingEnvironment;
         }
 
         [HttpGet]
@@ -55,8 +59,8 @@ namespace API.Controllers
                 var Batches = await _batchRepository.GetAll();
                 var batchesforview = _mapper.Map<IEnumerable< BatchForViewDTO>>(Batches);
                return Ok(batchesforview) ;
+               
         }  
-
 
         [HttpGet("{Id}")]
         [Authorize(Policy ="ManagerPolicy")]
@@ -69,7 +73,10 @@ namespace API.Controllers
             else
             { return Ok(BatchforeditDTO);} 
         }
-    
+
+
+        
+        
          [HttpPost]
            [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Register([FromBody]BatchForEditDTO batchForEditDTO)
@@ -101,7 +108,7 @@ namespace API.Controllers
                  // make sure about  the checking here....
                   if (result>0)
                   {
-                      return Ok(new Response { Status = "Success", Message = "Batch Register Was Successfull!" });
+                      return Ok(result);
                   }
                   else
                   {
@@ -137,6 +144,8 @@ namespace API.Controllers
         }
 
 
+
+       
 
         [HttpDelete("{Id}")]
   [Authorize(Policy ="ManagerPolicy")]
@@ -214,6 +223,166 @@ namespace API.Controllers
                    
              return Ok(completed);
         }
+
+
+        
+           [HttpPost]
+           [Route("DeletePhotos")]
+            public ActionResult <string> DeletePhotos(int Id)
+            {
+                  string err=string.Empty;
+                  try 
+                  {
+                    string webRootPath = _hostingEnvironment.WebRootPath;
+                    string uploadsDir = Path.Combine(webRootPath, "uploads");
+                    string fileName = Id.ToString()+"_Tube.jpg";
+                    string fullPath = Path.Combine(uploadsDir, fileName);
+
+                      if (System.IO.File.Exists(fullPath))
+                      {
+                        System.IO.File.Delete(fullPath);
+                      }
+                      fileName = Id.ToString()+"_Cartoon.jpg";
+                      fullPath = Path.Combine(uploadsDir, fileName);
+                     if (System.IO.File.Exists(fullPath))
+                      {
+                        System.IO.File.Delete(fullPath);
+                      }
+                    
+                     
+                  }
+                  catch(Exception ex)
+                  {
+                      err =ex.Message;
+                      
+                  }
+                 if (err.Length==0)
+                  {
+                    return Ok(err) ;
+                   // return Ok(new Response { Status = "Success", Message = " delete Was Successfull!" });
+                  }
+                  else
+                  {
+
+                   //  return false;
+                   return StatusCode(StatusCodes.Status500InternalServerError,
+                       err);   
+                  }
+                  
+            }
+
+
+            		[HttpPost]
+          [Route("UploadCartoonPhoto")]
+          [DisableRequestSizeLimit]
+           public async Task <IActionResult> AddCartoonPhoto()
+          {
+            // write photos to disk 
+             string error=string.Empty;
+              if (Request.Form.Files.Any())
+              {
+                 
+                  try 
+                  {
+                    string webRootPath = _hostingEnvironment.WebRootPath;
+                    string uploadsDir = Path.Combine(webRootPath, "uploads");
+                     // wwwroot/uploads/
+                    if (!Directory.Exists(uploadsDir))
+                    Directory.CreateDirectory(uploadsDir);
+
+                     // tube picture 
+                     IFormFile file = Request.Form.Files[0];
+                      var batchId= file.Name;
+                   //  string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).file.Trim('"');
+                     string fileName = batchId+"_Cartoon.jpg";
+                      string fullPath = Path.Combine(uploadsDir, fileName);
+                         var buffer = 1024 * 1024;
+                      using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer, useAsync: false);
+                      await file.CopyToAsync(stream);
+                     await stream.FlushAsync();    
+                  }
+                  catch(Exception ex)
+                  {
+                      error =ex.Message;
+                  }
+
+                 
+               
+                 
+              }
+                  if (error.Length==0)
+                  {
+                    return Ok(new Response { Status = "Success", Message = " Add Was Successfull!" });
+                  }
+                  else
+                  {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                       new Response { Status = "Error", Message =error});   
+                  }
+           
+
+        }
+
+
+          [HttpPost]
+          [Route("UploadTubePhoto")]
+          [DisableRequestSizeLimit]
+           public async Task <IActionResult> AddTubePhoto()
+          {
+            // write photos to disk 
+             string error=string.Empty;
+              if (Request.Form.Files.Any())
+              {
+                 
+                  try 
+                  {
+                    string webRootPath = _hostingEnvironment.WebRootPath;
+                    string uploadsDir = Path.Combine(webRootPath, "uploads");
+                     // wwwroot/uploads/
+                    if (!Directory.Exists(uploadsDir))
+                    Directory.CreateDirectory(uploadsDir);
+
+                     // tube picture 
+                     IFormFile file = Request.Form.Files[0];
+                      var batchId= file.Name;
+                   //  string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).file.Trim('"');
+                     string fileName = batchId+"_Tube.jpg";
+                      string fullPath = Path.Combine(uploadsDir, fileName);
+                         var buffer = 1024 * 1024;
+                      using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, buffer, useAsync: false);
+                      await file.CopyToAsync(stream);
+                     await stream.FlushAsync();    
+                  }
+                  catch(Exception ex)
+                  {
+                      error =ex.Message;
+                      
+                  }
+  
+              }
+                  if (error.Length==0)
+                  {
+                    return Ok(new Response { Status = "Success", Message = " Add Was Successfull!" });
+                  }
+                  else
+                  {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                       new Response { Status = "Error", Message =error});   
+                  }
+           
+          }
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

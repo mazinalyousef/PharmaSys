@@ -26,7 +26,7 @@ export class NotificationsComponent implements OnInit
   TaskSeconds:number;
   taskDepartmentId:number;
   taskTypeId:number;
-  taskassign : taskAssign={taskId:0,userId:'',seconds:0};
+  taskassign : taskAssign={taskId:0,userId:'',seconds:0,departmentId:0,taskTypeId:0};
   assignSuccess:boolean;
   loggedUser:AuthenticatedResponse;
 
@@ -102,6 +102,13 @@ export class NotificationsComponent implements OnInit
           {
             this.taskDepartmentId = res.departmentId;
             this.taskTypeId = res.taskTypeId;
+
+
+            // added...
+            this.taskassign.departmentId = res.departmentId;
+            this.taskassign.taskTypeId =  res.taskTypeId;
+
+
             this.baseTaskType =  this.mappinghelper.
             getBaseTaskType(res.taskTypeId);
             
@@ -160,7 +167,7 @@ export class NotificationsComponent implements OnInit
             this.presenseService.joinTaskGroups(this.loggedUser ,batchTaskId,this.taskDepartmentId,this.taskTypeId);
 
             this.taskassign.seconds=  this.TaskSeconds;
-          //  console.log("seconds:"+this.taskassign.seconds);
+           console.log( "TaskAssign Object Department:"+this.taskassign.departmentId);
             this.batchtaskservice.WaitForTaskTimer(this.taskassign).subscribe(res=>{
               
             });

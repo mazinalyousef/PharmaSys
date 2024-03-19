@@ -23,7 +23,9 @@ namespace API.Entities
         public ICollection<Batch> Batches { get; set; }
 
         public ICollection<Barcode>  Barcodes {get;set;}
-        
+
+        public string TubePictureURL { get; set; }
+        public string CartoonPictureURL { get; set; }
         
     }
 }

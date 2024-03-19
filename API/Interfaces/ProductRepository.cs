@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTOS;
 using API.Entities;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,15 @@ namespace API.Interfaces
             throw new NotImplementedException();
         }
 
-        public async Task<bool> Add_Product_Dataset(Product product)
+        public async Task<InsertedEntityStatus> Add_Product_Dataset(Product product)
         {
-            bool committed=false;
-            int insertedId=0;
+            InsertedEntityStatus insertedEntityStatus= new InsertedEntityStatus();
+            insertedEntityStatus.InsertedId=0;
+            insertedEntityStatus.OperationsSucceeded=false;
+
+
+          //  bool committed=false;
+          //  int insertedId=0;
             using (IDbContextTransaction transaction=await _dataContext.Database.BeginTransactionAsync() )
             {
                     try
@@ -35,38 +41,23 @@ namespace API.Interfaces
                       // add product 
 
                     var insertedProductEntity= _dataContext.Products.Add(product);
-                    // insert new product ingredients
-                    /*
-                    if (product.ProductIngredients!=null)
-                    {
-                      foreach(var newItem in product.ProductIngredients)
-                    {
-                        ProductIngredient productIngredient =new ProductIngredient ()
-                        {
-                            ProductId = insertedId,
-                            IngredientId= newItem.IngredientId,
-                            Percentage = newItem.Percentage
-                        };
-                        _dataContext.ProductIngredients.Add(productIngredient);
-                        await _dataContext.SaveChangesAsync();
-                       
-                    }
-                    }
-                    */
+                    
                     await _dataContext.SaveChangesAsync();
-                     insertedId = insertedProductEntity.Entity.Id;
+                      insertedEntityStatus.InsertedId = insertedProductEntity.Entity.Id;
                     
                     
                     await transaction.CommitAsync();
-                    committed=true;
+                   // committed=true;
+                    insertedEntityStatus.OperationsSucceeded=true;
                     }
                     catch(Exception ex)
                     {
                      var Error =ex.ToString();
                      await transaction.RollbackAsync();
                     }
-                    return committed;    
+                   
             }
+             return insertedEntityStatus;    
         }
 
         public void Delete(int Id)

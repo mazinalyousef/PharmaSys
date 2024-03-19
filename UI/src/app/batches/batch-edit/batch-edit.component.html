@@ -25,7 +25,8 @@
                             </mat-form-field>
                             </div>
                 
-                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                            <div class="form-group">
+                            <mat-form-field class="form-field" appearance="outline">
                                 
                                     <mat-label>MFG Date</mat-label>
                                     <input matInput [matDatepicker]="pickermFgDate" formControlName="mFgDate">
@@ -33,6 +34,16 @@
                                     <mat-datepicker-toggle matIconSuffix [for]="pickermFgDate"></mat-datepicker-toggle>
                                     <mat-datepicker #pickermFgDate></mat-datepicker>
                             </mat-form-field>
+
+                            <!--
+                            <div *ngIf="form.get('mFgDate').invalid &&
+                            (form.get('mFgDate').dirty || form.get('mFgDate').touched)"
+                            class="invalid-feedback">
+                            <div>  mFgDate Is Required</div>
+                               
+                          
+                            </div>
+                           -->
                             </div>
                 
                 
@@ -139,6 +150,36 @@
 
                 <mat-tab label="Photos">
 
+                    <div >
+                           
+
+                          <div>
+                            <label>Tube Image</label>
+                          </div>
+                          <div >
+                            <input type="file" accept="image/*" class="custom-file-input" id="customFile" (change)="handleTubeFileInput($any($event.target).files)" >
+                            <label class="custom-file-label" for="customFile">{{ uploadTubeFileLabel }}</label>
+                            <img src={{tubeUrl}} onerror="this.src='assets\\imgerr2.png'">
+                          </div>
+                     
+                  
+                         
+                      </div>
+                  
+                      <div >
+                       
+                        <div>
+                            <label>Cartoon Image</label>
+                          </div>
+                          <div >
+                            <input type="file" accept="image/*" class="custom-file-input" id="customFile" (change)="handleCartoonFileInput($any($event.target).files)" >
+                            <label class="custom-file-label" for="customFile">{{ uploadCartoonFileLabel }}</label>
+                            <img src={{cartoonUrl}} onerror="this.src='assets\\imgerr2.png'">
+                          </div>
+                         
+                  
+                        
+                      </div>
                 </mat-tab>
                 <mat-tab label="Ingredients">
                     <div class="ng-container">

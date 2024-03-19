@@ -37,7 +37,7 @@
     </button>
     <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
         
-        <button mat-menu-item routerLink="#">
+        <button mat-menu-item routerLink="/changePassword">
             <mat-icon>settings</mat-icon><span>Change Password</span>
         </button>
        
@@ -62,9 +62,9 @@
             <mat-list-item *appHasRole='["Manager","Developer"]'  routerLink="/management" > Management</mat-list-item>
         </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content >
+    <mat-sidenav-content class="mat-sidenav-content" >
         
-            <div class="app-sidenav-content">
+            <div class="router-outlet-content">
                 <router-outlet></router-outlet>
             </div>
          

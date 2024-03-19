@@ -8,7 +8,6 @@ namespace API.Entities
 {
     public class Batch
     {
-        
         public int Id { get; set; }
 
         public string BatchNO { get; set; }

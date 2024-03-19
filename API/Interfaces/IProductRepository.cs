@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOS;
 using API.Entities;
 
 namespace API.Interfaces
@@ -14,7 +15,7 @@ namespace API.Interfaces
        
        Task<Product> GetWithIngredients(int Id);
        Task<int> Add (Product product);
-        Task<bool> Add_Product_Dataset(Product product);
+        Task<InsertedEntityStatus> Add_Product_Dataset(Product product);
         Task<bool> Update(int Id,Product product);
 
         Task<bool> Update_Product_Dataset(int Id,Product product);

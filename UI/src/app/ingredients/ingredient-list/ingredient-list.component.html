@@ -4,6 +4,17 @@
     class="table-striped mat-elevation-z8"
     >
     -->
+
+
+    <div>
+      <mat-form-field class="form-field" appearance="outline" style="margin-top: 10px;">
+         <mat-label>Filter</mat-label>
+         <input matInput (keyup)="applyFilter($event)" placeholder="Search" #Searchinput>
+       </mat-form-field>
+   </div>
+   
+
+   
     <table mat-table [dataSource]="MatdataSource"
     class="table-striped mat-elevation-z8"
     >

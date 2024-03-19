@@ -17,8 +17,6 @@ namespace API.BusinessLogic
     public class BatchBL : IBatchBL
     {
         private readonly UserManager<User> _userManager;
- 
-
         private readonly DataContext _dataContext;
         
      public BatchBL( 

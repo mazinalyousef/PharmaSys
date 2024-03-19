@@ -34,9 +34,11 @@ namespace API.Controllers
          [HttpGet]
         public async Task<ActionResult<IEnumerable<DepartmentDTO>>> GetBatches()
         {
+                  
                 var departments = await _dataContext.Departments.ToListAsync();
                 var departmentforView = _mapper.Map<IEnumerable<DepartmentDTO>>(departments);
                 return Ok(departmentforView) ;
+                
         }   
         
     }

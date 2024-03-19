@@ -6,7 +6,7 @@
 
 <div class="component-main-container"> 
 
-   <label >{{this.presenceservice.timerTickDisplay$|async}}</label>
+   <label class="timer-label" >{{this.presenceservice.timerTickDisplay$|async}}</label>
 
 
    <div *ngIf="rawmaterialTask">
@@ -24,7 +24,11 @@
           </tr>
   
           <tr>
-              <td>Tube Weight :  {{rawmaterialTask.batchInfo.tubeWeight}}</td>
+              <td>
+
+                
+                Tube Weight :  {{rawmaterialTask.batchInfo.tubeWeight}}
+              </td>
               <td>Tubes Count: {{rawmaterialTask.batchInfo.tubesCount}}</td>
               <td>NDCNO: {{rawmaterialTask.batchInfo.ndcno}}</td>
               <td>MFNO : {{rawmaterialTask.batchInfo.mfno}}</td>
@@ -40,6 +44,20 @@
   
   
       </table>
+
+
+      <div class="row">
+        <div  class="column1">
+            <img src={{tubeUrl}} onerror="this.src='assets\\imgerr2.png'">
+        </div>
+        <div class="column2">
+            <img src={{cartoonUrl}} onerror="this.src='assets\\imgerr2.png'">
+        </div>
+      </div>
+  
+	
+
+    
    
       
   </div>

@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using API.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using API.Data;
+using System.Transactions;
 
 namespace API.Controllers
 {
@@ -27,20 +29,23 @@ namespace API.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
+        private readonly DataContext _dataContext;
+
         public Users( UserManager<User> userManager,
         RoleManager<IdentityRole> roleManager,
-        IConfiguration configuration,IMapper mapper)
+        IConfiguration configuration,IMapper mapper,DataContext dataContext)
         {
             _mapper = mapper;
             _configuration = configuration;
             _roleManager = roleManager;
             _userManager = userManager;
+            _dataContext=dataContext;
         }
 
 
 // [Authorize(Policy ="ManagerPolicy")]
         [HttpGet]
-     
+     [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult<IEnumerable<UserForViewDTO>>> GetUsers()
         {
                 var users = await _userManager.Users.Include(x=>x.Department).ToListAsync();
@@ -49,7 +54,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{Id}")]
-       
+       [Authorize]
         public async Task<ActionResult<User>> GetUser(string Id)
         {
              var _userResult = await _userManager.FindByIdAsync(Id);
@@ -62,9 +67,10 @@ namespace API.Controllers
         
         [HttpPost]
         [Route("register")]
-         
+         [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
+            // use transaction .. later....
            var _userResult = await _userManager.FindByNameAsync(registerDTO.Username);
             
            if (_userResult!=null)
@@ -72,9 +78,14 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 new Response { Status = "Error", Message = "User already exists!"});            
            }
-
+             bool committed=false;
            
-           User user =new ()
+              using (var transaction = await _dataContext.Database.BeginTransactionAsync())
+              {
+                try 
+                {
+
+                      User user =new ()
            {
                 UserName=registerDTO.Username,
                 Email =registerDTO.Email,
@@ -82,43 +93,68 @@ namespace API.Controllers
                 SecurityStamp = Guid.NewGuid().ToString()
            };
 
+        
+
            var result = await _userManager.CreateAsync(user,registerDTO.Password);
 
            
-            
-           if (!result.Succeeded)
+           // added
+           if (user.DepartmentId !=null)
            {
-               return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed To Create a User" });
+                // update roles
+                // get the roles as list from the helper class based on department 
+               var roles= DepartmentRoles.department_roles[(int)user.DepartmentId];
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+            var selectedRoles = roles;
+
+            selectedRoles = selectedRoles ?? new List<string>();
+
+             var result2 = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));       
+
            }
-           // create default role >>>>> member
-             /*
-            var defaultrole = _roleManager.FindByNameAsync(UserRoles.Member).Result;
-            if (defaultrole != null)
-            {
-              IdentityResult roleresult = await  _userManager.AddToRoleAsync(user, defaultrole.Name);
-            }
-            */
+
+
+                     await transaction.CommitAsync();
+                    committed=true;
+                }
+                 catch(Exception )
+                {
+                   await transaction.RollbackAsync();
+                }
+              }
+            
+           
    
-          return Ok(new Response { Status = "Success", Message = "User Register Was Successfull!" });
+           if (!committed)
+            {
+                  return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message = "Something Went Wrong"});         
+            }
+          return Ok(new Response { Status = "Success", Message = "User register Was Successfull!" });
         
         }
-
-
         [HttpPut("{Id}")]
-        
+        [Authorize(Policy ="ManagerPolicy")]
          public async Task<IActionResult> Update([FromBody] UpdateUserDTO updateDTO,string Id)
         {
             
-           var _userResult = await _userManager.FindByIdAsync(Id);
+            // use transaction ..later...
+            bool committed=false;
+             var _userResult = await _userManager.FindByIdAsync(Id);
             
            if (_userResult==null)
            {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 new Response { Status = "Error", Message = "User Not exists!"});            
            }
+             using (var transaction = await _dataContext.Database.BeginTransactionAsync())
+             {
 
+                try 
+                {
 
-           
           _userResult.UserName=updateDTO.Username;
           _userResult.Email = updateDTO.Email;
           _userResult.DepartmentId = updateDTO.DepartmentId;
@@ -126,11 +162,49 @@ namespace API.Controllers
 
            var result = await _userManager.UpdateAsync(_userResult);
             
-           if (!result.Succeeded)
+        
+           // added
+           if (_userResult.DepartmentId !=null)
            {
-               return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed To Update The User" });
+                // update roles
+                // get the roles as list from the helper class based on department 
+               var roles= DepartmentRoles.department_roles[(int)_userResult.DepartmentId];
+
+                var userRoles = await _userManager.GetRolesAsync(_userResult);
+
+            var selectedRoles = roles;
+
+            selectedRoles = selectedRoles ?? new List<string>();
+
+             var result2 = await _userManager.AddToRolesAsync(_userResult, selectedRoles.Except(userRoles));
+
+           
+
+            var result3 = await _userManager.RemoveFromRolesAsync(_userResult, userRoles.Except(selectedRoles));
+
+           
+
            }
 
+
+                    await transaction.CommitAsync();
+                    committed=true;
+                }
+                catch(Exception )
+                {
+                   await transaction.RollbackAsync();
+                }
+ 
+            
+            
+             }
+          
+          
+            if (!committed)
+            {
+                  return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message = "Something Went Wrong"});         
+            }
           return Ok(new Response { Status = "Success", Message = "User Update Was Successfull!" });
         
         }
@@ -174,10 +248,31 @@ namespace API.Controllers
             return Unauthorized(new LoggedUserDTO());
         }
 
+        
 
+        [HttpPost]
+        [Authorize]
+        [Route("ChangePassword")]
+
+        public async Task <IActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO)
+        {
+            var user =await _userManager.FindByIdAsync(changePasswordDTO.UserId);
+            if (user!=null)
+            {
+                var result = await _userManager.ChangePasswordAsync(user,changePasswordDTO.CurrentPassword,changePasswordDTO.NewPassword);
+                if (result.Succeeded)
+                {
+                    return Ok(new Response{ Message="Change Password Succeeded",Status="Succeess"});
+                }
+
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed To Change The User Password" });
+
+           
+        }
           
         [HttpPost("editRoles/{userName}")]
-         
+         [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> EditRoles(string userName, string[]RoleNames) 
         {
             var user = await _userManager.FindByNameAsync(userName);
@@ -212,7 +307,7 @@ namespace API.Controllers
 
 
         [HttpGet("Roles/{userName}")]
-       
+       [Authorize]
         public async Task<ActionResult<IEnumerable<RoleEditDto>>> GetUserRoles(string userName)
         {
             var user = await _userManager.FindByNameAsync(userName);

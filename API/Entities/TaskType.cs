@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,6 +9,8 @@ namespace API.Entities
 {
     public class TaskType
     {
+         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -22,5 +26,7 @@ namespace API.Entities
       public ICollection<TaskTypeCheckList> TaskTypeCheckLists { get; set; }
       public ICollection<TaskTypeRange> taskTypeRanges { get; set; }
       public ICollection<BatchTask> BatchTasks { get; set; }
+
+      public ICollection<TaskTypesTimers> taskTypesTimers{get;set;}
     }
 }
