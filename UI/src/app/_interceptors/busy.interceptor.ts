@@ -19,10 +19,16 @@ export class BusyInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>>
    {
 
-   // this.loaderService.isLoading.next(true);
-   this.loaderService.busy();
+
+    const exurl='Tasks/WaitForTaskTimer';
+    if (request.url.search(exurl)===-1)
+    {
+        // this.loaderService.isLoading.next(true);
+        this.loaderService.busy();
+    }
+   
     return next.handle(request).pipe(
-      delay(1000),
+      delay(10),
       finalize(
         ()=>{
           //this.loaderService.isLoading.next(false);

@@ -197,7 +197,7 @@ namespace API.Controllers
                 {
                      // send notifications to the associated groups...
                await _notificationHub.Clients.Group(UserRoles.Warehouse_CheckRooms).SendAsync("ReceiveMessage",newTaskMessage);
-               await _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).SendAsync("ReceiveMessage",newTaskMessage);
+            //   await _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).SendAsync("ReceiveMessage",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).SendAsync("ReceiveMessage",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.QA_CheckEquipements).SendAsync("ReceiveMessage",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.Production_CheckEquipements).SendAsync("ReceiveMessage",newTaskMessage);
@@ -205,7 +205,7 @@ namespace API.Controllers
 
                 // will also send notifications to clients so that they must update the notifications list
                await _notificationHub.Clients.Group(UserRoles.Warehouse_CheckRooms).SendAsync("UpdateNotifications",newTaskMessage);
-               await _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).SendAsync("UpdateNotifications",newTaskMessage);
+            //   await _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).SendAsync("UpdateNotifications",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).SendAsync("UpdateNotifications",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.QA_CheckEquipements).SendAsync("UpdateNotifications",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.Production_CheckEquipements).SendAsync("UpdateNotifications",newTaskMessage);

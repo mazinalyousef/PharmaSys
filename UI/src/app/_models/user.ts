@@ -10,6 +10,4 @@ export interface User
     password:string;
     departmentId:number;
     //departments:Departmen[];
-
-
 }

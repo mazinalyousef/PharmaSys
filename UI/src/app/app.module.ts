@@ -71,6 +71,14 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
 import { BusyInterceptor } from './_interceptors/busy.interceptor';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { BatchTaskSummaryComponent } from './batch-task-summary/batch-task-summary.component';
+import { BarcodeStickersComponent } from './barcode-stickers/barcode-stickers.component';
+import { NgxPrintModule } from 'ngx-print';
+import { QRCodeModule } from 'angularx-qrcode';
+
+
+ 
+ 
 
  
 
@@ -112,7 +120,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ServerErrorComponent,
     MessagesComponent,
     MessageComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    BatchTaskSummaryComponent,
+    BarcodeStickersComponent
   ],
   imports: [
     BrowserModule,
@@ -147,6 +157,11 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatProgressSpinnerModule,
     MatGridListModule,
     NgxSpinnerModule,
+    NgxPrintModule,
+    QRCodeModule,
+ 
+
+
     
     ToastrModule.forRoot(
       {positionClass: 'toast-bottom-right'}

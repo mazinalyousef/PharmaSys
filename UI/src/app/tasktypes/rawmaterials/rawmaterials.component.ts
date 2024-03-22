@@ -10,6 +10,7 @@ import { rawMaterialsTask } from 'src/app/_models/rawMaterialsTask';
 import { BatchtaskService } from 'src/app/_services/batchtask.service';
 import { MessageService } from 'src/app/_services/message.service';
 import { PresenceService } from 'src/app/_services/presence.service';
+import { StickersService } from 'src/app/_services/stickers.service';
 import { UsersService } from 'src/app/_services/users.service';
 import * as MessagesTitle from 'src/app/Globals/globalMessages'; 
 import { environment } from 'src/environments/environment';
@@ -36,11 +37,15 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
    tubeUrl:string;
    cartoonUrl:string;
   baseUrl = environment.apiUrl;
+
+
+  repeatCount:number;
    
   
    constructor(private activatedRoute : ActivatedRoute, private batchtaskService : BatchtaskService,
     private router : Router, public presenceservice :PresenceService,private userservice :UsersService,
-    private messageService:MessageService,private toastr :ToastrService
+    private messageService:MessageService,private toastr :ToastrService,
+     private stickerService:StickersService
     )
    {
     
@@ -66,6 +71,7 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
   }
   ngOnInit(): void
   {
+    this.repeatCount=1;
     this.isQATask=false;
     this.isWareHouseTask=false;
     this.isAccountantTask=false;
@@ -206,6 +212,15 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
            
       }
     
+  }
+
+  generateStickers()
+  {
+        this.stickerService.setSticker(this.rawmaterialTask.batchInfo.batchNO,this.rawmaterialTask.batchInfo.barcode,
+          this.rawmaterialTask.productInfo.productName,this.rawmaterialTask.batchIngredientDTOs,this.repeatCount);
+
+          this.router.navigate(['stickers']);
+
   }
   
 

@@ -120,6 +120,17 @@
       
    </div>
 
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+   <div>
+
+    <button (click)="generateStickers()" style="margin: 5px;" mat-raised-button color="primary">Generate Stickers</button>
+    <div> <label>Count</label></div>
+    <div>
+        <input type="text" [(ngModel)]="repeatCount" [ngModelOptions]="{standalone:true}"/>
+    </div>
+   </div>
+
 </div>
 
 

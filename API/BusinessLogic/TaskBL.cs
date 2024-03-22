@@ -52,15 +52,21 @@ namespace API.BusinessLogic
              bool isCompleted=false;
              string newTaskMessage="you've received a new task";
 
-              var Production_Manufacturingusers= _userManager.GetUsersInRoleAsync(UserRoles.Production_Manufacturing).GetAwaiter().GetResult();
+
+                //added
+               var Warehouse_RawMaterialsusers =_userManager.GetUsersInRoleAsync(UserRoles.Warehouse_RawMaterials).GetAwaiter().GetResult();
+
+               var Production_Manufacturingusers= _userManager.GetUsersInRoleAsync(UserRoles.Production_Manufacturing).GetAwaiter().GetResult();
                var QA_Samplingusers= _userManager.GetUsersInRoleAsync(UserRoles.QA_Sampling).GetAwaiter().GetResult();
 
-                 var Filling_CheckEquipementsusers= _userManager. GetUsersInRoleAsync(UserRoles.Filling_CheckEquipements).GetAwaiter().GetResult();
-                  var Filling_FillingTubesUsers= _userManager.GetUsersInRoleAsync(UserRoles.Filling_FillingTubes).GetAwaiter().GetResult();
-                   var Filling_CartooningUsers= _userManager.GetUsersInRoleAsync(UserRoles.Filling_Cartooning).GetAwaiter().GetResult();
-                   var Filling_PackagingUsers= _userManager. GetUsersInRoleAsync(UserRoles.Filling_Packaging).GetAwaiter().GetResult();
-                   var ManagerUsers= _userManager.GetUsersInRoleAsync(UserRoles.Manager).GetAwaiter().GetResult();
+                var Filling_CheckEquipementsusers= _userManager. GetUsersInRoleAsync(UserRoles.Filling_CheckEquipements).GetAwaiter().GetResult();
+                var Filling_FillingTubesUsers= _userManager.GetUsersInRoleAsync(UserRoles.Filling_FillingTubes).GetAwaiter().GetResult();
+                var Filling_CartooningUsers= _userManager.GetUsersInRoleAsync(UserRoles.Filling_Cartooning).GetAwaiter().GetResult();
+                var Filling_PackagingUsers= _userManager. GetUsersInRoleAsync(UserRoles.Filling_Packaging).GetAwaiter().GetResult();
+                var ManagerUsers= _userManager.GetUsersInRoleAsync(UserRoles.Manager).GetAwaiter().GetResult();
 
+
+                bool notifyWarehouse_RawMaterials=false;
 
                 bool notifyProduction_Manufacturing=false;
                 bool notifyQA_Sampling=false;
@@ -93,9 +99,41 @@ namespace API.BusinessLogic
                              // do this without locking for now ...
                             // todo : lock the current code later....
 
+              // check if room cleaning task so notify the warehouse raw material ....
+                if (originalTask.TaskTypeId==(int)TaskTypesEnum.RoomCleaning&&originalTask.DepartmentId==(int) DepartmentsEnum.Warehouse)
+                {
+                         // add notifications to : (warehouse--rawmaterial)
+                               
+                             
+                             // need to get the warehouseRawMaterial task Id for the batch
+                                   
+
+                                         BatchTask batchTask= new BatchTask();
+                                           batchTask= _dataContext.BatchTasks.Where(x=>x.TaskTypeId==(int) TaskTypesEnum.RawMaterialsWeighting
+                                          &&x.BatchId==originalTask.BatchId
+                                          &&x.DepartmentId==(int) DepartmentsEnum.Warehouse).FirstOrDefault();
+                              foreach (var userItem in Warehouse_RawMaterialsusers)
+                              {
+                                     var userId = userItem.Id;
+                                      Notification notification = new Notification ();
+                                      notification.BatchId = originalTask.BatchId;
+                                      notification.BatchTaskId =batchTask.Id;
+                                      notification.DateSent = DateTime.Now;
+                                      // need to get the batch nomber 
+                                     notification.NotificationMessage = string.Format("Batch {0} With Raw Material Weighting Task Is Available",
+                                      originalBatch.BatchNO.ToString());
+                                     notification.UserId = userId;
+                                    //_notificationRepository.Add(notification).GetAwaiter().GetResult();
+                                    _dataContext.Notifications.Add(notification);
+                                          _dataContext.SaveChanges(); 
+                              }
+
+                              notifyWarehouse_RawMaterials=true;  
+                }
+
                              #region  pre-production Tasks...
             // check if the current task is pre-production task
-            if (IsPreProductionTask(originalTask.TaskTypeId,(int)originalTask.DepartmentId))
+            else if (IsPreProductionTask(originalTask.TaskTypeId,(int)originalTask.DepartmentId))
             {
                 // lock here....
 
@@ -400,6 +438,17 @@ namespace API.BusinessLogic
 
 
                         #region notifications
+
+                         if (notifyWarehouse_RawMaterials)
+                        {
+                               _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).
+                                SendAsync("ReceiveMessage",newTaskMessage).GetAwaiter().GetResult();
+
+                                _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).
+                                SendAsync("UpdateNotifications","UpdateNotifications").GetAwaiter().GetResult();
+                        }
+
+
                         if (notifyProduction_Manufacturing)
                         {
                                _notificationHub.Clients.Group(UserRoles.Production_Manufacturing).
@@ -474,6 +523,7 @@ namespace API.BusinessLogic
                 }
                 
             }
+            /*
             else if  (_taskIdtypeId==(int)TaskTypesEnum.RoomCleaning)
             {
                    if (_departmentId==(int) DepartmentsEnum.Warehouse)
@@ -481,6 +531,7 @@ namespace API.BusinessLogic
                     ispreprodTask=true;
                 }  
             }
+            */
             else if  (_taskIdtypeId==(int)TaskTypesEnum.Equipments_Machines)
             {
                      if (_departmentId==(int) DepartmentsEnum.Production||

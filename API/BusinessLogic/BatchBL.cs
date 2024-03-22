@@ -49,7 +49,7 @@ namespace API.BusinessLogic
          
           var allusers= await _userManager.Users.ToListAsync();
           var Warehouse_CheckRoomsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.Warehouse_CheckRooms);
-          var  Warehouse_RawMaterialsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.Warehouse_RawMaterials);
+         // var  Warehouse_RawMaterialsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.Warehouse_RawMaterials);
           var  QA_RawMaterialsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.QA_RawMaterials);
           var  QA_CheckEquipementsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.QA_CheckEquipements);
           var  Production_CheckEquipementsusers=  await _userManager.GetUsersInRoleAsync(UserRoles.Production_CheckEquipements);
@@ -313,7 +313,7 @@ namespace API.BusinessLogic
 
 
            // add Weighting raw materials task notifications...
-       
+        /*
         foreach (var userItem in Warehouse_RawMaterialsusers)
          {
             var userId = userItem.Id;
@@ -328,6 +328,7 @@ namespace API.BusinessLogic
             _dataContext.Notifications.Add(notification);
              await _dataContext.SaveChangesAsync();
          }
+         */
 
 
         // add Raw Materials Check QA Task notifications...

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOS;
 using API.Entities;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -14,7 +15,6 @@ namespace API.Interfaces
 {
     public class TaskRepository : ITaskRepository
     {
-
         private readonly DataContext _dataContext;
 
         public TaskRepository(DataContext dataContext)
@@ -282,7 +282,7 @@ namespace API.Interfaces
              return rawMaterialsTaskForViewDTO;
         }
         
-        		public async Task<bool> SetAsAssigned(int TaskId,string UserId)
+        public async Task<bool> SetAsAssigned(int TaskId,string UserId)
         {
 
             // use transaction .. later
@@ -389,6 +389,46 @@ namespace API.Interfaces
          }
 
 
+        public async Task<IEnumerable<BatchTaskSummaryDTO>> GetBatchTaskSummaries(int Id)
+        {
 
+            List<BatchTaskSummaryDTO> batchTaskSummaryDTOs =new List<BatchTaskSummaryDTO> ();
+            var batchtasks =await _dataContext.BatchTasks.AsNoTracking()
+            .Include(x=>x.Department)
+            .Include(x=>x.TaskType)
+            .Include(x=>x.User)
+            .Include(x=>x.TaskState)
+            .Where(x=>x.BatchId==Id&&x.TaskTypeId!=(int)Enumerations.TaskTypesEnum.Enviroment)
+            .OrderBy(x=>x.Id)
+            .ToListAsync();
+            if (batchtasks!=null)
+            {
+                foreach(var item in batchtasks)
+                {
+                    string departmentTitle = item.Department!=null? item.Department.Title:"";
+                    string taskTitle =  item.TaskType.Title;
+                    string userName = item.User!=null? item.User.UserName:"";
+                    string taskState = item.TaskState.Title;
+
+                    string TitleForDisplay = string.Format("{0} - {1} ",taskTitle,departmentTitle);
+
+                    // create new batchtasksummaryDTO 
+                    BatchTaskSummaryDTO batchTaskSummaryDTO=new BatchTaskSummaryDTO ()
+                    {
+                       StartDate=item.StartDate,
+                       EndDate= item.EndDate,
+                       TaskTitle = TitleForDisplay,
+                        User=userName,
+                        TaskState = taskState
+
+                       
+                    };
+                    
+                     batchTaskSummaryDTOs.Add(batchTaskSummaryDTO);
+
+                }
+            }
+             return batchTaskSummaryDTOs;
+        }
     }
 }

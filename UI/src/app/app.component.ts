@@ -35,12 +35,15 @@ export class AppComponent implements OnInit
     }
     ngOnInit(): void
     {
+
+      this.setCurrentUser();
+      this.getdepartments();
+
+      /*
       setTimeout(() => {
         this.isBusy = this.loaderService.isLoading$;
     });
-     
-      this.setCurrentUser();
-      this.getdepartments();
+    */
       
    
      

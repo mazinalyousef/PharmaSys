@@ -35,7 +35,8 @@ export class UserEditComponent implements OnInit
   // fetched userName for editing....
   //private userName='';
   username?:string;
-  constructor( private activatedRoute:ActivatedRoute,private departmentservice:DepartmentsService,
+  constructor( private activatedRoute:ActivatedRoute,
+    private departmentservice:DepartmentsService,
     public dataservice: DataService,
   private router:Router,private userservice:UsersService,
   private toastr:ToastrService

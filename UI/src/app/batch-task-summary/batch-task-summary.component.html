@@ -1,0 +1,59 @@
+
+<div class="component-main-container">
+
+    <h1>Batch : {{batchno}}  Tasks .</h1>
+
+    <div class="commands text-right">
+    <button style="margin: 5px;" mat-raised-button color="primary"  
+     (click)="loaddata()"
+    class="btn btn-success">
+     Refresh
+    </button>
+    </div>
+ 
+    <div class="ng-container">
+       <table mat-table [dataSource]="MatdataSource"
+       class="table-striped mat-elevation-z8"
+     
+       >
+       <ng-container matColumnDef="taskTitle">
+           <th mat-header-cell *matHeaderCellDef>Title</th>
+           <td mat-cell *matCellDef="let item">{{item.taskTitle}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="taskState">
+            <th mat-header-cell *matHeaderCellDef>State</th>
+            <td [ngStyle]="{'color':getColor(item.taskState)}" mat-cell *matCellDef="let item">{{item.taskState}}</td>
+         </ng-container>
+
+         <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef>Assigned By</th>
+            <td mat-cell *matCellDef="let item">{{item.user}}</td>
+         </ng-container>
+
+         <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Start Date</th>
+            <td mat-cell *matCellDef="let item">{{item.startDate}}</td>
+         </ng-container>
+
+
+         <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef>End Date</th>
+            <td mat-cell *matCellDef="let item">{{item.endDate}}</td>
+         </ng-container>
+       
+
+
+       
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+     </table>
+ 
+      
+    </div>
+
+ </div>
+
+
+

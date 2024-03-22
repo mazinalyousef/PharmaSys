@@ -8,6 +8,7 @@ import { taskAssign } from '../_models/taskAssign';
 import { rawMaterialsTask } from '../_models/rawMaterialsTask';
 import { rangeSelectTask } from '../_models/rangeSelectTask';
 import { userTask } from '../_models/userTask';
+import { batchTasksSummary } from '../_models/batchTasksSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,11 @@ export class BatchtaskService {
   getallRunningForUser(userId:string) :Observable<userTask[]>
   {
     return this.http.get<userTask[]>(this.baseUrl+'tasks/userTasks/'+userId);
+  }
+
+  getBatchTaskSummaries(BatchId:number) : Observable<batchTasksSummary[]>
+  {
+    return this.http.get<batchTasksSummary[]>(this.baseUrl+'tasks/BtachTasksSummary/'+BatchId);
   }
 
 }

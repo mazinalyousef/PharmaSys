@@ -365,8 +365,19 @@ namespace API.Controllers
          
         }
 
+        [HttpGet]
+        [Route("BtachTasksSummary/{Id}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<BatchTaskSummaryDTO>>> GetBatchTaskSummaries(int Id)
+        {
+            var result= await _taskRepository.GetBatchTaskSummaries(Id);
+            return Ok(result);
+        }
 
 
+
+
+      
 
 
 

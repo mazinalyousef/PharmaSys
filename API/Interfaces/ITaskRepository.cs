@@ -33,6 +33,9 @@ namespace API.Interfaces
           
 
           Task<IEnumerable<BatchTask>>GetUserRunningTasks(string userId);
+
+
+           Task<IEnumerable<BatchTaskSummaryDTO>> GetBatchTaskSummaries(int Id);
         
         
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PresenceService } from '../_services/presence.service';
 import { DialogconfirmService } from '../_services/dialogconfirm.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ export class HomeComponent implements OnInit {
   
 
    
-  constructor(private dialogservice:DialogconfirmService)
+  constructor(private dialogservice:DialogconfirmService,private router:Router)
   {
 
   }
@@ -24,6 +25,10 @@ export class HomeComponent implements OnInit {
   {
 
     
+  }
+  testprint()
+  {
+    this.router.navigate(['stickers']);
   }
 
 }

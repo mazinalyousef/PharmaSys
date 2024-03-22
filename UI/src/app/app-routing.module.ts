@@ -20,6 +20,9 @@ import { AdminGuard } from './_guards/admin.guard';
 import { EnterTaskGuard } from './_guards/enter-task.guard';
 import { MessagesComponent } from './messages/messages.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { BatchTaskSummaryComponent } from './batch-task-summary/batch-task-summary.component';
+import { BarcodeStickersComponent } from './barcode-stickers/barcode-stickers.component';
+
 
 
 
@@ -47,6 +50,8 @@ const routes: Routes =
   {path:'server-error',component:ServerErrorComponent},
   {path:'messages',component:MessagesComponent,canActivate:[AuthGuard]},
   {path:'changePassword',component:ChangePasswordComponent,canActivate:[AuthGuard]},
+  {path:'batcheSummary/:id',component:BatchTaskSummaryComponent,canActivate:[AuthGuard]},
+  {path:'stickers',component:BarcodeStickersComponent,canActivate:[AuthGuard]},
   {path:'**',component:HomeComponent,pathMatch:'full'}
   
 ];
