@@ -18,6 +18,9 @@ namespace API.Timers
        public bool IsTimerStarted { get; set; }
        public  int MaxSeconds{get;set;}
 
+       //added...
+       public int TimerTickPeriod { get; set; }=1000;
+
 
           
         
@@ -26,7 +29,7 @@ namespace API.Timers
          _action = action;
         currentSeconds=-1;
         _autoResetEvent = new AutoResetEvent(false);
-        _timer = new Timer(Execute,_autoResetEvent,1000,1000);
+        _timer = new Timer(Execute,_autoResetEvent,1000,TimerTickPeriod);
         TimerStarted = DateTime.Now;
         IsTimerStarted = true;
         }

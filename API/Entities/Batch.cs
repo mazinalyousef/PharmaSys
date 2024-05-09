@@ -63,6 +63,13 @@ namespace API.Entities
 
         public int TubesCount { get; set; }
 
+
+        public int? CartoonsCount{get;set;}
+
+         public int? MasterCasesCount{get;set;}
+
+
+
         public ICollection<BatchIngredient> BatchIngredients { get; set; }
 
        

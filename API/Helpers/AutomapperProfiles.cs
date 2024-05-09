@@ -24,7 +24,11 @@ namespace API.Helpers
             CreateMap<Department,DepartmentDTO>();
 
               CreateMap<BatchIngredient,BatchIngredientDTO>().ForMember(des=>des.IngredientName,opt=>opt.
-              MapFrom(src=>src.Ingredient.IngredientName));
+              MapFrom(src=>src.Ingredient.IngredientName))
+              .ForMember(des=>des.IngredientCode,opt=>opt.
+              MapFrom(src=>src.Ingredient.IngredientCode));
+
+              
               CreateMap<BatchIngredientDTO,BatchIngredient>().ForMember(des=>des.Ingredient,opt=>opt.Ignore());
 
              CreateMap<Barcode,BarcodeForViewDTO>().

@@ -5,6 +5,12 @@
 @import 'node_modules/ngx-spinner/animations/ball-spin.css';
 
  
+:root {
+  --primary-color: #3F51B5;
+  --accent-color: #f0ad4e;
+  --gray-color:#dad9d9;
+  --light-gray-color:#f8f8f8;
+}
 
  .success {
     background-color: rgb(100, 230, 50) !important;

@@ -53,7 +53,7 @@ export class EnterTaskGuard implements CanActivate
                   }
                   else
                   {
-                    this.tostr.error('Not Allowed not equal users....','');
+                    this.tostr.error('Not Allowed not  equal users....','');
                     return false;
                   }
               }

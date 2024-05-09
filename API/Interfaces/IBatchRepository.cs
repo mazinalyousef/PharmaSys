@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOS;
 using API.Entities;
 
 namespace API.Interfaces
@@ -15,6 +16,7 @@ namespace API.Interfaces
 
        Task<Batch> GetBatch(int Id);
 
+      
        int getBatchState(int Id);
 
        bool setBatchState(int id,int newSate);

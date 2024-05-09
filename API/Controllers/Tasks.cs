@@ -25,6 +25,7 @@ namespace API.Controllers
     public class Tasks : ControllerBase
     {
           private readonly IHubContext<TaskTimerHub> _tasktimerhub;
+             private readonly IHubContext<TaskReminderHub> _taskreminderhub;
 
             private readonly IHubContext<NotificationHub> _notificationHub;
           private readonly TaskTimer _tasktimer;
@@ -42,6 +43,7 @@ namespace API.Controllers
 
         public Tasks(ITaskRepository taskRepository,IMapper mapper,ITaskBL taskBL,
         IHubContext<TaskTimerHub> tasktimerhub,TaskTimer taskTimer, 
+        IHubContext<TaskReminderHub> taskreminderhub,
         IHubContext<NotificationHub> notificationHub
         ,UserManager<User> userManager,DataContext dataContext)
         { _dataContext=dataContext;
@@ -49,11 +51,64 @@ namespace API.Controllers
             _taskRepository = taskRepository;
             _taskBL= taskBL;
              _tasktimerhub = tasktimerhub;
+             _taskreminderhub = taskreminderhub;
                 _tasktimer=taskTimer;
                 _notificationHub=notificationHub;
                 _userManager=userManager;
             
         }
+
+
+
+        [HttpPut]
+        [Route("StartReminder")]
+        [Authorize]
+        public async Task<ActionResult<bool>>StartReminder([FromBody]TaskAssignDTO taskAssignDTO)
+        {
+          bool iscompleted=false;
+
+          // get the task timer ....
+             var taskinfo=await _taskRepository.getBatchTaskInfo(taskAssignDTO.TaskId);
+
+             
+               // try to get the suitable timer ....
+              var timerItem= Helpers.TaskTypesTimerData.taskTypesTimers.Where(x=>x.DepartmentId==taskinfo.DepartmentId&&x.taskTypeId
+              ==taskinfo.TaskTypeId).FirstOrDefault();
+                
+              if (timerItem!=null)
+              {
+                  _tasktimer.MaxSeconds = timerItem.DurationInSeconds;
+              }
+                 string message="";
+              if (taskinfo.TaskTypeId==(int)Enumerations.TaskTypesEnum.FillingTubes)
+              { 
+                    message="Filling Tubes Reminder : Check Machines.....";
+                      _tasktimer.TimerTickPeriod=300000; // 
+              }
+              else  if (taskinfo.TaskTypeId==(int)Enumerations.TaskTypesEnum.Cartooning)
+              {
+                    message="Cartooning Reminder : Check Machines.....";
+                      _tasktimer.TimerTickPeriod=300000; // 
+              }
+
+              int secondsleft=-1;
+            
+
+               if (!_tasktimer.IsTimerStarted)
+                _tasktimer.PrepareTimer
+                (
+                async () =>
+                {
+                  await _taskreminderhub.Clients.Group(taskAssignDTO.TaskId.ToString()).SendAsync("TransferReminderData",
+                  message);
+                  secondsleft=_tasktimer.currentSeconds;   
+                } 
+                );
+
+
+          return Ok(iscompleted);
+        }
+
 
 
         [HttpPut]
@@ -123,15 +178,19 @@ namespace API.Controllers
                 _tasktimer.MaxSeconds=22;
                 }
                 */
-
-                
-                
                  int secondsleft=-1;
 
 
-                 // this is testing
-                //  string TransferTimerDataSignalRMethodName = string.Format("{0}_{1}",taskAssignDTO.TaskId.ToString(),"TransferTimerData");
-             
+                 // when task is assigned the timer started ...
+                 // however the timer will continue ticking down till reach the zero seconds (till reach its minimum value) --
+                 // -- neglecting the fact that the task may be ended ...
+                 // -- in other words : completing the task will never stop the timer (for now) --
+                 // -- it will just make the user leave the task group.....
+
+
+                 // 
+                 _tasktimer.TimerTickPeriod=1000;
+
                 if (!_tasktimer.IsTimerStarted)
                 _tasktimer.PrepareTimer
                 (
@@ -180,7 +239,7 @@ namespace API.Controllers
                            {
 
 
-        await Task.Delay((originalSeconds*1000)+5000).ContinueWith(o =>
+                            await Task.Delay((originalSeconds*1000)+5000).ContinueWith(o =>
                            {
                         
                                       try
@@ -261,6 +320,11 @@ namespace API.Controllers
                          return Ok(true);   
 
                    }
+
+
+
+
+
 
         [HttpGet("{Id}")]
           [Authorize]

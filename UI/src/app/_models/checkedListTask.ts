@@ -10,9 +10,12 @@ export interface checkedListTask
     batchId: number
     departmentId?: number
     userId?: string
+    userName?:string
     durationInSeconds: number
     startDate?: Date
     endDate?: Date
+
+    taskStateId :number;
 
     taskTypeCheckLists : taskTypeCheckList []
 

@@ -44,6 +44,7 @@
             <td  mat-cell *matCellDef="let user">
             <a mat-raised-button [routerLink]="['/users',user.id]">edit</a>   
             <a  mat-raised-button  [routerLink]="['/userRoles',user.userName]" >Edit Roles</a>   
+            <a mat-raised-button [routerLink]="['/changePassword',user.id]">Change Password</a>
             </td>
          </ng-container>
          

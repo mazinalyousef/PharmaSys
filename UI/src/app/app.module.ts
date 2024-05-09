@@ -75,6 +75,8 @@ import { BatchTaskSummaryComponent } from './batch-task-summary/batch-task-summa
 import { BarcodeStickersComponent } from './barcode-stickers/barcode-stickers.component';
 import { NgxPrintModule } from 'ngx-print';
 import { QRCodeModule } from 'angularx-qrcode';
+import { BatchRecordsReportComponent } from './batch-records-report/batch-records-report.component';
+import { BatchReportHeaderComponent } from './batch-report-header/batch-report-header.component';
 
 
  
@@ -122,7 +124,9 @@ import { QRCodeModule } from 'angularx-qrcode';
     MessageComponent,
     ChangePasswordComponent,
     BatchTaskSummaryComponent,
-    BarcodeStickersComponent
+    BarcodeStickersComponent,
+    BatchRecordsReportComponent,
+    BatchReportHeaderComponent
   ],
   imports: [
     BrowserModule,

@@ -22,5 +22,7 @@ export interface batch
     cartoonPictureURL: string
     tubeWeight: number
     tubesCount: number
+    cartoonsCount?:number
+    masterCasesCount?:number
     batchIngredients: batchIngredient []
 }

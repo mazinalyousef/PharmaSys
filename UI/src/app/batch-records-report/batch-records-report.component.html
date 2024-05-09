@@ -1,0 +1,286 @@
+<div class="commands text-right">
+    
+
+   <button style="margin: 5px;" mat-raised-button color="primary"
+class="btn btn-success"
+printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
+
+   </div>
+
+
+<div class="ng-container" id="print-area">
+
+    
+
+    <!--Cleaning Room-->
+    <div class="print-section" style="page-break-after: always;">
+      
+       <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+       <p>Cleaning Rooms Task</p>
+        <p>User:{{cleaningRoomTask.userName}}</p>
+       <p>Start Date: {{cleaningRoomTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+       <p>End Date: {{cleaningRoomTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+       <table mat-table [dataSource]="CleaningRooms_MatdataSource"
+       class="table-striped mat-elevation-z8"
+       >
+        
+         <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let item">{{item.title}}</td>
+         </ng-container>
+ 
+        <tr mat-header-row *matHeaderRowDef="CleaningRooms_displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: CleaningRooms_displayedColumns;"></tr>
+     </table>
+    </div>
+
+
+
+
+     <!--weighting raw materials-->
+     <div class="print-section" style="page-break-after: always;">
+      
+       <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+      <p>Weigting Raw Materials Task</p>
+      <p>User:{{weightingMaterialTask.userName}}</p>
+      <p>Start Date: {{weightingMaterialTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <p>End Date: {{weightingMaterialTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <table mat-table [dataSource]="RawMaterials_MatdataSource"
+      class="table-striped mat-elevation-z8"
+      >
+       
+        <ng-container matColumnDef="ingredientName">
+           <th mat-header-cell *matHeaderCellDef>Ingredient Name</th>
+           <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="qtyPerTube">
+         <th mat-header-cell *matHeaderCellDef>qtyPerTube</th>
+         <td mat-cell *matCellDef="let item">{{item.qtyPerTube/100|percent:'1.0-3'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="qtyPerBatch">
+         <th mat-header-cell *matHeaderCellDef>qtyPerBatch</th>
+         <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
+      </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="RawMaterials_displayedColumns"></tr>
+       <tr mat-row *matRowDef="let row; columns: RawMaterials_displayedColumns;"></tr>
+    </table>
+   </div>
+   
+
+     <!--Qa Check Equipments-->
+     <div class="print-section" style="page-break-after: always;">
+      
+      <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+      <p>Check Equipment Task - Quality Assurance</p>
+       <p>User:{{QAcheckEquipementsTask.userName}}</p>
+      <p>Start Date: {{QAcheckEquipementsTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <p>End Date: {{QAcheckEquipementsTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <table mat-table [dataSource]="QACheckEquipments_MatdataSource"
+      class="table-striped mat-elevation-z8"
+      >
+       
+        <ng-container matColumnDef="title">
+           <th mat-header-cell *matHeaderCellDef>Title</th>
+           <td mat-cell *matCellDef="let item">{{item.title}}</td>
+        </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="QACheckEquipments_displayedColumns"></tr>
+       <tr mat-row *matRowDef="let row; columns: QACheckEquipments_displayedColumns;"></tr>
+    </table>
+   </div>
+
+
+      
+        <div class="print-section" style="page-break-after: always;">
+      
+         <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+
+           <!--QA raw materials -->
+         <p>Raw Materials Weightings Task - Quality Assurance</p>
+          <p>User:{{QARawMaterialTask.userName}}</p>
+         <p>Start Date: {{QARawMaterialTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+         <p>End Date: {{QARawMaterialTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+
+         
+
+            <!-- Accountant -->
+         <p>Raw Materials Weightings Task-Accountant</p>
+         <p>User:{{AccountantWeightingMaterialsTask.userName}}</p>
+        <p>Start Date: {{AccountantWeightingMaterialsTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+        <p>End Date: {{AccountantWeightingMaterialsTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      
+      </div>
+
+
+       <!-- Production Check Equipments-->
+     <div class="print-section" style="page-break-after: always;">
+      
+      <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+      <p>Check Equipment Task - Production</p>
+       <p>User:{{ProductionCheckEquipementTask.userName}}</p>
+      <p>Start Date: {{ProductionCheckEquipementTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <p>End Date: {{ProductionCheckEquipementTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <table mat-table [dataSource]="ProductionCheckEquipments_MatdataSource"
+      class="table-striped mat-elevation-z8"
+      >
+       
+        <ng-container matColumnDef="title">
+           <th mat-header-cell *matHeaderCellDef>Title</th>
+           <td mat-cell *matCellDef="let item">{{item.title}}</td>
+        </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="ProductionCheckEquipments_displayedColumns"></tr>
+       <tr mat-row *matRowDef="let row; columns: ProductionCheckEquipments_displayedColumns;"></tr>
+    </table>
+   </div>
+
+
+   <!--Manufacturing-->
+   <div class="print-section" style="page-break-after: always;">
+      <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+      <p>Manufacturing Task</p>
+       <p>User:{{manufacturingTask.userName}}</p>
+      <p>Start Date: {{manufacturingTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <p>End Date: {{manufacturingTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+      <table mat-table [dataSource]="Manufacturing_MatdataSource"
+      class="table-striped mat-elevation-z8"
+      >
+       
+        <ng-container matColumnDef="title">
+           <th mat-header-cell *matHeaderCellDef>Title</th>
+           <td mat-cell *matCellDef="let item">{{item.title}}</td>
+        </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="Manufacturing_displayedColumns"></tr>
+       <tr mat-row *matRowDef="let row; columns: Manufacturing_displayedColumns;"></tr>
+    </table>
+   </div>
+
+  <!--Qa Sampling-->
+  <div class="print-section" style="page-break-after: always;">
+   <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+   <p>Sampling Task</p>
+    <p>User:{{QASamplingTask.userName}}</p>
+   <p>Start Date: {{QASamplingTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <p>End Date: {{QASamplingTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <table mat-table [dataSource]="Sampling_MatdataSource"
+   class="table-striped mat-elevation-z8"
+   >
+    
+     <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let item">{{item.title}}</td>
+     </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="Sampling_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: Sampling_displayedColumns;"></tr>
+ </table>
+</div>
+
+
+ <!--Filling Check Equpments-->
+ <div class="print-section" style="page-break-after: always;">
+   <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+   <p>Check Equipments Task - Filling</p>
+    <p>User:{{FillingCheckEquipementsTask.userName}}</p>
+   <p>Start Date: {{FillingCheckEquipementsTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <p>End Date: {{FillingCheckEquipementsTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <table mat-table [dataSource]="FillingCheckEquipments_MatdataSource"
+   class="table-striped mat-elevation-z8"
+   >
+    
+     <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let item">{{item.title}}</td>
+     </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="FillingCheckEquipments_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: FillingCheckEquipments_displayedColumns;"></tr>
+ </table>
+</div>
+
+ <!--filling tubes-->
+ <div class="print-section" style="page-break-after: always;">
+   <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+   <p>Filling Tubes Task</p>
+    <p>User:{{fillingTubeTask.userName}}</p>
+   <p>Start Date: {{fillingTubeTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <p>End Date: {{fillingTubeTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <table mat-table [dataSource]="FillingTubes_MatdataSource"
+   class="table-striped mat-elevation-z8"
+   >
+    
+     <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let item">{{item.title}}</td>
+     </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="FillingTubes_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: FillingTubes_displayedColumns;"></tr>
+ </table>
+</div>
+
+
+ <!--filling cartoons-->
+ <div class="print-section" style="page-break-after: always;">
+   <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+   <p>Filling cartoons- Task</p>
+    <p>User:{{cartooningTask.userName}}</p>
+   <p>Start Date: {{cartooningTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <p>End Date: {{cartooningTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <table mat-table [dataSource]="FillingCartoons_MatdataSource"
+   class="table-striped mat-elevation-z8"
+   >
+    
+     <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let item">{{item.title}}</td>
+     </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="FillingCartoons_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: FillingCartoons_displayedColumns;"></tr>
+ </table>
+</div>
+
+
+ <!--filling packaging-->
+ <div class="print-section" style="page-break-after: always;">
+   <app-batch-report-header [_batch]="batch"></app-batch-report-header>
+   <p>Filling packaging- Task</p>
+    <p>User:{{packagingTask.userName}}</p>
+   <p>Start Date: {{packagingTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <p>End Date: {{packagingTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
+   <table mat-table [dataSource]="FillingPackaging_MatdataSource"
+   class="table-striped mat-elevation-z8"
+   >
+    
+     <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let item">{{item.title}}</td>
+     </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="FillingPackaging_displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: FillingPackaging_displayedColumns;"></tr>
+ </table>
+</div>
+
+
+
+
+
+
+</div>
+
+<div class="commands text-right">
+    
+
+   <button style="margin: 5px;" mat-raised-button color="primary"
+class="btn btn-success"
+printSectionId="print-area" ngxPrint>Print</button>
+
+   </div>
+
+

@@ -9,6 +9,8 @@ import { rawMaterialsTask } from '../_models/rawMaterialsTask';
 import { rangeSelectTask } from '../_models/rangeSelectTask';
 import { userTask } from '../_models/userTask';
 import { batchTasksSummary } from '../_models/batchTasksSummary';
+import { batchManufacturingRecord } from '../_models/batchManufacturingRecord';
+import { identifierName } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,11 @@ export class BatchtaskService {
   assign(taskassign:taskAssign) : Observable<boolean>
   {
       return this.http.put<boolean>(this.baseUrl+'Tasks/Assign',taskassign);
+  }
+
+  StartReminder(taskassign:taskAssign) : Observable<Boolean>
+  {
+    return this.http.put<boolean> (this.baseUrl+'Tasks/StartReminder',taskassign);
   }
 
   WaitForTaskTimer(taskassign:taskAssign) : Observable<boolean>
@@ -47,6 +54,7 @@ export class BatchtaskService {
   getrawmaterialsTask(id:number) : Observable<rawMaterialsTask>
   {
      return this.http.get<rawMaterialsTask> (this.baseUrl+'tasks/rawmaterials/'+id);
+     
   }
   getrangeSelectTask(id:number) : Observable<rangeSelectTask>
   {
@@ -61,5 +69,9 @@ export class BatchtaskService {
   {
     return this.http.get<batchTasksSummary[]>(this.baseUrl+'tasks/BtachTasksSummary/'+BatchId);
   }
+   getBatchReport(id:number) : Observable<batchManufacturingRecord>
+   {
+     return this.http.get<batchManufacturingRecord>(this.baseUrl+'BatchRecords/'+id);
+   }
 
 }

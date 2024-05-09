@@ -111,25 +111,10 @@ export class NotificationsComponent implements OnInit
 
             this.baseTaskType =  this.mappinghelper.
             getBaseTaskType(res.taskTypeId);
-            
-
-
+          
             this.TaskSeconds = this.mappinghelper.
             getTaskSeconds(res.taskTypeId);
               
-
-              /*
-            if (res.taskTypeId===(TaskTypes.RawMaterialsWeighting))
-            {this.TaskSeconds=25;}
-            if (res.taskTypeId===(TaskTypes.Manufacturing))
-            {this.TaskSeconds=22;}
-            if (res.taskTypeId===(TaskTypes.RoomCleaning))
-            {this.TaskSeconds=15;}
-              */
-            
-           
-           
-             
           },error=>
           {
             console.log(error)
@@ -145,7 +130,43 @@ export class NotificationsComponent implements OnInit
         {
            
 
-           // route to suitable path....
+           
+           // fire the controllers .... 
+          
+
+           // join the task group 
+            this.presenseService.joinTaskGroups(this.loggedUser ,batchTaskId,this.taskDepartmentId,this.taskTypeId);
+
+            this.taskassign.seconds=  this.TaskSeconds;
+           //console.log( "TaskAssign Object Department:"+this.taskassign.departmentId);
+            this.batchtaskservice.WaitForTaskTimer(this.taskassign).subscribe(res=>{
+              
+            });
+
+            // after that user will join the reminder groups ...--
+            // -- but this is only for specific tasks......(cartooning , filling tubes ...)
+            if (this.taskassign.taskTypeId===TaskTypes.Cartooning||this.taskassign.taskTypeId===TaskTypes.FillingTubes)
+            {
+              // fire the reminder controller ....
+             
+              this.batchtaskservice.StartReminder(this.taskassign).subscribe(
+                res=>
+                {
+                  this.presenseService.joinReminderGroups(this.loggedUser,batchTaskId,this.taskDepartmentId,this.taskTypeId);
+                }
+                ,error=>
+                {
+                  console.log(error);
+                }
+              )
+           
+
+            }
+
+
+
+
+            // route to suitable path....
     
            if (this.baseTaskType == BaseTaskTypes.CheckedList)
            {
@@ -161,16 +182,7 @@ export class NotificationsComponent implements OnInit
               
            }
 
-           // fire the controller 
-          
-           // join the task group 
-            this.presenseService.joinTaskGroups(this.loggedUser ,batchTaskId,this.taskDepartmentId,this.taskTypeId);
 
-            this.taskassign.seconds=  this.TaskSeconds;
-           console.log( "TaskAssign Object Department:"+this.taskassign.departmentId);
-            this.batchtaskservice.WaitForTaskTimer(this.taskassign).subscribe(res=>{
-              
-            });
         }
        
         },

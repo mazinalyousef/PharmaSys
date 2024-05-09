@@ -79,8 +79,6 @@ export class UserRunningTaskComponent implements OnInit
                  
               }
 
-            
-             
               // join the task group 
               this.presenseService.joinTaskGroups(this.loggedUser ,id,this.taskDepartmentId,this.taskTypeId);
                

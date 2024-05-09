@@ -267,8 +267,6 @@ namespace API.Controllers
 
             }
             return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed To Change The User Password" });
-
-           
         }
           
         [HttpPost("editRoles/{userName}")]
@@ -338,9 +336,6 @@ namespace API.Controllers
                 );
             return token;
         }
-
-
-
 
     }
 }

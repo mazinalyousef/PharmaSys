@@ -19,7 +19,7 @@ export class IngredientListComponent implements  OnInit
   MatdataSource :any;
   @Output() editEvent = new EventEmitter();
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns = ['ingredientName','actions']; 
+  displayedColumns = ['ingredientName','ingredientCode','actions']; 
 
   pageNumber=1;
   pageSize=5;

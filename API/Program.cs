@@ -85,6 +85,12 @@ builder.Services.AddAuthentication(options =>
 
 
 
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+
+
 //builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(x=>x.JsonSerializerOptions.ReferenceHandler=ReferenceHandler.IgnoreCycles);
 builder.Services.AddCors();
@@ -94,7 +100,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
-// add singletone
+
 builder.Services.AddScoped<IGlobalDataRepository,GlobalDataRepository>();
 
 // add repository ....
@@ -105,6 +111,8 @@ builder.Services.AddScoped<IMessageRepository,MessageRepository>();
 builder.Services.AddScoped<IBatchBL,BatchBL>();
 builder.Services.AddScoped<ITaskBL,TaskBL>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
+
+builder.Services.AddScoped<IEmailSender,EmailSender>();
 
 
 
@@ -204,6 +212,7 @@ app.MapControllers();
 
 app.MapHub<NotificationHub>("hubs/notification");
 app.MapHub<TaskTimerHub>("hubs/taskTimer");
+app.MapHub<TaskReminderHub>("hubs/taskReminder");
 app.MapHub<MessageHub>("hubs/message");
 
 app.MapFallbackToController("Index","FallBack");

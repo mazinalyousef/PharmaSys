@@ -26,12 +26,18 @@ namespace API.DTOS
          #nullable enable
          public string? UserId { get; set; }
 
+         //added 
+         public string? UserName { get; set; }
+
 
          public int DurationInSeconds { get; set; }
 
       
          public DateTime? StartDate { get; set; }
          public DateTime? EndDate { get; set; }
+
+          // add state
+          public int TaskStateId { get; set; }
 
           public Batch BatchInfo { get; set; }
          public  Product ProductInfo { get; set; }

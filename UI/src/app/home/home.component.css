@@ -1,22 +1,21 @@
 
+.main-component{
+    background-color: var(--light-gray-color);;
+    display: flex;
+    width: auto;
+    justify-content: center;
+    align-items: center;  
+}
+ 
 .maingrid{
-    
+   
     margin-top: 42px;
     display: grid;
+    width: auto;
     grid-template-columns: 200px 200px 200px;
     column-gap: 10px;
     row-gap: 10px;
 }
-
-.main-component{
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
- 
- 
- 
 button {
     cursor:pointer;
     font-size: 1.25em;

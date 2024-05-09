@@ -29,6 +29,8 @@ export class BarcodeStickersComponent implements OnInit
     this.sticker.ingredients.forEach((element=>
       {
 
+        console.log("element:"+element);
+
       //  console.log(element.ingredientName);
 
       let  stickercontainerDiv = document.createElement('div');
@@ -64,7 +66,7 @@ export class BarcodeStickersComponent implements OnInit
 
         var pqtyPerTube = document.createElement("p"); //create the paragraph tag
         document.getElementById(element.ingredientName).appendChild(pqtyPerTube); 
-        pqtyPerTube.innerHTML = "QTYPerTube:"+ element.qtyPerTube.toString(); 
+        pqtyPerTube.innerHTML = "QTYPerTube:"+ element.qtyPerTube.toString()+"%"; 
 
 
 
@@ -73,9 +75,10 @@ export class BarcodeStickersComponent implements OnInit
 
           
         let node = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        node.setAttribute("id", "barcode" + element.ingredientName);
+        // note : the Id Attribute Name must not contain spaces ( at least for the barcode js )...
+        node.setAttribute("id", "barcode" + element.ingredientId);
         document.getElementById(element.ingredientName).appendChild(node); 
-        JsBarcode("#barcode"+  element.ingredientName,this.sticker.barcode, {
+        JsBarcode("#barcode"+  element.ingredientId,this.sticker.barcode, {
           format: 'code128', 
           text: '-' +  this.sticker.barcode + '-',
           background: 'rgba(255,255,255,1)',

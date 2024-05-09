@@ -45,6 +45,7 @@ export class IngredientEditComponent implements OnInit
     (
      {
       ingredientName:new FormControl(''),
+      ingredientCode:new FormControl(''),
        
      }
     );
@@ -69,6 +70,7 @@ export class IngredientEditComponent implements OnInit
       this.ingredient={} as ingredient;
       this.ingredient.id=0;
       this.ingredient.ingredientName="";
+      this.ingredient.ingredientCode="";
       this.form.patchValue(this.ingredient);
    }
 
@@ -81,6 +83,7 @@ export class IngredientEditComponent implements OnInit
   {
   
      this.ingredient.ingredientName  = this.form.get("ingredientName")?.value;
+     this.ingredient.ingredientCode  = this.form.get("ingredientCode")?.value;
      if(this.isEmptyOrSpaces( this.ingredient.ingredientName )){
       this.toastr.error("Name Is Required","");
       return;

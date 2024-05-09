@@ -10,6 +10,8 @@ import { TaskTypes } from '../_enums/TaskTypes';
 import { DepartmentsEnum } from '../_enums/DepartmentsEnum';
 import { message } from '../_models/message';
 import { MessageService } from './message.service';
+import { SnackbarServiceService } from './snackbar-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,7 @@ export class PresenceService {
   private hubConnection : HubConnection; // notifications
   private TimerHubConnection : HubConnection;
   private messageHubConnection : HubConnection;
+  private ReminderHubConnection : HubConnection;
 
 
 
@@ -113,7 +116,7 @@ export class PresenceService {
     //#endregion
 
 
-   constructor(private notificationService : NotificationService,private messageService:MessageService)
+   constructor(private notificationService : NotificationService,private messageService:MessageService,private toastr:ToastrService)
    {
 
     this.userNotifications.next([]); // may commit later
@@ -506,6 +509,7 @@ export class PresenceService {
   }
 
 
+
   RemoveTaskGroups(user:AuthenticatedResponse,taskid:number)
   {
     this.TimerHubConnection =new HubConnectionBuilder()
@@ -567,6 +571,48 @@ export class PresenceService {
     this.TimerHubConnection.stop().catch(error=>{console.log(error);})
   }
   }
+
+
+  joinReminderGroups(user:AuthenticatedResponse,taskid:number,departmentId:number,tasktypeId:number)
+  {
+    this.ReminderHubConnection =new HubConnectionBuilder()
+    .withUrl(this.hubUrl+'taskReminder',
+    {
+      accessTokenFactory:()=>user.token
+    })
+    .withAutomaticReconnect()
+    .build()
+    
+   // console.log("started taskReminder Connection");
+    this.ReminderHubConnection.start().then(
+      ()=>
+      {
+        this.ReminderHubConnection.invoke("AddUserToGroup",taskid).catch(err=>{console.log(err)});
+     //   console.log("added user to group : "+taskid.toString());
+      }
+    )
+    .catch(error=>console.log(error));
+     
+   
+    
+    this.ReminderHubConnection.on("TransferReminderData",(data)=>
+    {
+      
+       // console.log(data);
+        // keep the toastr message open ...
+        this.toastr.info(data,"",{timeOut:0,extendedTimeOut:0}); 
+    }
+    
+    )
+  }
+  stopReminderHubConnection()
+  {
+  if (this.ReminderHubConnection)
+   { 
+    this.ReminderHubConnection.stop().catch(error=>{console.log(error);})
+  }
+  }
+
 
   getUsernotifications( userId:string)
   {

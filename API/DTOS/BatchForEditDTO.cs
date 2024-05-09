@@ -47,6 +47,11 @@ namespace API.DTOS
 
         public int TubesCount { get; set; }
 
+        public int? CartoonsCount { get; set; }
+
+        public int? MasterCasesCount { get; set; }
+
+
 
          public ICollection<BatchIngredientDTO> BatchIngredients { get; set; }
 

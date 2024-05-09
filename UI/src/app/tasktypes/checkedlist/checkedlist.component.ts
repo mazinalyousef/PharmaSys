@@ -4,11 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, take } from 'rxjs';
 import { DepartmentsEnum } from 'src/app/_enums/DepartmentsEnum';
+import { taskStates } from 'src/app/_enums/taskStates';
 import { TaskTypes } from 'src/app/_enums/TaskTypes';
 import { AuthenticatedResponse } from 'src/app/_models/AuthenticatedResponse';
 import { checkedListTask } from 'src/app/_models/checkedListTask';
+import { EmailMessage } from 'src/app/_models/EmailMessage';
 import { message } from 'src/app/_models/message';
 import { BatchtaskService } from 'src/app/_services/batchtask.service';
+import { EmailService } from 'src/app/_services/email.service';
 import { MessageService } from 'src/app/_services/message.service';
 import { PresenceService } from 'src/app/_services/presence.service';
 import { UsersService } from 'src/app/_services/users.service';
@@ -37,9 +40,14 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
     tubeUrl:string;
     cartoonUrl:string;
 
+    firstMangerEmail:string;
+
+    iscompleted:boolean;
+
    constructor(private activatedRoute : ActivatedRoute, private batchtaskService : BatchtaskService,
      private router : Router,public presenceservice :PresenceService,private userservice :UsersService
-     ,private messageService:MessageService,private toastr :ToastrService
+     ,private messageService:MessageService,private toastr :ToastrService,
+     private emailservice:EmailService
     ) 
      {
 
@@ -84,10 +92,16 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
           {
             this.checkedlistTask=result;
              
-
+            this.iscompleted=false;
+           
 
             if (this.checkedlistTask)
             {
+
+              if (this.checkedlistTask.taskStateId===taskStates.finished)
+              {
+                 this.iscompleted=true;
+              }
              // this.tubeUrl = this.baseUrl+'images/'+this.checkedlistTask.productInfo.id.toString()+'_Tube.jpg'
              // this.cartoonUrl =this.baseUrl+'images/'+this.checkedlistTask.productInfo.id.toString()+'_Cartoon.jpg'
 
@@ -141,6 +155,8 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
             {
                // we may make the user leave the task group
               this.router.navigate(['/home']);
+
+              this.presenceservice.stopReminderHubConnection();
             }
             else
             {
@@ -159,6 +175,74 @@ export class CheckedlistComponent  implements OnInit,OnDestroy
   
    
   }
+
+
+
+  sendEmail()
+  {
+    this.userservice.loggedUser$.pipe(
+      take(1) 
+     ).subscribe(
+       res=> {
+       this.AuthenticatedUser=res;
+       }
+     );
+     if (this.AuthenticatedUser)
+     {
+
+      // get the first manager 
+       this.emailservice.getFirstManager().subscribe(
+        res=>
+        {
+          this.firstMangerEmail = res.email;
+        }
+        ,error=>
+        {
+          console.log(error);
+        }
+       )
+
+
+      // testing....
+      if (this.note.length>3)
+      {
+
+        if (this.firstMangerEmail)
+        {
+
+          let emailmessage : EmailMessage ={to:this.firstMangerEmail,
+          subject:'from:'+this.AuthenticatedUser.username,
+          content:this.note};
+           this.emailservice.sendEmail(emailmessage).subscribe(
+                   res=>
+                 {
+                    this.toastr.info(MessagesTitle.OnMessageSentSuccessful,'');
+                 }
+                 ,error=>
+                 {
+                   this.toastr.error(error,'');
+                 }
+  
+        )
+          
+        }
+        else
+        {
+          this.toastr.warning('There Was An Error getting Manager E-Mail To Send To..','');
+        }
+       
+      }
+      else
+      {
+       this.toastr.warning('Message Lenght is Too Short','');
+      }
+     
+     }
+  
+
+  }
+
+
 
   sendNote()
   {

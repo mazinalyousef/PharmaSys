@@ -13,6 +13,10 @@ namespace API.DTOS
         
         public int IngredientId { get; set; }
         public string IngredientName { get; set; } 
+
+        //added
+         public string IngredientCode { get; set; } 
+
         public decimal QTYPerTube { get; set; }
 
         

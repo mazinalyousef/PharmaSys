@@ -4,6 +4,7 @@ import { BatchtaskService } from '../_services/batchtask.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { BatchService } from '../_services/batch.service';
+import { batch } from '../_models/batch';
 
 @Component({
   selector: 'app-batch-task-summary',
@@ -14,8 +15,9 @@ export class BatchTaskSummaryComponent implements OnInit
 {
 
     batchtasksummaries : batchTasksSummary[];
+    _batch:batch;
     batchno:string;
-    displayedColumns = ['taskTitle','taskState', 'user','startDate','endDate'];
+    displayedColumns = ['taskTitle','taskState', 'user','startDate','endDate','totalminutes'];
     MatdataSource :any;
 
     Statuscolors = [{ status: "initialized", color: "#0AA2EE" }
@@ -49,6 +51,7 @@ export class BatchTaskSummaryComponent implements OnInit
           res=>
           {
               this.batchno=  res.batchNO;
+              this._batch = res;
           }
           ,error=>
           {

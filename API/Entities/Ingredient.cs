@@ -13,6 +13,9 @@ namespace API.Entities
         [Required]
         public string IngredientName { get; set; }
 
+        [StringLength(250)]
+        public string IngredientCode{get;set;}
+
 
        // note : may change to ICollection....
          public List<ProductIngredient> ProductIngredients { get; set; }

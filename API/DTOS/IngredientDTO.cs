@@ -7,7 +7,11 @@ namespace API.DTOS
 {
     public class IngredientDTO
     {
+
+       
           public int Id { get; set; }
           public string IngredientName { get; set; }
+
+           public string IngredientCode { get; set; }
     }
 }

@@ -63,6 +63,7 @@ namespace API.Controllers
            [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Update ([FromBody]BarcodeForViewDTO barcodeForViewDTO,int Id)
         {
+        
             var barcode = _mapper.Map<API.Entities.Barcode>(barcodeForViewDTO);
             // update ... keep in the controller for now 
             var originalEntity =await _dataContext.Barcodes.FirstOrDefaultAsync(x=>x.Id==Id);

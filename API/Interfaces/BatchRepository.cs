@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTOS;
 using API.Entities;
 using API.Enumerations;
 using Microsoft.EntityFrameworkCore;
@@ -123,9 +124,7 @@ namespace API.Interfaces
             return completed;
           }
 
-          
-
-
+        
         public async Task<IEnumerable<Batch>> GetAll()
         {
 
@@ -171,6 +170,9 @@ namespace API.Interfaces
               originalEntity.TubesCount = batch.TubesCount;
               originalEntity.TubeWeight = batch.TubeWeight;
 
+               originalEntity.CartoonsCount = batch.CartoonsCount;
+               originalEntity.MasterCasesCount = batch.MasterCasesCount;
+
                 // set the state tomodified....
                _dataContext.Entry(originalEntity).Property(x=>x.Barcode).IsModified=true;
                _dataContext.Entry(originalEntity).Property(x=>x.BatchNO).IsModified=true;
@@ -190,6 +192,9 @@ namespace API.Interfaces
 
                _dataContext.Entry(originalEntity).Property(x=>x.TubesCount).IsModified=true;
                _dataContext.Entry(originalEntity).Property(x=>x.TubeWeight).IsModified=true;
+
+                _dataContext.Entry(originalEntity).Property(x=>x.CartoonsCount).IsModified=true;
+                _dataContext.Entry(originalEntity).Property(x=>x.MasterCasesCount).IsModified=true;
 
                           
               await _dataContext.SaveChangesAsync();
@@ -284,6 +289,8 @@ namespace API.Interfaces
         }
 
 
+
+          
          
     }
 }

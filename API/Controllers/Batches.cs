@@ -26,8 +26,6 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class Batches : ControllerBase
     {
-
-
         private readonly IWebHostEnvironment _hostingEnvironment;
         
          private readonly IConfiguration _configuration;
@@ -44,6 +42,7 @@ namespace API.Controllers
          IBatchBL batchBL,
          IMapper mapper,IWebHostEnvironment hostingEnvironment)
         {
+            
             _batchBL = batchBL;
             _batchRepository = batchRepository;
             _notificationHub =notificationHub;
@@ -75,8 +74,7 @@ namespace API.Controllers
         }
 
 
-        
-        
+    
          [HttpPost]
            [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Register([FromBody]BatchForEditDTO batchForEditDTO)
@@ -118,7 +116,6 @@ namespace API.Controllers
            
         }
 
-    
         [HttpPut("{Id}")]
           [Authorize(Policy ="ManagerPolicy")]
         public async Task<IActionResult> Update ([FromBody]BatchForEditDTO batchForEditDTO,int Id)
@@ -143,9 +140,6 @@ namespace API.Controllers
               return Ok(new Response { Status = "Success", Message = "Batch Update Was Successfull!" });
         }
 
-
-
-       
 
         [HttpDelete("{Id}")]
   [Authorize(Policy ="ManagerPolicy")]
@@ -198,7 +192,7 @@ namespace API.Controllers
                      // send notifications to the associated groups...
                await _notificationHub.Clients.Group(UserRoles.Warehouse_CheckRooms).SendAsync("ReceiveMessage",newTaskMessage);
             //   await _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).SendAsync("ReceiveMessage",newTaskMessage);
-               await _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).SendAsync("ReceiveMessage",newTaskMessage);
+            //   await _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).SendAsync("ReceiveMessage",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.QA_CheckEquipements).SendAsync("ReceiveMessage",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.Production_CheckEquipements).SendAsync("ReceiveMessage",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.Accountant).SendAsync("ReceiveMessage",newTaskMessage);
@@ -206,7 +200,7 @@ namespace API.Controllers
                 // will also send notifications to clients so that they must update the notifications list
                await _notificationHub.Clients.Group(UserRoles.Warehouse_CheckRooms).SendAsync("UpdateNotifications",newTaskMessage);
             //   await _notificationHub.Clients.Group(UserRoles.Warehouse_RawMaterials).SendAsync("UpdateNotifications",newTaskMessage);
-               await _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).SendAsync("UpdateNotifications",newTaskMessage);
+            //   await _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).SendAsync("UpdateNotifications",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.QA_CheckEquipements).SendAsync("UpdateNotifications",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.Production_CheckEquipements).SendAsync("UpdateNotifications",newTaskMessage);
                await _notificationHub.Clients.Group(UserRoles.Accountant).SendAsync("UpdateNotifications",newTaskMessage);
@@ -304,12 +298,8 @@ namespace API.Controllers
                   catch(Exception ex)
                   {
                       error =ex.Message;
-                  }
-
-                 
-               
-                 
-              }
+                  }             
+                 }
                   if (error.Length==0)
                   {
                     return Ok(new Response { Status = "Success", Message = " Add Was Successfull!" });
@@ -320,7 +310,6 @@ namespace API.Controllers
                        new Response { Status = "Error", Message =error});   
                   }
            
-
         }
 
 
@@ -372,6 +361,11 @@ namespace API.Controllers
            
           }
 
+
+
+
+
+       
 
 
 

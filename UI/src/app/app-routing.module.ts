@@ -22,6 +22,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { BatchTaskSummaryComponent } from './batch-task-summary/batch-task-summary.component';
 import { BarcodeStickersComponent } from './barcode-stickers/barcode-stickers.component';
+import { BatchRecordsReportComponent } from './batch-records-report/batch-records-report.component';
 
 
 
@@ -49,8 +50,9 @@ const routes: Routes =
   {path:'not-found',component:NotFoundComponent},
   {path:'server-error',component:ServerErrorComponent},
   {path:'messages',component:MessagesComponent,canActivate:[AuthGuard]},
-  {path:'changePassword',component:ChangePasswordComponent,canActivate:[AuthGuard]},
-  {path:'batcheSummary/:id',component:BatchTaskSummaryComponent,canActivate:[AuthGuard]},
+  {path:'changePassword/:id',component:ChangePasswordComponent,canActivate:[AdminGuard]},
+  {path:'batchSummary/:id',component:BatchTaskSummaryComponent,canActivate:[AuthGuard]},
+  {path:'batchReport/:id',component:BatchRecordsReportComponent,canActivate:[AuthGuard]},
   {path:'stickers',component:BarcodeStickersComponent,canActivate:[AuthGuard]},
   {path:'**',component:HomeComponent,pathMatch:'full'}
   

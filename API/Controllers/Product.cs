@@ -16,7 +16,8 @@ namespace API.Controllers
     
     public class Product : ControllerBase
     {
-      
+        
+        
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
 
@@ -61,7 +62,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-          [Authorize(Policy ="ManagerPolicy")]
+        [Authorize(Policy ="ManagerPolicy")]
         public async Task<ActionResult< IEnumerable<ProductDTO>>> getProducts()
         {
              var productsDTO = await _productRepository.GetAll();

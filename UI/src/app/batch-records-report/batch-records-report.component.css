@@ -1,0 +1,13 @@
+div.print-section
+{
+  page-break-after: always;
+}
+@media print{
+    table {
+        
+       color: #333333;
+       border-width: 1px;
+       border-color: #666666;
+       
+    }
+}

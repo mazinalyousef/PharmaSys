@@ -9,6 +9,8 @@ import { AuthenticatedResponse } from '../_models/AuthenticatedResponse';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { PresenceService } from './presence.service';
 import { changepassword } from '../_models/changepassword';
+import { BatchtaskService } from './batchtask.service';
+import { TaskTypes } from '../_enums/TaskTypes';
 
 
 
@@ -42,7 +44,9 @@ export class UsersService
 
 
    // move this logic to interceptor....
-  constructor(private http:HttpClient, private presenseService:PresenceService) 
+  constructor(private http:HttpClient, private presenseService:PresenceService,
+    private batchTaskservice:BatchtaskService
+    ) 
   {
      
   }
@@ -107,6 +111,30 @@ export class UsersService
               this.presenseService.getUsermessages(user.id);
               this.presenseService.joinMessageGroups(this.CurrentloggedUser);
 
+              this.batchTaskservice.getallRunningForUser(user.id).subscribe(
+                res=>
+                {
+                  if (res)
+                  { 
+                     const userTasks = res;
+                     userTasks.forEach(element => {
+                       
+                        if (element.taskTypeId===TaskTypes.Cartooning||element.taskTypeId===TaskTypes.FillingTubes)
+                        {
+                           // join the reminders ...
+                           // the department is not  necessary ...
+                           this.presenseService.joinReminderGroups(user,element.id,0,element.taskTypeId);
+                        }
+                       
+                     });
+                  }
+                },
+                error=>
+                {
+                  console.log(error);
+                }
+              )
+
           }
         }
       )
@@ -137,15 +165,40 @@ export class UsersService
    
   
     this.presenseService.createMessageHubConnection(user); //added
-
-     this.presenseService.setInitialMessagesCount(user.id,true);
-     
+     this.presenseService.setInitialMessagesCount(user.id,true); 
     this.presenseService.getUsermessages(user.id);
     this.presenseService.joinMessageGroups(user); //added
 
     // timer hub not habdeled here ...
     // consider it 
     // may need to handle as well
+    
+
+    // we need to check the user current runnig tasks... so the user will join reminders ...
+    this.batchTaskservice.getallRunningForUser(user.id).subscribe(
+      res=>
+      {
+        if (res)
+        { 
+           const userTasks = res;
+           userTasks.forEach(element => {
+             
+              if (element.taskTypeId===TaskTypes.Cartooning||element.taskTypeId===TaskTypes.FillingTubes)
+              {
+                 // join the reminders ...
+                 // the department is not  necessary ...
+                 this.presenseService.joinReminderGroups(user,element.id,0,element.taskTypeId);
+              }
+             
+           });
+        }
+      },
+      error=>
+      {
+        console.log(error);
+      }
+    )
+
     
   }
 

@@ -56,6 +56,10 @@ namespace API.BusinessLogic
                 //added
                var Warehouse_RawMaterialsusers =_userManager.GetUsersInRoleAsync(UserRoles.Warehouse_RawMaterials).GetAwaiter().GetResult();
 
+                //added 
+                var QA_RawMaterialsusers=_userManager.GetUsersInRoleAsync(UserRoles.QA_RawMaterials).GetAwaiter().GetResult();
+
+
                var Production_Manufacturingusers= _userManager.GetUsersInRoleAsync(UserRoles.Production_Manufacturing).GetAwaiter().GetResult();
                var QA_Samplingusers= _userManager.GetUsersInRoleAsync(UserRoles.QA_Sampling).GetAwaiter().GetResult();
 
@@ -67,6 +71,7 @@ namespace API.BusinessLogic
 
 
                 bool notifyWarehouse_RawMaterials=false;
+                bool notifyQA_RawMaterials=false;
 
                 bool notifyProduction_Manufacturing=false;
                 bool notifyQA_Sampling=false;
@@ -130,6 +135,34 @@ namespace API.BusinessLogic
 
                               notifyWarehouse_RawMaterials=true;  
                 }
+                else   if (originalTask.TaskTypeId==(int)TaskTypesEnum.RawMaterialsWeighting&&originalTask.DepartmentId==(int) DepartmentsEnum.Warehouse)
+                {
+                         // add notifications to : (QA--rawmaterial)
+                             // need to get the QARawMaterial task Id for the batch
+                                   
+
+                                         BatchTask batchTask= new BatchTask();
+                                           batchTask= _dataContext.BatchTasks.Where(x=>x.TaskTypeId==(int) TaskTypesEnum.RawMaterialsWeighting
+                                          &&x.BatchId==originalTask.BatchId
+                                          &&x.DepartmentId==(int) DepartmentsEnum.QA).FirstOrDefault();
+                              foreach (var userItem in QA_RawMaterialsusers)
+                              {
+                                     var userId = userItem.Id;
+                                      Notification notification = new Notification ();
+                                      notification.BatchId = originalTask.BatchId;
+                                      notification.BatchTaskId =batchTask.Id;
+                                      notification.DateSent = DateTime.Now;
+                                      // need to get the batch nomber 
+                                     notification.NotificationMessage = string.Format("Batch {0} With Raw Material Weighting Task Is Available",
+                                      originalBatch.BatchNO.ToString());
+                                     notification.UserId = userId;
+                                    //_notificationRepository.Add(notification).GetAwaiter().GetResult();
+                                    _dataContext.Notifications.Add(notification);
+                                          _dataContext.SaveChanges(); 
+                              }
+
+                              notifyQA_RawMaterials=true;  
+                } 
 
                              #region  pre-production Tasks...
             // check if the current task is pre-production task
@@ -448,6 +481,15 @@ namespace API.BusinessLogic
                                 SendAsync("UpdateNotifications","UpdateNotifications").GetAwaiter().GetResult();
                         }
 
+                        if (notifyQA_RawMaterials)
+                        {
+                             _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).
+                                SendAsync("ReceiveMessage",newTaskMessage).GetAwaiter().GetResult();
+
+                                _notificationHub.Clients.Group(UserRoles.QA_RawMaterials).
+                                SendAsync("UpdateNotifications","UpdateNotifications").GetAwaiter().GetResult();
+                        }
+
 
                         if (notifyProduction_Manufacturing)
                         {
@@ -515,7 +557,8 @@ namespace API.BusinessLogic
 
             if (_taskIdtypeId==(int)TaskTypesEnum.RawMaterialsWeighting)
             {
-                if (_departmentId==(int) DepartmentsEnum.Warehouse||
+                // _departmentId==(int) DepartmentsEnum.Warehouse||
+                if (
                 _departmentId==(int) DepartmentsEnum.QA||
                 _departmentId==(int) DepartmentsEnum.Accounting)
                 {

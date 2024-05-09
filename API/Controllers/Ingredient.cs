@@ -97,6 +97,11 @@ namespace API.Controllers
             {
                 originalEntity.IngredientName = ingredientDTO.IngredientName;
                 _dataContext.Entry(originalEntity).Property(x=>x.IngredientName).IsModified=true;
+
+                  originalEntity.IngredientCode = ingredientDTO.IngredientCode;
+                _dataContext.Entry(originalEntity).Property(x=>x.IngredientCode).IsModified=true;
+
+
                 var result = await _dataContext.SaveChangesAsync();
             if (result==0)
            {

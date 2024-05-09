@@ -4,10 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { DepartmentsEnum } from 'src/app/_enums/DepartmentsEnum';
+import { taskStates } from 'src/app/_enums/taskStates';
 import { AuthenticatedResponse } from 'src/app/_models/AuthenticatedResponse';
+import { EmailMessage } from 'src/app/_models/EmailMessage';
 import { message } from 'src/app/_models/message';
 import { rawMaterialsTask } from 'src/app/_models/rawMaterialsTask';
 import { BatchtaskService } from 'src/app/_services/batchtask.service';
+import { EmailService } from 'src/app/_services/email.service';
 import { MessageService } from 'src/app/_services/message.service';
 import { PresenceService } from 'src/app/_services/presence.service';
 import { StickersService } from 'src/app/_services/stickers.service';
@@ -23,7 +26,7 @@ import { environment } from 'src/environments/environment';
 export class RawmaterialsComponent implements OnInit,OnDestroy
 {
 
-   displayedColumns = ['ingredientName','qtyPerTube','qtyPerBatch','isChecked']; 
+   displayedColumns = ['ingredientName','ingredientCode','qtyPerTube','qtyPerBatch','isChecked']; 
    idparam?:number;
    rawmaterialTask : rawMaterialsTask;
    ingredientsdataSource :any;
@@ -31,6 +34,7 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
    isWareHouseTask:boolean;
    isAccountantTask:boolean;
    AuthenticatedUser :AuthenticatedResponse;
+   firstMangerEmail:string;
    note:string;
    message:message;
 
@@ -40,12 +44,15 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
 
 
   repeatCount:number;
+
+  iscompleted:boolean;
    
   
    constructor(private activatedRoute : ActivatedRoute, private batchtaskService : BatchtaskService,
     private router : Router, public presenceservice :PresenceService,private userservice :UsersService,
     private messageService:MessageService,private toastr :ToastrService,
-     private stickerService:StickersService
+     private stickerService:StickersService,
+     private emailservice:EmailService
     )
    {
     
@@ -90,9 +97,18 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
             
             this.rawmaterialTask=result;
             this.ingredientsdataSource = new MatTableDataSource<any>(this.rawmaterialTask.batchIngredientDTOs);
+               
 
+
+            this,this.iscompleted=false;
             if (this.rawmaterialTask)
             {
+              
+			    	if (this.rawmaterialTask.taskStateId===taskStates.finished)
+              {
+              this.iscompleted=true;
+              }
+
               this.tubeUrl = this.baseUrl+'images/'+this.rawmaterialTask.batchInfo.id.toString()+'_Tube.jpg'
               this.cartoonUrl =this.baseUrl+'images/'+this.rawmaterialTask.batchInfo.id.toString()+'_Cartoon.jpg'
             }
@@ -212,6 +228,71 @@ export class RawmaterialsComponent implements OnInit,OnDestroy
            
       }
     
+  }
+
+
+  sendEmail()
+  {
+    this.userservice.loggedUser$.pipe(
+      take(1) 
+     ).subscribe(
+       res=> {
+       this.AuthenticatedUser=res;
+       }
+     );
+     if (this.AuthenticatedUser)
+     {
+
+      // get the first manager 
+       this.emailservice.getFirstManager().subscribe(
+        res=>
+        {
+          this.firstMangerEmail = res.email;
+        }
+        ,error=>
+        {
+          console.log(error);
+        }
+       )
+
+
+      // testing....
+      if (this.note.length>3)
+      {
+
+        if (this.firstMangerEmail)
+        {
+
+          let emailmessage : EmailMessage ={to:this.firstMangerEmail,
+          subject:'from:'+this.AuthenticatedUser.username,
+          content:this.note};
+           this.emailservice.sendEmail(emailmessage).subscribe(
+                   res=>
+                 {
+                    this.toastr.info(MessagesTitle.OnMessageSentSuccessful,'');
+                 }
+                 ,error=>
+                 {
+                   this.toastr.error(error,'');
+                 }
+  
+        )
+          
+        }
+        else
+        {
+          this.toastr.warning('There Was An Error getting Manager E-Mail To Send To..','');
+        }
+       
+      }
+      else
+      {
+       this.toastr.warning('Message Lenght is Too Short','');
+      }
+     
+     }
+  
+
   }
 
   generateStickers()

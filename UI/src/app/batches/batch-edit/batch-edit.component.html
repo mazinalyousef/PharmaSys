@@ -140,6 +140,24 @@
                         <input  [readonly]="true" matInput formControlName="tubesCount"   >
                     </mat-form-field>
                     </div>
+
+
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Cartoons Count:
+                        </mat-label>
+                        <input  [readonly]="true" matInput formControlName="cartoonsCount"   >
+                    </mat-form-field>
+                    </div>
+
+                    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                        <mat-label>Master Cases Count:
+                        </mat-label>
+                        <input  [readonly]="true" matInput formControlName="masterCasesCount"   >
+                    </mat-form-field>
+                    </div>
+
+
+
                         </div>
                     </div>
                    
@@ -195,19 +213,29 @@
                          </ng-container>
                         -->
 
+
+
                          <ng-container matColumnDef="ingredientName">
                             <th mat-header-cell *matHeaderCellDef>Ingredient</th>
                             <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
                          </ng-container>
-                        
+
+                         <ng-container matColumnDef="ingredientCode">
+                            <th mat-header-cell *matHeaderCellDef>Ingredient Code</th>
+                            <td mat-cell *matCellDef="let item">{{item.ingredientCode}}</td>
+                         </ng-container>
+            
                          <ng-container matColumnDef="qtyPerTube">
                             <th mat-header-cell *matHeaderCellDef>QTY Per Tube</th>
-                            <td mat-cell *matCellDef="let item">{{item.qtyPerTube}}</td>
+                            <td mat-cell *matCellDef="let item">{{item.qtyPerTube/100|percent:'1.0-3'}}</td>
                          </ng-container>
                          <ng-container matColumnDef="qtyPerBatch">
                             <th mat-header-cell *matHeaderCellDef>QTY Per Batch</th>
                             <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
                          </ng-container>
+
+                        
+
                         
                          
                          <tr mat-header-row *matHeaderRowDef="displayedIngredientsColumns"></tr>

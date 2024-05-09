@@ -1,7 +1,7 @@
 
 <div class="component-main-container">
 
-    <h1>Batch : {{batchno}}  Tasks .</h1>
+    <h1>Batch : {{_batch.batchNO}}  Tasks .</h1>
 
     <div class="commands text-right">
     <button style="margin: 5px;" mat-raised-button color="primary"  
@@ -9,12 +9,44 @@
     class="btn btn-success">
      Refresh
     </button>
+
+    <button style="margin: 5px;" mat-raised-button color="primary"
+class="btn btn-success"
+printSectionId="print-section" ngxPrint [useExistingCss]="true">Print</button>
+
     </div>
  
-    <div class="ng-container">
+    <div class="ng-container" id="print-section">
+
+       
+      <table class="header-table">
+         <tr>
+             <td>Batch NO :  {{_batch.batchNO}}</td>
+             <td>Batch Size: {{_batch.batchSize}}</td>
+             <td>Start Date: {{_batch.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+             <td>End Date: {{_batch.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+         </tr>
+ 
+         <tr>
+             <td>Tube Weight :  {{_batch.tubeWeight}}</td>
+             <td>Tubes Count: {{_batch.tubesCount}}</td>
+             <td>NDCNO: {{_batch.ndcno}}</td>
+             <td>MFNO : {{_batch.mfno}}</td>
+         </tr>
+ 
+         <tr>
+             <td>Barcode :  {{_batch.barcode}}</td>
+             <td>Product: {{_batch.productName}}</td>
+             <td>Expiration Date : {{_batch.expDate|date:"dd/MM/yyyy"}}</td>
+             <td>MFG Date: {{_batch.mFgDate|date:"dd/MM/yyyy"}}</td>
+         </tr>
+         
+     </table>
+
+
        <table mat-table [dataSource]="MatdataSource"
        class="table-striped mat-elevation-z8"
-     
+       
        >
        <ng-container matColumnDef="taskTitle">
            <th mat-header-cell *matHeaderCellDef>Title</th>
@@ -33,13 +65,19 @@
 
          <ng-container matColumnDef="startDate">
             <th mat-header-cell *matHeaderCellDef>Start Date</th>
-            <td mat-cell *matCellDef="let item">{{item.startDate}}</td>
+            <td mat-cell *matCellDef="let item">{{item.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
          </ng-container>
 
 
          <ng-container matColumnDef="endDate">
             <th mat-header-cell *matHeaderCellDef>End Date</th>
-            <td mat-cell *matCellDef="let item">{{item.endDate}}</td>
+            <td mat-cell *matCellDef="let item">{{item.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+         </ng-container>
+
+
+         <ng-container matColumnDef="totalminutes">
+            <th mat-header-cell *matHeaderCellDef>Total Minutes</th>
+            <td mat-cell *matCellDef="let item">{{item.totalminutes}}</td>
          </ng-container>
        
 

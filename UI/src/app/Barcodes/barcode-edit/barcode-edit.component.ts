@@ -99,9 +99,20 @@ export class BarcodeEditComponent implements OnInit
      //Valid
      
      var prod= this.Allproducts.find(x=>x.id===this.barcode.productId);
-     console.log(prod);
+     //console.log(prod);
 
-     this.productAutoCompletecontrol.setValue(prod);
+      if (prod)
+      {
+        this.productAutoCompletecontrol.setValue(prod);
+        // also set the selectedProductItem
+        this.selectedProductItem.id = prod.id;
+        console.log("selected product id after load:"+ this.selectedProductItem.id);
+      }
+      else 
+      {
+        console.log("No Product Found..can't set product Id");
+      }
+    
    }
    );
  
@@ -130,13 +141,15 @@ export class BarcodeEditComponent implements OnInit
 
   onSubmit()
   {
-  
      //this.barcode.productId  = +this.form.get("productId")?.value;
-     this.barcode.productId= this.selectedProductItem.id 
+   //  this.barcode.productId= this.selectedProductItem.id ;
+     this.barcode.productId =  this.productAutoCompletecontrol.value.id;
+     console.log(this.productAutoCompletecontrol.value);
+     // this.productAutoCompletecontrol
      this.barcode.barcode  = this.form.get("barcode")?.value;
      this.barcode.ndcno  = this.form.get("ndcno")?.value;
      this.barcode.tubeWeight  = +this.form.get("tubeWeight")?.value;
-
+   
      if(this.isEmptyOrSpaces( this.barcode.barcode )){
       this.toastr.error("barcode Is Required","");
       return;

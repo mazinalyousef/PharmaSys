@@ -5,4 +5,5 @@ export interface batchTasksSummary
     user :string
     startDate? :Date
     endDate?:Date
+    totalminutes:number
 }

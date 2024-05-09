@@ -42,7 +42,8 @@ namespace API.Interfaces
             CheckedListTaskForViewDTO checkedListTaskForViewDTO=null;
             // first get the task info along with batch info and task type info 
            var BatchTaskDataSet=  await _dataContext.BatchTasks.AsNoTracking()
-           .Include(x=>x.Department).
+           .Include(x=>x.Department)
+           .Include(x=>x.User).
             Include(x=>x.TaskType)
             .ThenInclude(x=>x.TaskTypeCheckLists).AsNoTracking().
              FirstOrDefaultAsync(x=>x.Id==Id);
@@ -67,6 +68,16 @@ namespace API.Interfaces
                 checkedListTaskForViewDTO.StartDate =BatchTaskDataSet.StartDate;
                 checkedListTaskForViewDTO.TaskTypeId =BatchTaskDataSet.TaskTypeId;
                 checkedListTaskForViewDTO.UserId=BatchTaskDataSet.UserId;
+
+
+                if (BatchTaskDataSet.User!=null)
+                {
+                    checkedListTaskForViewDTO.UserName =BatchTaskDataSet.User.UserName;
+                }
+                //added....
+                checkedListTaskForViewDTO.TaskStateId = BatchTaskDataSet.TaskStateId;
+
+
 
                
 
@@ -112,6 +123,8 @@ namespace API.Interfaces
                     batchforview.NDCNO=BatchEntity.NDCNO;
                     batchforview.TubeWeight = BatchEntity.TubeWeight;
                      batchforview.TubesCount = BatchEntity.TubesCount;
+                     batchforview.CartoonsCount =BatchEntity.CartoonsCount;
+                    batchforview.MasterCasesCount = BatchEntity.MasterCasesCount;
 
                     checkedListTaskForViewDTO.BatchInfo=batchforview;
                     if (BatchEntity.Product!=null)
@@ -203,6 +216,7 @@ namespace API.Interfaces
               var BatchTaskDataSet=  await _dataContext.BatchTasks.AsNoTracking()
             .Include(x=>x.Department)
             .Include(x=>x.TaskType)
+            .Include(x=>x.User)
             .Include(x=>x.Batch).ThenInclude(x=>x.BatchIngredients).ThenInclude(x=>x.Ingredient).AsNoTracking().
              FirstOrDefaultAsync(x=>x.Id==Id);
 
@@ -227,6 +241,15 @@ namespace API.Interfaces
                 rawMaterialsTaskForViewDTO.TaskTypeId =BatchTaskDataSet.TaskTypeId;
                 rawMaterialsTaskForViewDTO.UserId=BatchTaskDataSet.UserId;
 
+                //added...
+                if (BatchTaskDataSet.User!=null)
+                {
+                    rawMaterialsTaskForViewDTO.UserName = BatchTaskDataSet.User.UserName;
+                }
+               
+                //added..
+                rawMaterialsTaskForViewDTO.TaskStateId = BatchTaskDataSet.TaskStateId;
+                  
                 string departmentTitle=string.Empty;
                 if (BatchTaskDataSet.Department!=null)
                 {
@@ -245,6 +268,7 @@ namespace API.Interfaces
                      batchIngredientNewItem.BatchId = item.BatchId;
                      batchIngredientNewItem.IngredientId = item.IngredientId;
                      batchIngredientNewItem.IngredientName = item.Ingredient.IngredientName;
+                     batchIngredientNewItem.IngredientCode = item.Ingredient.IngredientCode;
                      batchIngredientNewItem.IsChecked=false;
                      batchIngredientNewItem.QTYPerBatch = item.QTYPerBatch;
                      batchIngredientNewItem.QTYPerTube = item.QTYPerTube;
@@ -266,6 +290,9 @@ namespace API.Interfaces
                     batchforview.NDCNO=BatchEntity.NDCNO;
                     batchforview.TubeWeight = BatchEntity.TubeWeight;
                     batchforview.TubesCount = BatchEntity.TubesCount;
+                    batchforview.CartoonsCount =BatchEntity.CartoonsCount;
+                    batchforview.MasterCasesCount = BatchEntity.MasterCasesCount;
+
 
                     rawMaterialsTaskForViewDTO.BatchInfo=batchforview;
                     if (BatchEntity.Product!=null)
@@ -364,7 +391,6 @@ namespace API.Interfaces
             return completed;
          }
 
-        
          public List<BatchTask> getBatchTasks(int _batchId)
          {
             List<BatchTask> batchTasks=new  List<BatchTask>();
@@ -388,7 +414,6 @@ namespace API.Interfaces
             .Where(x=>x.UserId==userId&&x.TaskStateId==(int)Enumerations.TaskStatesEnum.processing).ToListAsync();
          }
 
-
         public async Task<IEnumerable<BatchTaskSummaryDTO>> GetBatchTaskSummaries(int Id)
         {
 
@@ -409,21 +434,26 @@ namespace API.Interfaces
                     string taskTitle =  item.TaskType.Title;
                     string userName = item.User!=null? item.User.UserName:"";
                     string taskState = item.TaskState.Title;
+                      
 
                     string TitleForDisplay = string.Format("{0} - {1} ",taskTitle,departmentTitle);
 
                     // create new batchtasksummaryDTO 
                     BatchTaskSummaryDTO batchTaskSummaryDTO=new BatchTaskSummaryDTO ()
                     {
+                        Id=item.Id,//added..
+                        TaskTypeId= item.TaskTypeId,//added...
                        StartDate=item.StartDate,
                        EndDate= item.EndDate,
                        TaskTitle = TitleForDisplay,
                         User=userName,
-                        TaskState = taskState
+                        TaskState = taskState,
+                       
 
                        
                     };
                     
+                     batchTaskSummaryDTO.Totalminutes = item.StartDate.HasValue&&item.EndDate.HasValue? (int) (item.EndDate.Value-item.StartDate.Value).TotalMinutes:0;
                      batchTaskSummaryDTOs.Add(batchTaskSummaryDTO);
 
                 }

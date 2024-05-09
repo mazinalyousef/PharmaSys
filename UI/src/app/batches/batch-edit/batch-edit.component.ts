@@ -23,7 +23,7 @@ export class BatchEditComponent  implements OnInit
 {
    
   baseUrl = environment.apiUrl;
-  displayedIngredientsColumns = ['ingredientName', 'qtyPerTube','qtyPerBatch']; 
+  displayedIngredientsColumns = ['ingredientName','ingredientCode', 'qtyPerTube','qtyPerBatch']; 
 
 
    title:string;
@@ -52,13 +52,15 @@ export class BatchEditComponent  implements OnInit
     uploadCartoonFileLabel: string | undefined = 'Choose Cartoon image to upload';
     cartoonUrl:string;
 
+    masterCaseSize:number;
+
     constructor(private activatedRoute:ActivatedRoute,
       private router:Router,private batchservice:BatchService,
       private barcodeservice:BarcodeService,
       private userservice:UsersService, private toastr:ToastrService,
       private productService:ProductService)
     {
-
+      this.masterCaseSize=24;
     }
 
     ngOnInit(): void
@@ -108,6 +110,8 @@ export class BatchEditComponent  implements OnInit
           productName:new FormControl(''),
           tubeWeight:new FormControl(''),
           tubesCount:new FormControl(''),
+          cartoonsCount:new FormControl(''),
+          masterCasesCount:new FormControl(''),
         }
         )
        
@@ -313,6 +317,8 @@ console.log(error);  this.stateIsNotInitialized=true;
       this.batch.cartoonPictureURL  = "";
       this.batch.tubeWeight  = +this.form.get("tubeWeight")?.value;
       this.batch.tubesCount  = +this.form.get("tubesCount")?.value;
+      this.batch.cartoonsCount  = +this.form.get("cartoonsCount")?.value;
+      this.batch.masterCasesCount  = +this.form.get("masterCasesCount")?.value;
        //#endregion
 
 
@@ -426,6 +432,10 @@ console.log(error);  this.stateIsNotInitialized=true;
     this.batch.productName="";
     this.batch.ndcno = "";
     this.batch.tubeWeight = 0;
+    this.batch.tubesCount = 0;
+    this.batch.cartoonsCount = 0;
+    this.batch.masterCasesCount = 0;
+    
     this.form.patchValue({
       productId:this.batch.productId,
       productName:this.batch.productName,
@@ -455,24 +465,34 @@ console.log(error);  this.stateIsNotInitialized=true;
     let    batchsizegrams = batchsize * 1000;
    // console.log(batchsizegrams);
    let tubescount :number = 1;
+   let mastercasescount :number=1;
     if (tubewight!=0)
     {
     tubescount = Math.ceil((batchsizegrams) / (tubewight)) ;
     this.batch.tubesCount =  +tubescount ;
+    this.batch.cartoonsCount = + tubescount;
+    mastercasescount= Math.ceil((tubescount) / ( this.masterCaseSize)) ;
+    this.batch.masterCasesCount = + mastercasescount;
     this.form.patchValue(
       {
-        tubesCount:this.batch.tubesCount
+        tubesCount:this.batch.tubesCount,
+        cartoonsCount:this.batch.cartoonsCount
+        , masterCasesCount:this.batch.masterCasesCount
       }
     );
 
-    console.log(tubescount);
+   // console.log(tubescount);
     }
     else
     {
       this.batch.tubesCount = 0;
+      this.batch.cartoonsCount = 0;
+      this.batch.masterCasesCount = 0;
       this.form.patchValue(
         {
-          tubesCount:this.batch.tubesCount
+          tubesCount:this.batch.tubesCount,
+        cartoonsCount:this.batch.cartoonsCount
+        , masterCasesCount:this.batch.masterCasesCount
         }
       )
     }
