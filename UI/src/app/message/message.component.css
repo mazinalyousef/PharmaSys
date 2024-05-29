@@ -1,0 +1,12 @@
+.grid{
+    display: grid;
+    grid-template-columns: 300px 300px 300px;
+    column-gap: 10px;
+    row-gap: 10px;
+}
+.message-row{
+    font-weight: bold;
+     color: #0C356A;    
+    grid-column-start: 1;
+    grid-column-end: 3;
+}

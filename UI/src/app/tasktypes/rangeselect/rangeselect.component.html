@@ -1,0 +1,24 @@
+<div *ngIf="groupedRanges">
+
+    <div *ngFor="let groupedrangeItem of groupedRanges">
+
+        <div>
+            <label>{{groupedrangeItem[0].taskTypeGroupTitle}}</label>
+        </div>
+        
+      <mat-select  (selectionChange)="onselectionchanged($event.source)"
+      
+         [ngModel]="groupedrangeItem[0].rangeValue"
+         id="{{groupedrangeItem[0].taskTypeGroupId}}">
+         
+        <mat-option *ngFor="let opt of groupedrangeItem" [value]="opt.rangeValue">{{opt.rangeValue}}</mat-option>
+      </mat-select>
+    </div>
+</div>
+<div>
+    <button (click)="onComplete()" style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;" mat-raised-button color="primary"  type="submit" 
+    class="btn btn-success">
+    Complete
+    </button>
+ </div>
+

@@ -1,0 +1,72 @@
+
+<div class="component-main-container " style="margin-top: 2%;">
+    <!--change to dynamic later-->
+    <h1 style="display: flex; justify-content: center; align-items: center; flex-direction: column;font-weight: bold;color: #636060; font-size: 40px;">{{title}}</h1>
+
+
+    <div class="container">
+
+        <div class="form-group" style="display: flex; justify-content: center;"  >
+            <mat-form-field class="form-field" >
+            
+                <mat-select id="RoleName" (selectionChange)="selectedValue($event)">
+                <mat-option value="">--- Select a Role ---</mat-option>
+                <mat-option *ngFor="let item of Allroles" [value]="item">
+                    {{item}}
+                </mat-option>
+                </mat-select>
+                </mat-form-field>
+        </div>
+        <div style="display: flex; justify-content: center;">
+        <div>
+            <button  style="margin: 5px; width: 200px; transition: transform 0.3s;font-size: 20px; background-color: #D7EB58" mat-raised-button color="primary"  
+
+        (click)="addRole()"
+             class="btn btn-success">
+             Add
+            </button>
+        </div>
+        </div>
+
+        <div class="ng-container">
+            <table mat-table [dataSource]="userrolesdataSource"
+            class="table-striped mat-elevation-z8"
+            >
+            <ng-container matColumnDef="userroleID">
+                <th mat-header-cell *matHeaderCellDef  style="background-color: #7DCDF2; font-size: 20px; color: #636060;">User Role</th>
+                <td mat-cell *matCellDef="let item" style="font-size: 20px;">{{item}}</td>
+             </ng-container>
+            
+             <ng-container matColumnDef="actions">
+               <th mat-header-cell *matHeaderCellDef  style="background-color: #7DCDF2; font-size: 20px; color: #636060;">Actions</th>
+               <td  mat-cell *matCellDef="let item">
+               <a  mat-raised-button (click)="deleteRole(item)" style="background-color: #FA4A4A; width: 200px; font-size: 20px;" >delete</a>   
+               </td>
+            </ng-container>
+            
+
+           
+             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+           
+          </table>
+         </div>
+
+
+         <div>
+            <button style="margin: 5px; width: 200px; background-color: #D7EB58;font-size: 20px;" mat-raised-button color="primary"  
+
+        (click)="save()"
+             class="btn btn-success">
+             Save
+            </button>
+        </div>
+
+
+
+
+    </div>
+    
+
+</div>
+

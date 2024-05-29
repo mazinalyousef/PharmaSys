@@ -1,0 +1,36 @@
+<div>
+    
+    <h1>{{title}}</h1>
+    <div class="form-container">
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" >
+
+            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                <mat-label>Ingredient Name
+                </mat-label>
+                <input   matInput formControlName="ingredientName" required>
+            </mat-form-field></div>
+
+            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                <mat-label>Ingredient Code
+                </mat-label>
+                <input   matInput formControlName="ingredientCode" >
+            </mat-form-field></div>
+
+           
+            
+            
+           <div class="form-group commands">        
+            <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  mat-raised-button color="primary" type="submit" 
+            class="btn btn-success">
+            Save
+            </button>
+            <button type="button"  style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  mat-raised-button color="primary"  
+            class="btn btn-success" (click)="onnew()">
+            New
+            </button>
+            </div>
+
+        </form>
+      </div>
+</div>

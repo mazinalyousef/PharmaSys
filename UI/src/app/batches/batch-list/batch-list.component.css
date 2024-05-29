@@ -1,0 +1,12 @@
+button:hover {
+    transform: scale(1.1);
+  }
+  .demo-paginator{
+    font-size: 20px;
+    color: #848181;
+    
+  }
+  table th,
+  table td {
+    font-size: 20px;
+  }

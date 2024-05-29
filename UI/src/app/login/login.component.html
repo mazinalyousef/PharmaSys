@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="login-container">
+    <!-- <div class=" imge-container">
+      <img src="assets/rafiki.png" alt="صورة SVG" width="200" height="200"  >
+    </div> -->
+    <div class="login-form"> 
+      
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+      <p style="font-size: 40px;font-weight: bold; margin-right: 20px; color:#7DCDF2; ">Log in</p>
+      
+        
+        <br/>
+
+          <div class="form-group">
+             <mat-form-field class="form-field" appearance="outline">
+            <mat-label>User Name:
+            </mat-label>
+            <input   matInput  id="username" name="username" [(ngModel)]="loginuser.username"  >
+        </mat-form-field></div>
+
+        <br/>
+
+
+          <!--
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="loginuser.password" 
+          class="form-control" placeholder="Password" required>
+        -->
+
+        <div  class="form-group"  >
+          <mat-form-field    class="form-field" appearance="outline">
+              <mat-label>Password:
+              </mat-label>
+              <input matInput type="password"  id="password" name="password" [(ngModel)]="loginuser.password"  >
+          </mat-form-field>
+      </div>
+
+        <br/>
+
+        <!--
+        <button  class="btn btn-lg btn-primary" type="submit" [disabled]="!loginForm.valid">Log in</button>
+-->
+
+  <div class="form-group commands">        
+  <button  style="width: 300px; color:white;background-color: #D7EB58; font-size: 20px; height:50px;"  mat-raised-button  type="submit" 
+  class="btn btn-success">
+     OK
+  </button>
+
+  </div>
+  <!-- <div class="image-container">
+    <img src="assets/rafiki.png" alt="صورة SVG" width="200" height="200">
+  </div>
+   -->
+  
+    </form>
+  </div>
+   
+  </div>
+ 
+</div>

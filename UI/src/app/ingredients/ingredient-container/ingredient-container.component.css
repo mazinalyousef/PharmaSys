@@ -1,0 +1,16 @@
+.row {
+    display: flex;
+   background-color: var(--gray-color);;
+  }
+  
+  .column {
+    border-right: solid;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-color:  var(--primary-color);;
+    background-color: white;
+    margin: 0.5%;
+    padding: 5px;
+    flex: 50%;
+  }

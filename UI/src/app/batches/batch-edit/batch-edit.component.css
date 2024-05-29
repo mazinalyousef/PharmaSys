@@ -1,0 +1,31 @@
+.row {
+    padding-top: 10px;
+    display: flex;
+   justify-content: stretch;
+   align-items: stretch;
+  }
+  
+  .column1 {
+    width: 100%;
+    flex: 50%;
+  }
+  .column2 {
+    width: 100%;
+    flex: 50%;
+  }
+
+  img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 200px;height: 150px;
+  }
+  .custom-tab .mat-tab-label {
+    font-size: 20px;
+  }
+  .form-field{
+    font-size: 20px;
+  }
+  .mdc-tab__text-label {
+    font-size: 20px;
+  }

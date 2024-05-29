@@ -1,0 +1,68 @@
+<div>
+  <!--
+  <table mat-table [dataSource]="managementDataService.ingredients$|async"
+    class="table-striped mat-elevation-z8"
+    >
+    -->
+
+
+    <div>
+      <mat-form-field class="form-field" appearance="outline" style="margin-top: 10px;">
+         <mat-label>Filter</mat-label>
+         <input matInput (keyup)="applyFilter($event)" placeholder="Search" #Searchinput>
+       </mat-form-field>
+   </div>
+   
+
+   
+    <table mat-table [dataSource]="MatdataSource"
+    class="table-striped mat-elevation-z8"
+    >
+    <ng-container matColumnDef="ingredientName">
+        <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Name</th>
+        <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientName}}</td>
+     </ng-container>
+
+     <ng-container matColumnDef="ingredientCode">
+      <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Code</th>
+      <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientCode}}</td>
+   </ng-container>
+    
+     <ng-container matColumnDef="actions">
+       <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Actions</th>
+       <td  mat-cell *matCellDef="let item">
+       <a mat-raised-button (click)="edit(item.id)" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 150px ;" >edit</a>   
+       <a mat-raised-button (click)="delete(item.id)" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 150px ;" >delete</a>   
+       </td>
+    </ng-container>
+    
+     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+    <!--Client Side Pagination-->
+
+    <mat-paginator #paginator
+    class="demo-paginator"
+    showFirstLastButtons
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page">
+   </mat-paginator>
+
+   
+
+    
+   <!--server side pagination-->
+
+   <!--
+  </div>
+    <input [(ngModel)]="pageNumber">
+    <button (click)="gotopage()">go</button>
+  <div>
+    -->
+   
+  </div>
+
+ 
+

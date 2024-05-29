@@ -1,0 +1,150 @@
+<!--
+<label *ngIf="isWareHouseTask" >{{this.presenceservice.RawMaterialsWeighting_WareHouse_timerTickDisplay$|async}}</label>
+<label *ngIf="isQATask" >{{this.presenceservice.RawMaterialsWeighting_QA_timerTickDisplay$|async}}</label>
+<label *ngIf="isAccountantTask" >{{this.presenceservice.RawMaterialsWeighting_Accountant_timerTickDisplay$|async}}</label>
+-->
+
+<div class="component-main-container" style="margin-top: 2%;"> 
+
+   <label class="timer-label"  >{{this.presenceservice.timerTickDisplay$|async}}</label>
+
+
+   <div *ngIf="rawmaterialTask">
+      
+
+      <div class="header-main-container">{{rawmaterialTask.title}}</div>
+      <div class="table-container" style="margin-top: 1%; margin-bottom: 2%;">
+      <table class="header-table" id="print-section">
+        
+          <tr >
+              <td>Batch NO :  {{rawmaterialTask.batchInfo.batchNO}}</td>
+              <td>Batch Size: {{rawmaterialTask.batchInfo.batchSize}}</td>
+              <td>Start Date: {{rawmaterialTask.batchInfo.startDate}}</td>
+              <td>MFG Date: {{rawmaterialTask.batchInfo.mFgDate}}</td>
+              <td style="height: 50px;">Expiration Date: {{rawmaterialTask.batchInfo.expDate}}</td>
+
+          </tr>
+  
+          <tr>
+              <td>
+                Tube Weight :  {{rawmaterialTask.batchInfo.tubeWeight}}
+              </td>
+              <td>Tubes Count: {{rawmaterialTask.batchInfo.tubesCount}}</td>
+              <td>Cartoons Count: {{rawmaterialTask.batchInfo.cartoonsCount}}</td>
+              <td>Master Cases Count: {{rawmaterialTask.batchInfo.masterCasesCount}}</td>
+              <td style="height: 50px;"></td>
+              
+          </tr>
+  
+          <tr>
+              <td>Barcode :  {{rawmaterialTask.batchInfo.barcode}}</td>
+              <td>NDCNO: {{rawmaterialTask.batchInfo.ndcno}}</td>
+              <td>MFNO : {{rawmaterialTask.batchInfo.mfno}}</td>
+              <td>Product: {{rawmaterialTask.productInfo.productName}}</td>
+              <td style="height: 50px;"></td>
+           
+             
+          </tr>
+          
+  
+  
+      </table>
+      </div>
+<div  style="display: flex; justify-content: center; align-items: center;">
+      <div class="row">
+        <div  class="column1">
+            <img src={{tubeUrl}} onerror="this.src='assets\\imgerr2.png'">
+        </div>
+        <div class="column2">
+            <img src={{cartoonUrl}} onerror="this.src='assets\\imgerr2.png'">
+        </div>
+      </div>
+  
+	
+    </div>
+    
+   
+      </div>
+
+
+   <div class="ng-container">
+   <table mat-table [dataSource]="ingredientsdataSource"  class="table-striped mat-elevation-z8">
+       <ng-container matColumnDef="ingredientName">
+           <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Ingredient</th>
+           <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ingredientCode">
+            <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Ingredient Code</th>
+            <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientCode}}</td>
+         </ng-container>
+
+         
+        <ng-container matColumnDef="qtyPerTube">
+           <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">qtyPerTube</th>
+           <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.qtyPerTube/100|percent:'1.0-3'}}</td>
+        </ng-container>
+   
+        <ng-container matColumnDef="qtyPerBatch">
+           <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">qtyPerBatch</th>
+           <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.qtyPerBatch}}</td>
+        </ng-container>
+   
+        <ng-container matColumnDef="isChecked">
+           <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Completed</th>
+           <td mat-cell *matCellDef="let item">
+   
+            <!-- <mat-checkbox [checked]="item.isChecked"></mat-checkbox>-->
+   
+            <mat-checkbox color="primary"
+            [(ngModel)]="item.isChecked"
+            [ngModelOptions]="{standalone: true}"
+            ></mat-checkbox>
+   
+           </td>
+        </ng-container>
+   
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+   </table>
+   </div>
+   <div>
+      <button [disabled]="iscompleted" (click)="onComplete()" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary"  type="submit" 
+      class="btn btn-success">
+      Complete
+      </button>
+   </div>
+   
+   
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+   <div>
+       <div style="font-size: 20px; font-weight: bold; margin-top: 1%;"> <label>Note</label></div>
+      
+       <div  >
+           <textarea [(ngModel)]="note" [ngModelOptions]="{standalone:true}" rows="5" style="width: 500px;"></textarea>
+       </div>
+      
+       <div>
+           <button (click)="sendNote()" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary">Send Note</button>
+       </div>
+
+       <div>
+        <button (click)="sendEmail()" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary">Send E-mail</button>
+       </div>
+      
+   </div>
+
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+   <div style="margin-top: 1%;">
+
+    <button (click)="generateStickers()" style="margin: 10px;font-size: 16px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary">Generate Stickers</button>
+    <div  style="font-size: 20px; font-weight: bold; "> <label>Count</label></div>
+    <div >
+        <input type="text" [(ngModel)]="repeatCount" [ngModelOptions]="{standalone:true}" style="width: 500px; height: 30px;"/>
+    </div>
+   </div>
+
+</div>
+
+

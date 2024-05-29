@@ -1,0 +1,73 @@
+<div class="barcode-edit">
+
+<div class="form-container">
+ <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+        <mat-label>barcode:
+        </mat-label>
+        <input   matInput formControlName="barcode" required>
+    </mat-form-field>
+   </div>  
+   
+   <div class="form-group"> 
+    <mat-form-field class="form-field" appearance="outline">
+    <input #input1 type="text"  
+    placeholder="product..."
+    aria-label="Number"
+    matInput
+     [formControl]="productAutoCompletecontrol"
+     [matAutocomplete]="ProdAuto">
+
+
+     <mat-autocomplete #ProdAuto="matAutocomplete" [displayWith]="getOptionText"
+     (optionSelected)="getProductFromSelection($event.option.value)"
+     >
+       <mat-option *ngFor="let item of filteredproducts |async" 
+       [value]="item">
+      {{item.productName}}
+       </mat-option>
+      </mat-autocomplete > 
+
+
+   </mat-form-field>
+  </div>
+
+    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+    <mat-label>NDCNO:
+    </mat-label>
+     <input   matInput formControlName="ndcno">
+    </mat-form-field>
+    </div>  
+
+
+    <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Tube Weight:
+        </mat-label>
+         <input matInput formControlName="tubeWeight">
+        </mat-form-field>
+        </div> 
+
+
+
+        
+    <div class="form-group commands">
+     <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  mat-raised-button color="primary" type="submit"
+     class="btn btn-success">
+       Save
+     </button>
+
+     <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  mat-raised-button color="primary" type="button"
+     (click)="onnew()"
+     class="btn btn-success">
+       New
+     </button>
+
+
+    </div>
+
+
+
+ </form>
+</div>
+</div>

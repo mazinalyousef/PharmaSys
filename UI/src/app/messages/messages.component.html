@@ -1,0 +1,13 @@
+<div>
+  <ul >
+    <li  *ngFor="let item of presenseService.userMessages$|async">
+
+
+      <div class="message-container">
+        <app-message [msg]="item"></app-message>
+      </div>
+    
+      
+    </li>
+ </ul>
+</div>

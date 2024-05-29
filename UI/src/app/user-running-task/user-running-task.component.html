@@ -1,0 +1,18 @@
+<div style="margin: 1.5%;">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title style="font-size: 20px;">Task : {{userrunningTask.taskTypeTitle}}</mat-card-title>
+      <mat-card-subtitle style="font-size: 16px;">Batch NO: {{userrunningTask.batchNO}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p style="font-size: 16px;"> Batch Size :{{userrunningTask.batchSize}}</p>
+      <br>
+      <p style="font-size: 16px;"> Product :{{userrunningTask.productName}}</p>
+      <br>
+      <p style="font-size: 16px;"> Start Date :{{userrunningTask.startDate}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button  style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ; border: none;" (click)="enterTask(userrunningTask.id,userrunningTask.taskTypeId)">Enter</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

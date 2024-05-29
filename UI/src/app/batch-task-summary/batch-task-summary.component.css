@@ -1,0 +1,45 @@
+.component-main-container h1{
+    display: flex; 
+    justify-content: center;
+     align-items: center; 
+     flex-direction: column;font-weight: bold;
+     color: #636060;
+     font-size: 40px;
+}
+.commands{
+    display: flex;
+    justify-content: center;
+}
+.commands button {
+    margin: 10px;
+    font-size: 20px;
+     background-color: #D7EB58; 
+     width: 200px
+}
+#print-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .header-table tr{
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #7DCDF2;
+  }
+  .header-table {
+    table-layout: fixed;
+    width: 100%;
+    height: 20%;
+  }
+  
+  .header-table td {
+    width: 10%;
+  }
+  .cell-width {
+    width: 25%; 
+  }
+  .table-striped {
+    font-size: 20px;
+  }

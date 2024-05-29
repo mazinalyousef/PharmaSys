@@ -1,0 +1,27 @@
+
+<!--
+<app-nav></app-nav>
+-->
+
+<!--
+    using the spinner causes this error.....
+    ExpressionChangedAfterItHasBeenCheckedError
+    try to fix later....
+-->
+ 
+
+<!--
+<div *ngIf="isBusy|async" class="loader-container">
+    <mat-spinner style="left: 50%; top: 50%;"></mat-spinner>
+</div>
+ -->
+
+
+ <ngx-spinner  type="ball-spin">
+    <h3>Loading....</h3>
+ </ngx-spinner>
+
+<app-nav></app-nav>
+<!--
+<app-login></app-login>
+-->

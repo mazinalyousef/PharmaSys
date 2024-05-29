@@ -1,0 +1,16 @@
+
+<div class="row">
+    
+
+    <div class="column">
+        <app-barcode-list #barList (editEvent)="barEdit.loadBarcode()"  ></app-barcode-list>
+    </div>
+
+    
+<div class="column">
+
+    <app-barcode-edit  #barEdit (saveEvent)="barList.loadItems()"></app-barcode-edit>
+ </div>
+
+
+</div>
