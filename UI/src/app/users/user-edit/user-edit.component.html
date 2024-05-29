@@ -1,5 +1,5 @@
- <div class="component-main-container">
-      <h1>{{title}}</h1>
+ <div class="component-main-container" style="margin-top: 2%;">
+      <h1  style="display: flex; justify-content: center; align-items: center; flex-direction: column;font-weight: bold;color: #636060; font-size: 40px;">{{title}}</h1>
 
       <div class="form-container">
 
@@ -16,8 +16,8 @@
                 class="form-control" />
             </div>
             -->
-            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
-                <mat-label>User Name
+            <div class="form-group" > <mat-form-field class="form-field" appearance="outline">
+                <mat-label  style="font-size: 20px;">User Name
                 </mat-label>
                 <input   matInput formControlName="userName" required>
             </mat-form-field></div>
@@ -34,7 +34,7 @@
             </div>
             -->
             <div class="form-group"><mat-form-field class="form-field" appearance="outline">
-                <mat-label>E-Mail:
+                <mat-label style="font-size: 20px;">E-Mail:
                 </mat-label>
                 <input matInput formControlName="email" required>
             </mat-form-field></div>
@@ -52,7 +52,7 @@
             -->
             <div  *ngIf="!iseditmode" class="form-group"  >
                 <mat-form-field    class="form-field" appearance="outline">
-                    <mat-label>Password:
+                    <mat-label style="font-size: 20px;">Password:
                     </mat-label>
                     <input matInput type="password" formControlName="password" >
                 </mat-form-field>
@@ -86,13 +86,13 @@
             </div>
                 
     
-           <div class="form-group commands">        
-            <button style="margin: 5px;" mat-raised-button color="primary" type="submit" 
+           <div class="form-group commands"style="display: flex; justify-content: center;">        
+            <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;" mat-raised-button color="primary" type="submit" 
             class="btn btn-success">
             Save
             </button>
     
-            <button style="margin: 5px;" mat-raised-button color="basic"
+            <button style="margin: 10px;width: 200px;font-size: 20px;" mat-raised-button color="basic"
                type="submit"
             [routerLink]="['/users']"
             class="btn">

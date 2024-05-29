@@ -42,8 +42,5 @@ namespace API.DTOS
 
             
          public ICollection<TaskTypeCheckList> taskTypeCheckLists{get;set;}
-
-         //added..
-           public ICollection<MessageDTO> Messages { get; set; }
     }
 }

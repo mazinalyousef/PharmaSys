@@ -1,6 +1,6 @@
 export enum DepartmentsEnum
 {
-Management=1,
+    Management=1,
 Warehouse=2,
 QA=3,
 Accounting=4,

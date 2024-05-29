@@ -32,7 +32,7 @@ public User( )
 
       public ICollection<Message> Messages{get;set;}
 
-      public ICollection<Message> DestinatedMessages{get;set;}
+       public ICollection<Message> DestinatedMessages{get;set;}
 
        
     }

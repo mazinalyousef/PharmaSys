@@ -45,7 +45,7 @@
         </div>
 
         <div class="column">
-          <button style="margin: 5px;" mat-raised-button color="primary"  type="submit"
+          <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  mat-raised-button color="primary"  type="submit"
           class="btn btn-success" >
              Add
           </button>
@@ -64,23 +64,23 @@
 
 
         <ng-container matColumnDef="ingredientId">
-          <th mat-header-cell *matHeaderCellDef>ingredient Id</th>
+          <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Id</th>
           <td mat-cell *matCellDef="let item">{{item.ingredientId}}</td>
        </ng-container>
 
 
         <ng-container matColumnDef="ingredientTitle">
-            <th mat-header-cell *matHeaderCellDef>ingredient Title</th>
+            <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Title</th>
             <td mat-cell *matCellDef="let item">{{item.ingredientTitle}}</td>
          </ng-container>
         
          <ng-container matColumnDef="percentage">
-            <th mat-header-cell *matHeaderCellDef>percentage</th>
+            <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">percentage</th>
             <td mat-cell *matCellDef="let item">{{item.percentage}}</td>
          </ng-container>
          
          <ng-container matColumnDef="actions">
-           <th mat-header-cell *matHeaderCellDef>Actions</th>
+           <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Actions</th>
            <td  mat-cell *matCellDef="let item">
            <a  mat-raised-button 
             (click)="deleteProductingredient(item.ingredientId)"

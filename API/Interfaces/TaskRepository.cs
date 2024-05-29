@@ -44,7 +44,6 @@ namespace API.Interfaces
            var BatchTaskDataSet=  await _dataContext.BatchTasks.AsNoTracking()
            .Include(x=>x.Department)
            .Include(x=>x.User).
-           Include(x=>x.Messages).
             Include(x=>x.TaskType)
             .ThenInclude(x=>x.TaskTypeCheckLists).AsNoTracking().
              FirstOrDefaultAsync(x=>x.Id==Id);
@@ -78,31 +77,7 @@ namespace API.Interfaces
                 //added....
                 checkedListTaskForViewDTO.TaskStateId = BatchTaskDataSet.TaskStateId;
 
-               
-                // added
-                 
-                if ( BatchTaskDataSet.Messages!=null)
-                {
-                    checkedListTaskForViewDTO.Messages =new List<MessageDTO>();
-                     foreach (var item in BatchTaskDataSet.Messages)
-                     {
-                        MessageDTO messageDTO=new  MessageDTO()
-                        {
-                            MessageText = item.MessageText,
-                            DateSent=item.DateSent,DateRead=item.DateRead,
-                            BatchId=item.BatchId,
-                            BatchTaskId=item.BatchTaskId,
-                            UserId = item.UserId,
-                            UserName= "",
-                            BatchNO="",
-                            DestinationUserId=item.DestinationUserId,
-                         IsRead=item.IsRead,
-                          Id=item.Id
-                        };
-                        checkedListTaskForViewDTO.Messages.Add(messageDTO);
-                     }
-                }
-               
+
 
                
 
@@ -242,7 +217,6 @@ namespace API.Interfaces
             .Include(x=>x.Department)
             .Include(x=>x.TaskType)
             .Include(x=>x.User)
-             .Include(x=>x.Messages)
             .Include(x=>x.Batch).ThenInclude(x=>x.BatchIngredients).ThenInclude(x=>x.Ingredient).AsNoTracking().
              FirstOrDefaultAsync(x=>x.Id==Id);
 
@@ -275,31 +249,6 @@ namespace API.Interfaces
                
                 //added..
                 rawMaterialsTaskForViewDTO.TaskStateId = BatchTaskDataSet.TaskStateId;
-
-                // added
-                 // added
-               
-                if ( BatchTaskDataSet.Messages!=null)
-                {  rawMaterialsTaskForViewDTO.Messages =new List<MessageDTO>();
-                     foreach (var item in BatchTaskDataSet.Messages)
-                     {
-                        MessageDTO messageDTO=new  MessageDTO()
-                        {
-                            MessageText = item.MessageText,
-                            DateSent=item.DateSent,DateRead=item.DateRead,
-                            BatchId=item.BatchId,
-                            BatchTaskId=item.BatchTaskId,
-                            UserId = item.UserId,
-                            UserName= "",
-                            BatchNO="",
-                            DestinationUserId=item.DestinationUserId,
-                         IsRead=item.IsRead,
-                          Id=item.Id
-                        };
-                        rawMaterialsTaskForViewDTO.Messages.Add(messageDTO);
-                     }
-                }
-                 
                   
                 string departmentTitle=string.Empty;
                 if (BatchTaskDataSet.Department!=null)

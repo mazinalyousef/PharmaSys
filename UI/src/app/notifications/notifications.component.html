@@ -6,23 +6,23 @@
     >
 
     <ng-container matColumnDef="notificationMessage">
-        <th mat-header-cell *matHeaderCellDef>Notification</th>
-        <td mat-cell *matCellDef="let item">{{item.notificationMessage}}</td>
+        <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Notification</th>
+        <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.notificationMessage}}</td>
      </ng-container>
 
      <ng-container matColumnDef="takenDisplayTitle">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let item">{{item.takenDisplayTitle}}</td>
+      <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Status</th>
+      <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.takenDisplayTitle}}</td>
    </ng-container>
 
     
      <ng-container matColumnDef="dateSent">
-        <th mat-header-cell *matHeaderCellDef>Date Sent</th>
-        <td mat-cell *matCellDef="let item">{{item.dateSent}}</td>
+        <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Date Sent</th>
+        <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.dateSent}}</td>
      </ng-container>
       
      <ng-container matColumnDef="actions">
-       <th mat-header-cell *matHeaderCellDef>Actions</th>
+       <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Actions</th>
        <td  mat-cell *matCellDef="let item">
        <a  *ngIf="item.batchTaskId" style="margin-right: 5px;" mat-raised-button
          

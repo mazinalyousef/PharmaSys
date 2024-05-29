@@ -43,9 +43,5 @@ namespace API.DTOS
          public  Product ProductInfo { get; set; }
 
          public ICollection<BatchIngredientDTO>  batchIngredientDTOs {get;set;}
-
-
-         // added....
-          public ICollection<MessageDTO> Messages { get; set; }
     }
 }

@@ -1,23 +1,25 @@
-<table class="header-table">
+<div class="table-container" style="margin-top: 1%; margin-bottom: 2%;">
+<table class="header-table" >
     <tr>
-        <td>Batch NO :  {{_batch.batchNO}}</td>
-        <td>Batch Size: {{_batch.batchSize}}</td>
-        <td>Start Date: {{_batch.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
-        <td>End Date: {{_batch.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+        <td class="cell-width" >Batch NO :  {{_batch.batchNO}}</td>
+        <td class="cell-width">Batch Size: {{_batch.batchSize}}</td>
+        <td class="cell-width" >Start Date: {{_batch.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+        <td class="cell-width" style="height: 50px; background-color: #7DCDF2 ">End Date: {{_batch.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
     </tr>
 
     <tr>
-        <td>Tube Weight :  {{_batch.tubeWeight}}</td>
-        <td>Tubes Count: {{_batch.tubesCount}}</td>
-        <td>NDCNO: {{_batch.ndcno}}</td>
-        <td>MFNO : {{_batch.mfno}}</td>
+        <td  stley="height: 50px;" class="cell-width">Tube Weight :  {{_batch.tubeWeight}}</td>
+        <td class="cell-width">Tubes Count: {{_batch.tubesCount}}</td>
+        <td class="cell-width">NDCNO: {{_batch.ndcno}}</td>
+        <td class="cell-width"  style="height: 50px; background-color: #7DCDF2 ">MFNO : {{_batch.mfno}}</td>
     </tr>
 
     <tr>
-        <td>Barcode :  {{_batch.barcode}}</td>
-        <td>Product: {{_batch.productName}}</td>
-        <td>Expiration Date : {{_batch.expDate|date:"dd/MM/yyyy"}}</td>
-        <td>MFG Date: {{_batch.mFgDate|date:"dd/MM/yyyy"}}</td>
+        <td class="cell-width">Barcode :  {{_batch.barcode}}</td>
+        <td class="cell-width">Product: {{_batch.productName}}</td>
+        <td class="cell-width">Expiration Date : {{_batch.expDate|date:"dd/MM/yyyy"}}</td>
+        <td class="cell-width"  style="height: 50px; background-color: #7DCDF2  ;" >MFG Date: {{_batch.mFgDate|date:"dd/MM/yyyy"}}</td>
     </tr>
     
 </table>
+</div>

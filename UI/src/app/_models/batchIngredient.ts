@@ -7,5 +7,4 @@ export interface batchIngredient
     qtyPerTube:number   
     qtyPerBatch:number
     isChecked:boolean
-    
 }

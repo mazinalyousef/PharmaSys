@@ -1,0 +1,7 @@
+.commands button {
+    transition: transform 0.3s;
+  }
+  
+  .commands button:hover {
+    transform: scale(1.1);
+  }

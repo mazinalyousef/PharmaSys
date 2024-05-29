@@ -1,8 +1,6 @@
 
 import { batch } from "./batch"
 import { batchIngredient } from "./batchIngredient"
-import { batchTaskNote } from "./batchTaskNote"
-import { message } from "./message"
 import { product } from "./product"
 
 export interface rawMaterialsTask
@@ -24,6 +22,4 @@ export interface rawMaterialsTask
     
     batchInfo :batch
     productInfo:product
-
-    messages : message[]
 }

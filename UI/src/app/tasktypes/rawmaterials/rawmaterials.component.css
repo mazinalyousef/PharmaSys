@@ -7,6 +7,7 @@ img {
 
   .row {
     display: flex;
+    gap: 50px;
   }
   
   .column1 {
@@ -16,5 +17,27 @@ img {
    
     flex: 50%;
   }
+  .table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+}
+ .header-table{
+  table-layout: fixed;
+    width: 70%;
+    /* height: 100%; */
+}
+.header-table tr{
+    font-weight: bold;
+    font-size: 16px;
+  }
+    /* .cell-width {
+    width:20% ;
+    
+  }  */
+  .header-table tr td {
+height: 10%;
 
+  }
   

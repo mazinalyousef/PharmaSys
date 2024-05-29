@@ -20,3 +20,12 @@
     padding: 5px;
     width: 200px;height: 150px;
   }
+  .custom-tab .mat-tab-label {
+    font-size: 20px;
+  }
+  .form-field{
+    font-size: 20px;
+  }
+  .mdc-tab__text-label {
+    font-size: 20px;
+  }
