@@ -1,3 +1,4 @@
+<<<<<<< HEAD
  /* .container{
   display: flex;
   align-items: center;
@@ -38,6 +39,17 @@
   align-items: center;
   margin-bottom: 20px;
 }
+=======
+ .login-container
+ 
+ {
+    margin-top: 32px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+    
+ }
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
  .login-form
  {
    
@@ -50,15 +62,25 @@
   .commands
   {
    display: flex;
+<<<<<<< HEAD
    color:#7DCDF2
    /* justify-content: center; */
+=======
+   justify-content: center;
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
    
   }
 
   .form-field
   {
    
+<<<<<<< HEAD
     /* border-radius: 20%; */
   width: 100%;
   }
  
+=======
+    
+    
+  }
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117

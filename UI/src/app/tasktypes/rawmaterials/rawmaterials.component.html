@@ -4,24 +4,39 @@
 <label *ngIf="isAccountantTask" >{{this.presenceservice.RawMaterialsWeighting_Accountant_timerTickDisplay$|async}}</label>
 -->
 
+<<<<<<< HEAD
 <div class="component-main-container" style="margin-top: 2%;"> 
 
    <label class="timer-label"  >{{this.presenceservice.timerTickDisplay$|async}}</label>
+=======
+<div class="component-main-container"> 
+
+   <label class="timer-label" >{{this.presenceservice.timerTickDisplay$|async}}</label>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 
 
    <div *ngIf="rawmaterialTask">
       
 
       <div class="header-main-container">{{rawmaterialTask.title}}</div>
+<<<<<<< HEAD
       <div class="table-container" style="margin-top: 1%; margin-bottom: 2%;">
       <table class="header-table" id="print-section">
+=======
+  
+      <table class="header-table">
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
         
           <tr >
               <td>Batch NO :  {{rawmaterialTask.batchInfo.batchNO}}</td>
               <td>Batch Size: {{rawmaterialTask.batchInfo.batchSize}}</td>
               <td>Start Date: {{rawmaterialTask.batchInfo.startDate}}</td>
               <td>MFG Date: {{rawmaterialTask.batchInfo.mFgDate}}</td>
+<<<<<<< HEAD
               <td style="height: 50px;">Expiration Date: {{rawmaterialTask.batchInfo.expDate}}</td>
+=======
+              <td>Expiration Date: {{rawmaterialTask.batchInfo.expDate}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 
           </tr>
   
@@ -32,7 +47,10 @@
               <td>Tubes Count: {{rawmaterialTask.batchInfo.tubesCount}}</td>
               <td>Cartoons Count: {{rawmaterialTask.batchInfo.cartoonsCount}}</td>
               <td>Master Cases Count: {{rawmaterialTask.batchInfo.masterCasesCount}}</td>
+<<<<<<< HEAD
               <td style="height: 50px;"></td>
+=======
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
               
           </tr>
   
@@ -41,7 +59,10 @@
               <td>NDCNO: {{rawmaterialTask.batchInfo.ndcno}}</td>
               <td>MFNO : {{rawmaterialTask.batchInfo.mfno}}</td>
               <td>Product: {{rawmaterialTask.productInfo.productName}}</td>
+<<<<<<< HEAD
               <td style="height: 50px;"></td>
+=======
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
            
              
           </tr>
@@ -49,8 +70,13 @@
   
   
       </table>
+<<<<<<< HEAD
       </div>
 <div  style="display: flex; justify-content: center; align-items: center;">
+=======
+
+
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
       <div class="row">
         <div  class="column1">
             <img src={{tubeUrl}} onerror="this.src='assets\\imgerr2.png'">
@@ -61,15 +87,24 @@
       </div>
   
 	
+<<<<<<< HEAD
     </div>
     
    
       </div>
+=======
+
+    
+   
+      
+  </div>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 
 
    <div class="ng-container">
    <table mat-table [dataSource]="ingredientsdataSource"  class="table-striped mat-elevation-z8">
        <ng-container matColumnDef="ingredientName">
+<<<<<<< HEAD
            <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Ingredient</th>
            <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientName}}</td>
         </ng-container>
@@ -77,10 +112,20 @@
         <ng-container matColumnDef="ingredientCode">
             <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Ingredient Code</th>
             <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientCode}}</td>
+=======
+           <th mat-header-cell *matHeaderCellDef>Ingredient</th>
+           <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ingredientCode">
+            <th mat-header-cell *matHeaderCellDef>Ingredient Code</th>
+            <td mat-cell *matCellDef="let item">{{item.ingredientCode}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
          </ng-container>
 
          
         <ng-container matColumnDef="qtyPerTube">
+<<<<<<< HEAD
            <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">qtyPerTube</th>
            <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.qtyPerTube/100|percent:'1.0-3'}}</td>
         </ng-container>
@@ -92,6 +137,19 @@
    
         <ng-container matColumnDef="isChecked">
            <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Completed</th>
+=======
+           <th mat-header-cell *matHeaderCellDef>qtyPerTube</th>
+           <td mat-cell *matCellDef="let item">{{item.qtyPerTube/100|percent:'1.0-3'}}</td>
+        </ng-container>
+   
+        <ng-container matColumnDef="qtyPerBatch">
+           <th mat-header-cell *matHeaderCellDef>qtyPerBatch</th>
+           <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
+        </ng-container>
+   
+        <ng-container matColumnDef="isChecked">
+           <th mat-header-cell *matHeaderCellDef>Completed</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
            <td mat-cell *matCellDef="let item">
    
             <!-- <mat-checkbox [checked]="item.isChecked"></mat-checkbox>-->
@@ -109,7 +167,11 @@
    </table>
    </div>
    <div>
+<<<<<<< HEAD
       <button [disabled]="iscompleted" (click)="onComplete()" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary"  type="submit" 
+=======
+      <button [disabled]="iscompleted" (click)="onComplete()" style="margin: 5px;" mat-raised-button color="primary"  type="submit" 
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
       class="btn btn-success">
       Complete
       </button>
@@ -118,6 +180,7 @@
    
    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
    <div>
+<<<<<<< HEAD
        <div style="font-size: 20px; font-weight: bold; margin-top: 1%;"> <label>Note</label></div>
       
        <div  >
@@ -130,18 +193,41 @@
 
        <div>
         <button (click)="sendEmail()" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary">Send E-mail</button>
+=======
+       <div> <label>Note</label></div>
+      
+       <div>
+           <textarea [(ngModel)]="note" [ngModelOptions]="{standalone:true}"></textarea>
+       </div>
+      
+       <div>
+           <button (click)="sendNote()" style="margin: 5px;" mat-raised-button color="primary">Send Note</button>
+       </div>
+
+       <div>
+        <button (click)="sendEmail()" style="margin: 5px;" mat-raised-button color="primary">Send E-mail</button>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
        </div>
       
    </div>
 
    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 
+<<<<<<< HEAD
    <div style="margin-top: 1%;">
 
     <button (click)="generateStickers()" style="margin: 10px;font-size: 16px; background-color: #D7EB58; width: 200px " mat-raised-button color="primary">Generate Stickers</button>
     <div  style="font-size: 20px; font-weight: bold; "> <label>Count</label></div>
     <div >
         <input type="text" [(ngModel)]="repeatCount" [ngModelOptions]="{standalone:true}" style="width: 500px; height: 30px;"/>
+=======
+   <div>
+
+    <button (click)="generateStickers()" style="margin: 5px;" mat-raised-button color="primary">Generate Stickers</button>
+    <div> <label>Count</label></div>
+    <div>
+        <input type="text" [(ngModel)]="repeatCount" [ngModelOptions]="{standalone:true}"/>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
     </div>
    </div>
 

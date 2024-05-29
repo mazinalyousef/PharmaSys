@@ -10,6 +10,7 @@ div.print-section
        border-color: #666666;
        
     }
+<<<<<<< HEAD
 }
 .commands{
   display: flex;
@@ -51,3 +52,6 @@ div.print-section
 }
 .cell-width {
 } */
+=======
+}
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117

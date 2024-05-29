@@ -1,5 +1,6 @@
 
 .main-component{
+<<<<<<< HEAD
     background-color: var(--light-gray-color);
     flex-direction: column; /* تغيير الاتجاه إلى عمودي */
     position: relative;
@@ -11,14 +12,28 @@
     /* gap: 20px; */
 }
 
+=======
+    background-color: var(--light-gray-color);;
+    display: flex;
+    width: auto;
+    justify-content: center;
+    align-items: center;  
+}
+ 
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 .maingrid{
    
     margin-top: 42px;
     display: grid;
     width: auto;
     grid-template-columns: 200px 200px 200px;
+<<<<<<< HEAD
     column-gap: 50px;
     row-gap: 20px;
+=======
+    column-gap: 10px;
+    row-gap: 10px;
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 }
 button {
     cursor:pointer;
@@ -28,6 +43,7 @@ button {
     position: relative;
     border: .0875em solid;
     padding: 1em;
+<<<<<<< HEAD
     color: #24aceb;
     background: transparent;
     border-radius: .625em;
@@ -36,12 +52,23 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     /* width: 227px; */
     height: 200px;
+=======
+    color: #3F51B5;
+    background: transparent;
+    border-radius: .625em;
+    transition: background 1s;
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
     
     &:hover,
     &:focus {
         color: white;
+<<<<<<< HEAD
         background: linear-gradient(to top left, #A3E0FC, #E4F47D);
         border-color:  #D7EB58;
+=======
+        background: #3F51B5;
+        border-color: #3F51B5;
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
     }
     
     &:active {
@@ -61,6 +88,7 @@ button {
     */
    transition: fill 1s;
 }
+<<<<<<< HEAD
 .container {
     position: relative;
     text-align: center;
@@ -232,3 +260,10 @@ p {
 designed-link:hover{
   font-size: 30px;
 }
+=======
+
+
+
+ 
+ 
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117

@@ -19,6 +19,7 @@
     class="table-striped mat-elevation-z8"
     >
     <ng-container matColumnDef="ingredientName">
+<<<<<<< HEAD
         <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Name</th>
         <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientName}}</td>
      </ng-container>
@@ -33,6 +34,22 @@
        <td  mat-cell *matCellDef="let item">
        <a mat-raised-button (click)="edit(item.id)" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 150px ;" >edit</a>   
        <a mat-raised-button (click)="delete(item.id)" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 150px ;" >delete</a>   
+=======
+        <th mat-header-cell *matHeaderCellDef>ingredient Name</th>
+        <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
+     </ng-container>
+
+     <ng-container matColumnDef="ingredientCode">
+      <th mat-header-cell *matHeaderCellDef>ingredient Code</th>
+      <td mat-cell *matCellDef="let item">{{item.ingredientCode}}</td>
+   </ng-container>
+    
+     <ng-container matColumnDef="actions">
+       <th mat-header-cell *matHeaderCellDef>Actions</th>
+       <td  mat-cell *matCellDef="let item">
+       <a mat-raised-button (click)="edit(item.id)" >edit</a>   
+       <a mat-raised-button (click)="delete(item.id)" >delete</a>   
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
        </td>
     </ng-container>
     

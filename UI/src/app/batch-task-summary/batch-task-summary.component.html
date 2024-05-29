@@ -1,7 +1,13 @@
 
+<<<<<<< HEAD
 <div class="component-main-container" style="margin-top: 2%;">
 
     <h1 >Batch : {{_batch.batchNO}}  Tasks .</h1>
+=======
+<div class="component-main-container">
+
+    <h1>Batch : {{_batch.batchNO}}  Tasks .</h1>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 
     <div class="commands text-right">
     <button style="margin: 5px;" mat-raised-button color="primary"  
@@ -21,6 +27,7 @@ printSectionId="print-section" ngxPrint [useExistingCss]="true">Print</button>
        
       <table class="header-table">
          <tr>
+<<<<<<< HEAD
              <td class="cell-width">Batch NO :  {{_batch.batchNO}}</td>
              <td class="cell-width">Batch Size: {{_batch.batchSize}}</td>
              <td class="cell-width">Start Date: {{_batch.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
@@ -39,6 +46,26 @@ printSectionId="print-section" ngxPrint [useExistingCss]="true">Print</button>
              <td class="cell-width">Product: {{_batch.productName}}</td>
              <td class="cell-width">Expiration Date : {{_batch.expDate|date:"dd/MM/yyyy"}}</td>
              <td class="cell-width">MFG Date: {{_batch.mFgDate|date:"dd/MM/yyyy"}}</td>
+=======
+             <td>Batch NO :  {{_batch.batchNO}}</td>
+             <td>Batch Size: {{_batch.batchSize}}</td>
+             <td>Start Date: {{_batch.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+             <td>End Date: {{_batch.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+         </tr>
+ 
+         <tr>
+             <td>Tube Weight :  {{_batch.tubeWeight}}</td>
+             <td>Tubes Count: {{_batch.tubesCount}}</td>
+             <td>NDCNO: {{_batch.ndcno}}</td>
+             <td>MFNO : {{_batch.mfno}}</td>
+         </tr>
+ 
+         <tr>
+             <td>Barcode :  {{_batch.barcode}}</td>
+             <td>Product: {{_batch.productName}}</td>
+             <td>Expiration Date : {{_batch.expDate|date:"dd/MM/yyyy"}}</td>
+             <td>MFG Date: {{_batch.mFgDate|date:"dd/MM/yyyy"}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
          </tr>
          
      </table>
@@ -49,6 +76,7 @@ printSectionId="print-section" ngxPrint [useExistingCss]="true">Print</button>
        
        >
        <ng-container matColumnDef="taskTitle">
+<<<<<<< HEAD
            <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Title</th>
            <td mat-cell *matCellDef="let item"  style="font-size: 20px;">{{item.taskTitle}}</td>
         </ng-container>
@@ -66,18 +94,47 @@ printSectionId="print-section" ngxPrint [useExistingCss]="true">Print</button>
          <ng-container matColumnDef="startDate">
             <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Start Date</th>
             <td mat-cell *matCellDef="let item"  style="font-size: 20px;">{{item.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+=======
+           <th mat-header-cell *matHeaderCellDef>Title</th>
+           <td mat-cell *matCellDef="let item">{{item.taskTitle}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="taskState">
+            <th mat-header-cell *matHeaderCellDef>State</th>
+            <td [ngStyle]="{'color':getColor(item.taskState)}" mat-cell *matCellDef="let item">{{item.taskState}}</td>
+         </ng-container>
+
+         <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef>Assigned By</th>
+            <td mat-cell *matCellDef="let item">{{item.user}}</td>
+         </ng-container>
+
+         <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Start Date</th>
+            <td mat-cell *matCellDef="let item">{{item.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
          </ng-container>
 
 
          <ng-container matColumnDef="endDate">
+<<<<<<< HEAD
             <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">End Date</th>
             <td mat-cell *matCellDef="let item"  style="font-size: 20px;">{{item.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+=======
+            <th mat-header-cell *matHeaderCellDef>End Date</th>
+            <td mat-cell *matCellDef="let item">{{item.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
          </ng-container>
 
 
          <ng-container matColumnDef="totalminutes">
+<<<<<<< HEAD
             <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Total Minutes</th>
             <td mat-cell *matCellDef="let item" style="font-size: 20px;">{{item.totalminutes}}</td>
+=======
+            <th mat-header-cell *matHeaderCellDef>Total Minutes</th>
+            <td mat-cell *matCellDef="let item">{{item.totalminutes}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
          </ng-container>
        
 

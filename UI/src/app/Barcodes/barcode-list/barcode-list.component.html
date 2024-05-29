@@ -13,21 +13,36 @@
       class="table-striped mat-elevation-z8"
       >
       <ng-container matColumnDef="barcode">
+<<<<<<< HEAD
           <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">barcode</th>
+=======
+          <th mat-header-cell *matHeaderCellDef>barcode</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
           <td mat-cell *matCellDef="let item">{{item.barcode}}</td>
        </ng-container>
 
        <ng-container matColumnDef="productName">
+<<<<<<< HEAD
         <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">product</th>
+=======
+        <th mat-header-cell *matHeaderCellDef>product</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
         <td mat-cell *matCellDef="let item">{{item.productName}}</td>
         </ng-container>
 
       
        <ng-container matColumnDef="actions">
+<<<<<<< HEAD
          <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Actions</th>
          <td  mat-cell *matCellDef="let item">
          <a mat-raised-button (click)="edit(item.barcode)"style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  >edit</a>   
          <a mat-raised-button (click)="delete(item.id)" style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;" >delete</a>   
+=======
+         <th mat-header-cell *matHeaderCellDef>Actions</th>
+         <td  mat-cell *matCellDef="let item">
+         <a mat-raised-button (click)="edit(item.barcode)" >edit</a>   
+         <a mat-raised-button (click)="delete(item.id)" >delete</a>   
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
          </td>
       </ng-container>
       

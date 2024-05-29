@@ -79,7 +79,10 @@ import { BatchRecordsReportComponent } from './batch-records-report/batch-record
 import { BatchReportHeaderComponent } from './batch-report-header/batch-report-header.component';
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
  
  
 
@@ -127,8 +130,12 @@ import { BatchReportHeaderComponent } from './batch-report-header/batch-report-h
     BatchTaskSummaryComponent,
     BarcodeStickersComponent,
     BatchRecordsReportComponent,
+<<<<<<< HEAD
     BatchReportHeaderComponent,
   
+=======
+    BatchReportHeaderComponent
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
   ],
   imports: [
     BrowserModule,

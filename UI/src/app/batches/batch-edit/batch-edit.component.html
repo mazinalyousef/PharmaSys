@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 <div class="component-main-container"  style="margin-top: 2%;">
     <h1  style="display: flex; justify-content: center; align-items: center; flex-direction: column;font-weight: bold;color: #636060; font-size: 40px;">{{title}}</h1>
+=======
+<div class="component-main-container">
+    <h1>{{title}}</h1>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 
 
     <div class="form-container">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
+<<<<<<< HEAD
             <mat-tab-group >
                 <mat-tab label="General">
   
@@ -12,6 +18,15 @@
                         <div class="column1" style="margin-top: 1%;">
                             <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                                 <mat-label style="font-size: 20px;">Batch NO:
+=======
+            <mat-tab-group>
+                <mat-tab label="General">
+  
+                    <div class="row">
+                        <div class="column1">
+                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                <mat-label>Batch NO:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                                 </mat-label>
                                 <input   matInput formControlName="batchNO" required>
                             </mat-form-field>
@@ -19,7 +34,11 @@
                 
                 
                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                             <mat-label style="font-size: 20px;">Batch Size:
+=======
+                            <mat-label>Batch Size:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                             </mat-label>
                             <input  (blur)="onbatchSizeBlur($event)"   matInput formControlName="batchSize" required>
                             </mat-form-field>
@@ -28,7 +47,11 @@
                             <div class="form-group">
                             <mat-form-field class="form-field" appearance="outline">
                                 
+<<<<<<< HEAD
                                     <mat-label style="font-size: 20px;">MFG Date</mat-label>
+=======
+                                    <mat-label>MFG Date</mat-label>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                                     <input matInput [matDatepicker]="pickermFgDate" formControlName="mFgDate">
                                  
                                     <mat-datepicker-toggle matIconSuffix [for]="pickermFgDate"></mat-datepicker-toggle>
@@ -49,7 +72,11 @@
                 
                             <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                                 
+<<<<<<< HEAD
                                 <mat-label style="font-size: 20px;">EXP Date</mat-label>
+=======
+                                <mat-label>EXP Date</mat-label>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                                 <input matInput [matDatepicker]="pickerexpDate" formControlName="expDate">
                                 
                                 <mat-datepicker-toggle matIconSuffix [for]="pickerexpDate"></mat-datepicker-toggle>
@@ -59,7 +86,11 @@
                 
                 
                              <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                                 <mat-label  style="font-size: 20px;">Revision:
+=======
+                                <mat-label>Revision:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                                 </mat-label>
                                 <input   matInput formControlName="revision"  >
                             </mat-form-field>
@@ -68,7 +99,11 @@
 
                            <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                             
+<<<<<<< HEAD
                             <mat-label  style="font-size: 20px;">Revision Date</mat-label>
+=======
+                            <mat-label>Revision Date</mat-label>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                             <input matInput [matDatepicker]="pickerrevisionDate" formControlName="revisionDate">
                              
                             <mat-datepicker-toggle matIconSuffix [for]="pickerrevisionDate"></mat-datepicker-toggle>
@@ -81,10 +116,17 @@
                 
                         </div>
 
+<<<<<<< HEAD
                         <div class="column2" style="margin-top: 1%;">
                         
                              <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
                                 <mat-label style="font-size: 20px;">barcode:
+=======
+                        <div class="column2">
+                        
+                             <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+                                <mat-label>barcode:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                                 </mat-label>
                                 <input  (blur)="onBarcodeBlur($event)"  matInput formControlName="barcode"   >
                             </mat-form-field>
@@ -95,7 +137,11 @@
                     
                     
                        <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label style="font-size: 20px;">MFNO:
+=======
+                        <mat-label>MFNO:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input   matInput formControlName="mfno"   >
                     </mat-form-field>
@@ -103,7 +149,11 @@
                     
                     
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label style="font-size: 20px;">NDCNO:
+=======
+                        <mat-label>NDCNO:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input   matInput formControlName="ndcno"   >
                     </mat-form-field>
@@ -111,7 +161,11 @@
                     
                     
                     <div [hidden]="true" class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label  style="font-size: 20px;">Product ID:
+=======
+                        <mat-label>Product ID:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input   matInput formControlName="productId"   >
                     </mat-form-field>
@@ -119,7 +173,11 @@
 
 
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label  style="font-size: 20px;">Product:
+=======
+                        <mat-label>Product:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input [readonly]="true"  matInput formControlName="productName"   >
                     </mat-form-field>
@@ -127,7 +185,11 @@
                     
                     
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label  style="font-size: 20px;">Tube Weight:
+=======
+                        <mat-label>Tube Weight:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input [readonly]="true" (blur)="ontubeWeightBlur($event)"   matInput formControlName="tubeWeight"   >
                     </mat-form-field>
@@ -135,7 +197,11 @@
                     
                     
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label  style="font-size: 20px;">Tubes Count:
+=======
+                        <mat-label>Tubes Count:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input  [readonly]="true" matInput formControlName="tubesCount"   >
                     </mat-form-field>
@@ -143,14 +209,22 @@
 
 
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label  style="font-size: 20px;">Cartoons Count:
+=======
+                        <mat-label>Cartoons Count:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input  [readonly]="true" matInput formControlName="cartoonsCount"   >
                     </mat-form-field>
                     </div>
 
                     <div class="form-group"> <mat-form-field class="form-field" appearance="outline">
+<<<<<<< HEAD
                         <mat-label  style="font-size: 20px;">Master Cases Count:
+=======
+                        <mat-label>Master Cases Count:
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                         </mat-label>
                         <input  [readonly]="true" matInput formControlName="masterCasesCount"   >
                     </mat-form-field>
@@ -166,7 +240,11 @@
                 </mat-tab>
 
 
+<<<<<<< HEAD
                 <mat-tab label="Photos" class="tap">
+=======
+                <mat-tab label="Photos">
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
 
                     <div >
                            
@@ -174,11 +252,19 @@
                           <div>
                             <label>Tube Image</label>
                           </div>
+<<<<<<< HEAD
                           <div  >
                               <img src={{tubeUrl}} onerror="this.src='assets\\imgerr2.png'">
                           </div>   <input  type="file" accept="image/*" class="custom-file-input" id="customFile" (change)="handleTubeFileInput($any($event.target).files)" >
                             <label class="custom-file-label" for="customFile">{{ uploadTubeFileLabel }}</label>
                        
+=======
+                          <div >
+                            <input type="file" accept="image/*" class="custom-file-input" id="customFile" (change)="handleTubeFileInput($any($event.target).files)" >
+                            <label class="custom-file-label" for="customFile">{{ uploadTubeFileLabel }}</label>
+                            <img src={{tubeUrl}} onerror="this.src='assets\\imgerr2.png'">
+                          </div>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                      
                   
                          
@@ -216,6 +302,7 @@
 
 
                          <ng-container matColumnDef="ingredientName">
+<<<<<<< HEAD
                             <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Ingredient</th>
                             <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.ingredientName}}</td>
                          </ng-container>
@@ -232,6 +319,24 @@
                          <ng-container matColumnDef="qtyPerBatch">
                             <th mat-header-cell *matHeaderCellDef style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">QTY Per Batch</th>
                             <td mat-cell *matCellDef="let item" style="font-size: 16px;">{{item.qtyPerBatch}}</td>
+=======
+                            <th mat-header-cell *matHeaderCellDef>Ingredient</th>
+                            <td mat-cell *matCellDef="let item">{{item.ingredientName}}</td>
+                         </ng-container>
+
+                         <ng-container matColumnDef="ingredientCode">
+                            <th mat-header-cell *matHeaderCellDef>Ingredient Code</th>
+                            <td mat-cell *matCellDef="let item">{{item.ingredientCode}}</td>
+                         </ng-container>
+            
+                         <ng-container matColumnDef="qtyPerTube">
+                            <th mat-header-cell *matHeaderCellDef>QTY Per Tube</th>
+                            <td mat-cell *matCellDef="let item">{{item.qtyPerTube/100|percent:'1.0-3'}}</td>
+                         </ng-container>
+                         <ng-container matColumnDef="qtyPerBatch">
+                            <th mat-header-cell *matHeaderCellDef>QTY Per Batch</th>
+                            <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
                          </ng-container>
 
                         
@@ -251,21 +356,35 @@
 
 
 
+<<<<<<< HEAD
 <div class="form-group commands"style="display: flex; justify-content: center;">
+=======
+<div class="form-group commands">
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
              
 
            
     
+<<<<<<< HEAD
     <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;" mat-raised-button color="primary" type="submit"
+=======
+    <button style="margin: 5px;" mat-raised-button color="primary" type="submit"
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
     class="btn btn-success">
     Save
     </button>
 
     
     <button type="button"  [disabled]="stateIsNotInitialized"
+<<<<<<< HEAD
     style="margin: 10px;font-size: 20px;  width: 200px ;" mat-raised-button color="primary" (click)="SendBatch()">Send</button>
 
     <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ; color: white;" mat-raised-button color="basic"
+=======
+    style="margin: 5px;" mat-raised-button color="primary" (click)="SendBatch()">Send</button>
+
+    <button style="margin: 5px;" mat-raised-button color="basic"
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
       
     [routerLink]="['/batches']"
     class="btn">

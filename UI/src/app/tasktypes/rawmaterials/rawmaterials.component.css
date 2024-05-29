@@ -7,7 +7,10 @@ img {
 
   .row {
     display: flex;
+<<<<<<< HEAD
     gap: 50px;
+=======
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
   }
   
   .column1 {
@@ -17,6 +20,7 @@ img {
    
     flex: 50%;
   }
+<<<<<<< HEAD
   .table-container {
     display: flex;
     justify-content: center;
@@ -40,4 +44,7 @@ img {
 height: 10%;
 
   }
+=======
+
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
   
