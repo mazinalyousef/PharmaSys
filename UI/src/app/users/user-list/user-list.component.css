@@ -7,7 +7,50 @@
    font-size: 14px;
    width: 100%;
    }
+<<<<<<< HEAD
+   .centered-heading {
+      text-align: center;
+      margin-top: 50px;
+    }
+    
+    .user-heading {
+      font-size: 45px;
+      font-weight: bold;
+      color:  #848181;
+    }
+    .commands {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .commands button {
+      transition: transform 0.3s;
+    }
+    
+    .commands button:hover {
+      transform: scale(1.1);
+    }
+    table {
+      font-size: 16px;
+      color:  #d3d3d3;
+    }
+    .demo-paginator{
+      font-size: 20px;
+      color: #848181;
+      
+    }
+    
+    table th,
+    table td {
+      font-size: 20px;
+    }
+  
+    /* a.mat-raised-button {
+      font-size: 20px;
+    } */
+=======
 
 
    
  
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117

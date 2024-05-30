@@ -45,7 +45,11 @@
         </div>
 
         <div class="column">
+<<<<<<< HEAD
+          <button style="margin: 10px;font-size: 20px; background-color: #D7EB58; width: 200px ;"  mat-raised-button color="primary"  type="submit"
+=======
           <button style="margin: 5px;" mat-raised-button color="primary"  type="submit"
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
           class="btn btn-success" >
              Add
           </button>
@@ -64,23 +68,39 @@
 
 
         <ng-container matColumnDef="ingredientId">
+<<<<<<< HEAD
+          <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Id</th>
+=======
           <th mat-header-cell *matHeaderCellDef>ingredient Id</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
           <td mat-cell *matCellDef="let item">{{item.ingredientId}}</td>
        </ng-container>
 
 
         <ng-container matColumnDef="ingredientTitle">
+<<<<<<< HEAD
+            <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">ingredient Title</th>
+=======
             <th mat-header-cell *matHeaderCellDef>ingredient Title</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
             <td mat-cell *matCellDef="let item">{{item.ingredientTitle}}</td>
          </ng-container>
         
          <ng-container matColumnDef="percentage">
+<<<<<<< HEAD
+            <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">percentage</th>
+=======
             <th mat-header-cell *matHeaderCellDef>percentage</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
             <td mat-cell *matCellDef="let item">{{item.percentage}}</td>
          </ng-container>
          
          <ng-container matColumnDef="actions">
+<<<<<<< HEAD
+           <th mat-header-cell *matHeaderCellDef  style="background-color:#7DCDF2 ;  color: #636060; font-size: 20px;">Actions</th>
+=======
            <th mat-header-cell *matHeaderCellDef>Actions</th>
+>>>>>>> 447c91fb132f1fb4bb4fca227e83230fd4a92117
            <td  mat-cell *matCellDef="let item">
            <a  mat-raised-button 
             (click)="deleteProductingredient(item.ingredientId)"
