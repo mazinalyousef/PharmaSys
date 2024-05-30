@@ -1,4 +1,6 @@
 import { batch } from "./batch"
+import { batchTaskNote } from "./batchTaskNote"
+import { message } from "./message"
 import { product } from "./product"
 import { taskTypeCheckList } from "./taskTypeCheckList"
 
@@ -21,6 +23,12 @@ export interface checkedListTask
 
     batchInfo :batch
     productInfo:product
+
+
+    //added
+    messages : message[]
+
+    
 
 
 }

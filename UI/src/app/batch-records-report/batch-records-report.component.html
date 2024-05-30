@@ -28,15 +28,35 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
             <th mat-header-cell *matHeaderCellDef>Title</th>
             <td mat-cell *matCellDef="let item">{{item.title}}</td>
          </ng-container>
+
+         <ng-container matColumnDef="isChecked">
+            <th mat-header-cell *matHeaderCellDef>Completed</th>
+          <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+          <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+            [(ngModel)]="item.isChecked"
+            [ngModelOptions]="{standalone: true}"
+            [disabled]="true"
+            ></mat-checkbox></td>
+         </ng-container>
+
  
         <tr mat-header-row *matHeaderRowDef="CleaningRooms_displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: CleaningRooms_displayedColumns;"></tr>
      </table>
+
+     <div *ngIf="cleaningRoomTask.messages">
+      <p>Notes:</p>
+      <ul >
+         <li  *ngFor="let item of cleaningRoomTask.messages">
+           <div class="message-container">
+              <p>{{item.messageText}}</p>
+           </div>
+         </li>
+      </ul>
+     </div>
     </div>
 
-
-
-
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
      <!--weighting raw materials-->
      <div class="print-section" style="page-break-after: always;">
       
@@ -64,12 +84,38 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
          <td mat-cell *matCellDef="let item">{{item.qtyPerBatch}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="isChecked">
+         <th mat-header-cell *matHeaderCellDef>Completed</th>
+        <!--<td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+        <td mat-cell *matCellDef="let item">
+         <mat-checkbox color="primary"
+         [(ngModel)]="item.isChecked"
+         [ngModelOptions]="{standalone: true}"
+         [disabled]="true"
+        
+         ></mat-checkbox>
+        </td>
+      </ng-container>
+
+
        <tr mat-header-row *matHeaderRowDef="RawMaterials_displayedColumns"></tr>
        <tr mat-row *matRowDef="let row; columns: RawMaterials_displayedColumns;"></tr>
     </table>
+
+    <div *ngIf="cleaningRoomTask.messages">
+      <p>Notes:</p>
+      <ul >
+         <li  *ngFor="let item of weightingMaterialTask.messages">
+           <div class="message-container">
+              {{item.messageText}}
+           </div>
+         </li>
+      </ul>
+    </div>
+   
    </div>
    
-
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
      <!--Qa Check Equipments-->
      <div class="print-section" style="page-break-after: always;">
       
@@ -87,13 +133,37 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
            <td mat-cell *matCellDef="let item">{{item.title}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="isChecked">
+         <th mat-header-cell *matHeaderCellDef>Completed</th>
+       <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+       <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+         [(ngModel)]="item.isChecked"
+         [ngModelOptions]="{standalone: true}"
+         [disabled]="true"
+         ></mat-checkbox></td>
+      </ng-container>
+
+
        <tr mat-header-row *matHeaderRowDef="QACheckEquipments_displayedColumns"></tr>
        <tr mat-row *matRowDef="let row; columns: QACheckEquipments_displayedColumns;"></tr>
     </table>
+
+
+    <div *ngIf="QAcheckEquipementsTask.messages">
+      <p>Notes:</p>
+      <ul >
+         <li  *ngFor="let item of QAcheckEquipementsTask.messages">
+           <div class="message-container">
+              <p>{{item.messageText}}</p>
+           </div>
+         </li>
+      </ul>
+     </div>
+
    </div>
 
 
-      
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
         <div class="print-section" style="page-break-after: always;">
       
          <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -104,6 +174,17 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
          <p>Start Date: {{QARawMaterialTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
          <p>End Date: {{QARawMaterialTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
 
+         <div *ngIf="QARawMaterialTask.messages">
+            <p>Notes:</p>
+            <ul >
+               <li  *ngFor="let item of QARawMaterialTask.messages">
+                 <div class="message-container">
+                    <p>{{item.messageText}}</p>
+                 </div>
+               </li>
+            </ul>
+           </div>
+
          
 
             <!-- Accountant -->
@@ -112,9 +193,20 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
         <p>Start Date: {{AccountantWeightingMaterialsTask.startDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
         <p>End Date: {{AccountantWeightingMaterialsTask.endDate|date:"dd/MM/yyyy HH:mm:ss"}}</p>
       
+        <div *ngIf="AccountantWeightingMaterialsTask.messages">
+         <p>Notes:</p>
+         <ul >
+            <li  *ngFor="let item of AccountantWeightingMaterialsTask.messages">
+              <div class="message-container">
+                 <p>{{item.messageText}}</p>
+              </div>
+            </li>
+         </ul>
+        </div>
+
       </div>
 
-
+      <hr style="height:2px;border-width:0;color:gray;background-color:gray">
        <!-- Production Check Equipments-->
      <div class="print-section" style="page-break-after: always;">
       
@@ -132,12 +224,34 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
            <td mat-cell *matCellDef="let item">{{item.title}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="isChecked">
+         <th mat-header-cell *matHeaderCellDef>Completed</th>
+       <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+       <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+         [(ngModel)]="item.isChecked"
+         [ngModelOptions]="{standalone: true}"
+         [disabled]="true"
+         ></mat-checkbox></td>
+      </ng-container>
+
+
        <tr mat-header-row *matHeaderRowDef="ProductionCheckEquipments_displayedColumns"></tr>
        <tr mat-row *matRowDef="let row; columns: ProductionCheckEquipments_displayedColumns;"></tr>
     </table>
+
+    <div *ngIf="ProductionCheckEquipementTask.messages">
+      <p>Notes:</p>
+      <ul >
+         <li  *ngFor="let item of ProductionCheckEquipementTask.messages">
+           <div class="message-container">
+              <p>{{item.messageText}}</p>
+           </div>
+         </li>
+      </ul>
+     </div>
    </div>
 
-
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
    <!--Manufacturing-->
    <div class="print-section" style="page-break-after: always;">
       <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -154,11 +268,34 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
            <td mat-cell *matCellDef="let item">{{item.title}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="isChecked">
+         <th mat-header-cell *matHeaderCellDef>Completed</th>
+       <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+       <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+         [(ngModel)]="item.isChecked"
+         [ngModelOptions]="{standalone: true}"
+         [disabled]="true"
+         ></mat-checkbox></td>
+      </ng-container>
+
+
        <tr mat-header-row *matHeaderRowDef="Manufacturing_displayedColumns"></tr>
        <tr mat-row *matRowDef="let row; columns: Manufacturing_displayedColumns;"></tr>
     </table>
-   </div>
 
+
+    <div *ngIf="manufacturingTask.messages">
+      <p>Notes:</p>
+      <ul >
+         <li  *ngFor="let item of manufacturingTask.messages">
+           <div class="message-container">
+              <p>{{item.messageText}}</p>
+           </div>
+         </li>
+      </ul>
+     </div>
+   </div>
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
   <!--Qa Sampling-->
   <div class="print-section" style="page-break-after: always;">
    <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -175,12 +312,35 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
         <td mat-cell *matCellDef="let item">{{item.title}}</td>
      </ng-container>
 
+     <ng-container matColumnDef="isChecked">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+    <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+    <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+      [(ngModel)]="item.isChecked"
+      [ngModelOptions]="{standalone: true}"
+      [disabled]="true"
+      ></mat-checkbox></td>
+   </ng-container>
+
+
     <tr mat-header-row *matHeaderRowDef="Sampling_displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: Sampling_displayedColumns;"></tr>
  </table>
+
+ <div *ngIf="QASamplingTask.messages">
+   <p>Notes:</p>
+   <ul >
+      <li  *ngFor="let item of QASamplingTask.messages">
+        <div class="message-container">
+           <p>{{item.messageText}}</p>
+        </div>
+      </li>
+   </ul>
+  </div>
+
 </div>
 
-
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
  <!--Filling Check Equpments-->
  <div class="print-section" style="page-break-after: always;">
    <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -197,11 +357,34 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
         <td mat-cell *matCellDef="let item">{{item.title}}</td>
      </ng-container>
 
+     <ng-container matColumnDef="isChecked">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+    <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+    <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+      [(ngModel)]="item.isChecked"
+      [ngModelOptions]="{standalone: true}"
+      [disabled]="true"
+      ></mat-checkbox></td>
+   </ng-container>
+
+
     <tr mat-header-row *matHeaderRowDef="FillingCheckEquipments_displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: FillingCheckEquipments_displayedColumns;"></tr>
  </table>
-</div>
 
+ <div *ngIf="FillingCheckEquipementsTask.messages">
+   <p>Notes:</p>
+   <ul >
+      <li  *ngFor="let item of FillingCheckEquipementsTask.messages">
+        <div class="message-container">
+           <p>{{item.messageText}}</p>
+        </div>
+      </li>
+   </ul>
+  </div>
+
+</div>
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
  <!--filling tubes-->
  <div class="print-section" style="page-break-after: always;">
    <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -218,12 +401,36 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
         <td mat-cell *matCellDef="let item">{{item.title}}</td>
      </ng-container>
 
+     <ng-container matColumnDef="isChecked">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+    <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+    <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+      [(ngModel)]="item.isChecked"
+      [ngModelOptions]="{standalone: true}"
+      [disabled]="true"
+      ></mat-checkbox></td>
+   </ng-container>
+
+
     <tr mat-header-row *matHeaderRowDef="FillingTubes_displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: FillingTubes_displayedColumns;"></tr>
  </table>
+
+ <div *ngIf="fillingTubeTask.messages">
+   <p>Notes:</p>
+   <ul >
+      <li  *ngFor="let item of fillingTubeTask.messages">
+        <div class="message-container">
+           <p>{{item.messageText}}</p>
+        </div>
+      </li>
+   </ul>
+  </div>
+
+
 </div>
 
-
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
  <!--filling cartoons-->
  <div class="print-section" style="page-break-after: always;">
    <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -240,12 +447,35 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
         <td mat-cell *matCellDef="let item">{{item.title}}</td>
      </ng-container>
 
+     <ng-container matColumnDef="isChecked">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+    <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+    <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+      [(ngModel)]="item.isChecked"
+      [ngModelOptions]="{standalone: true}"
+      [disabled]="true"
+      ></mat-checkbox></td>
+   </ng-container>
+
+
     <tr mat-header-row *matHeaderRowDef="FillingCartoons_displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: FillingCartoons_displayedColumns;"></tr>
  </table>
+
+ <div *ngIf="cartooningTask.messages">
+   <p>Notes:</p>
+   <ul >
+      <li  *ngFor="let item of cartooningTask.messages">
+        <div class="message-container">
+           <p>{{item.messageText}}</p>
+        </div>
+      </li>
+   </ul>
+  </div>
+
 </div>
 
-
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
  <!--filling packaging-->
  <div class="print-section" style="page-break-after: always;">
    <app-batch-report-header [_batch]="batch"></app-batch-report-header>
@@ -262,14 +492,33 @@ printSectionId="print-area" ngxPrint [useExistingCss]="true">Print</button>
         <td mat-cell *matCellDef="let item">{{item.title}}</td>
      </ng-container>
 
+     <ng-container matColumnDef="isChecked">
+      <th mat-header-cell *matHeaderCellDef>Completed</th>
+    <!-- <td mat-cell *matCellDef="let item">{{item.isChecked}}</td>--> 
+    <td mat-cell *matCellDef="let item">  <mat-checkbox color="primary"
+      [(ngModel)]="item.isChecked"
+      [ngModelOptions]="{standalone: true}"
+      [disabled]="true"
+      ></mat-checkbox></td>
+   </ng-container>
+   
+
     <tr mat-header-row *matHeaderRowDef="FillingPackaging_displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: FillingPackaging_displayedColumns;"></tr>
  </table>
+
+ <div *ngIf="packagingTask.messages">
+   <p>Notes:</p>
+   <ul >
+      <li  *ngFor="let item of packagingTask.messages">
+        <div class="message-container">
+           <p>{{item.messageText}}</p>
+        </div>
+      </li>
+   </ul>
+  </div>
+
 </div>
-
-
-
-
 
 
 </div>

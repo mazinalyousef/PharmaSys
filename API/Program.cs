@@ -207,6 +207,7 @@ app.UseStaticFiles();
       FileProvider = new PhysicalFileProvider(uploadsDir)
   }); 
 
+
 app.MapControllers();
 
 
